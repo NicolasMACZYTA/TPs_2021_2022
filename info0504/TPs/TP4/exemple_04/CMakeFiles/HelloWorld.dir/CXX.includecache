@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/c/Users/nithrilh/Documents/info0504/TPs/TP4/exemple_04/src/HelloWorld.cxx
+cstdio
+-
+cstdlib
+-
+iostream
+-
+myStrlen.h
+-
+
+MyStrlen/myStrlen.h
+cstddef
+-
+

@@ -1,0 +1,8 @@
+/mnt/c/Users/nithrilh/Documents/info0504/TPs/TP4/exemple_04/CMakeFiles/edit_cache.dir
+/mnt/c/Users/nithrilh/Documents/info0504/TPs/TP4/exemple_04/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/nithrilh/Documents/info0504/TPs/TP4/exemple_04/CMakeFiles/HelloWorld.dir
+/mnt/c/Users/nithrilh/Documents/info0504/TPs/TP4/exemple_04/src/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/nithrilh/Documents/info0504/TPs/TP4/exemple_04/src/CMakeFiles/edit_cache.dir
+/mnt/c/Users/nithrilh/Documents/info0504/TPs/TP4/exemple_04/MyStrlen/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/nithrilh/Documents/info0504/TPs/TP4/exemple_04/MyStrlen/CMakeFiles/edit_cache.dir
+/mnt/c/Users/nithrilh/Documents/info0504/TPs/TP4/exemple_04/MyStrlen/CMakeFiles/MyStrlen.dir

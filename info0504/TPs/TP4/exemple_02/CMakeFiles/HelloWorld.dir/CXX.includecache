@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/c/Users/nithrilh/Documents/info0504/TPs/TP4/exemple_02/src/HelloWorld.cpp
+cstdio
+-
+cstdlib
+-
+iostream
+-
+

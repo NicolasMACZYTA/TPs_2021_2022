@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/c/Users/nithrilh/Documents/info0504/TPs/TP4/exemple_08/MyStrlen/myStrlen.cxx
+myStrlen.h
+/mnt/c/Users/nithrilh/Documents/info0504/TPs/TP4/exemple_08/MyStrlen/myStrlen.h
+
+/mnt/c/Users/nithrilh/Documents/info0504/TPs/TP4/exemple_08/MyStrlen/myStrlen.h
+cstddef
+-
+

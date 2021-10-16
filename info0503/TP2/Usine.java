@@ -1,6 +1,6 @@
 import Voitures.Voiture;
 public class Usine {
-    private Parking parking;
+    public Parking parking;
     public Usine(int nparking, int i,int j){
         this.parking = new Parking(nparking,i,j);
     }

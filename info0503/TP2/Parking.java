@@ -12,4 +12,8 @@ public class Parking {
         places[Integer.valueOf(i)][j]= new Place(i,j);
         places[Integer.valueOf(i)][j].setVoiture(v);
     }
+
+    public Voiture getVoiture(char i, int j){
+        return places[Integer.valueOf(i)][j].getVoiture();
+    }
 }

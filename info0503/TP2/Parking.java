@@ -1,3 +1,4 @@
+import Voitures.Voiture;
 public class Parking {
     private int nParking;
     private Place[][] places;
@@ -7,8 +8,8 @@ public class Parking {
         this.places = new Place[lenght][width];
     }
 
-    public void stocker(Voiture v, int i, int j){
-        places[i][j]= new Place((char)i,j);
-        places[i][j].setVoiture(v);
+    public void stocker(Voiture v, char i, int j){
+        places[Integer.valueOf(i)][j]= new Place(i,j);
+        places[Integer.valueOf(i)][j].setVoiture(v);
     }
 }

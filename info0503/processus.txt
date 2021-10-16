@@ -1,0 +1,10 @@
+1. Le Client discute avec le Concessionaire par rapport au Catalogue et passe une Commande
+	La Commande contient le nom du client, son mail, le modele du vehicule, les options, la couleur, le nom du concessionnaire, mail du concessionnaire.
+2. Le Concessionnaire envoie la Commande au Constructeur.
+2,2. Le Constructeur comfirme la commande.
+3. Le Constructeur demande a une de ses Usine de construire le Vehicule.
+4. L'Usine demande les pieces necessaire au Fournisseur
+5. Le Fournisseur envoi les pieces necessaire.
+6. l'Usine construit le Vehicule par rapport a un Modele qui posséde des Options et une Couleur.
+7. Le Constructeur recoit un codeVIN et une Date de Fabriquation, une place de parking avec un nom et numero de ranger.
+8. Le Constructeur envoi les informations du Vehicule et l'adresse de l'usine au Client.

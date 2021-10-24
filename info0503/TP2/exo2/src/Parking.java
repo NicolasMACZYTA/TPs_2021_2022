@@ -4,11 +4,11 @@ public class Parking {
     private Place[][] places;
 
     public Parking(int nParking, int lenght, int width){
-        this.nParking=nParking;
+        this.nParking = nParking;
         this.places = new Place[lenght][width];
     }
 
-    public void stocker(Voiture v, char i, int j){
+    public void stockerVoiture(Voiture v, char i, int j){
         places[Integer.valueOf(i)][j]= new Place(i,j);
         places[Integer.valueOf(i)][j].setVoiture(v);
     }

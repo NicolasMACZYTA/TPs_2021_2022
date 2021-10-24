@@ -2,9 +2,6 @@ import Voitures.*;
 
 
 public class testVoiture {
-
-    
-    
     public static void main(String [] args){
         Moteur[] tMoteur = {new Moteur("XUD","diesel",90), new Moteur("XU","essence",92), new Moteur("PRV_REV2","essence",205)};
         String[] couleurs = {"vert anglais","gris métallisé", "noir laqué"};
@@ -19,7 +16,7 @@ public class testVoiture {
 
         System.out.println(v1.toString());
         System.out.println("\n stockage : ");
-        u.stocker(v1, 'A', 1);
+        u.stockerVoiture(v1, 'A', 1);
         v2 = u.parking.getVoiture('A', 1);
         System.out.println(v2.toString());
     }

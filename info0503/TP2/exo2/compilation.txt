@@ -1,0 +1,15 @@
+repertoires
+cls
+misc
+    json.java
+src
+    bu_01
+        auteur.java
+        livre.java
+        bu.java
+    testbu.java
+
+javac -d cls -sourcepath src src/testbu.java
+javac -d cls -cp misc/json-20210307.jar -sourcepath src src/testbu.java
+
+java -cp cls:misc/json-20210307.jar testbu

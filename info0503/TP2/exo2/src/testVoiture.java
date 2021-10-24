@@ -6,7 +6,7 @@ public class testVoiture {
         Moteur[] tMoteur = {new Moteur("XUD","diesel",90), new Moteur("XU","essence",92), new Moteur("PRV_REV2","essence",205)};
         String[] couleurs = {"vert anglais","gris métallisé", "noir laqué"};
         Option[] options = {new Option("climatisation", "climatisation"), new Option("pack confort", "sieges velours baguettes en ronce de noyer"), new Option("autoradio CD", "autoradio CD") };
-        Usine u = new Usine(1, 250, 250);
+        Usine u = new Usine("JJLand", 1, 250, 250);
         Modele modele = new Modele("406 berline");
         modele.setCouleurs(couleurs);
         modele.setMoteurs(tMoteur);

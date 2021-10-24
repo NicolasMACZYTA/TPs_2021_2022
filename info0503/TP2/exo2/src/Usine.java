@@ -7,7 +7,7 @@ public class Usine {
 
     public Usine(){
         this.nomUsine = "Usine Non Defini";
-        this.parking = new Parking(5,10); //Un petit parking predefini
+        this.parking = new Parking(10,5,10); //Un petit parking predefini
     }
 
     public Usine(String nom, int idparking, int i, int j){

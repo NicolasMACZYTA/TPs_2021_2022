@@ -1,6 +1,11 @@
 import Voitures.*;
 import java.util.*;
 import org.json.JSONObject;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+ 
 
 public class testVoiture {
     public static void main(String [] args){
@@ -25,5 +30,22 @@ public class testVoiture {
         System.out.println("Usine\n");
         System.out.println(new JSONObject(u));
 
+        String str = ""+new JSONObject(u);
+
+            File file = new File("data1.txt");
+             
+            String data = str;
+             
+            try(FileOutputStream fos = new FileOutputStream(file);
+                    BufferedOutputStream bos = new BufferedOutputStream(fos)) {
+                byte[] bytes = data.getBytes();
+                bos.write(bytes);
+                bos.close();
+                fos.close();
+                System.out.print("fichier écrit dans le fichier avec succès.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        
     }
 }

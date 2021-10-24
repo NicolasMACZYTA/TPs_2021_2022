@@ -1,0 +1,17 @@
+$etu = new Etudiant(...)
+$etuJSON = json_encode($etu)
+echo $etuJSON
+</br>
+var_dump(json_decode($etuJSON));
+</br>
+vardum(json_decode($etuJSON,true));
+
+Dans etudiant
+public function jsonSerialize():array{
+    $json["nom"] = $this->nom;
+    ...
+    return $json;
+}
+
+$etu2 = Etudiant::fromJSON(json_decode($etuJSON,true));
+echo $etu2

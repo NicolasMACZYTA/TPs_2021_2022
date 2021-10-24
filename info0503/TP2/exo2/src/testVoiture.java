@@ -1,5 +1,6 @@
 import Voitures.*;
-
+import java.util.*;
+import org.json.JSONObject;
 
 public class testVoiture {
     public static void main(String [] args){
@@ -19,5 +20,10 @@ public class testVoiture {
         u.stockerVoiture(v1, 'A', 1);
         v2 = u.parking.getVoiture('A', 1);
         System.out.println(v2.toString());
+
+        //TEST JSON
+        System.out.println("Usine\n");
+        System.out.println(new JSONObject(u));
+
     }
 }

@@ -1,5 +1,5 @@
 package Voitures;
-
+import org.json.JSONObject;
 
 public class Voiture {
 
@@ -50,4 +50,28 @@ public class Voiture {
     public String toString(){
         return "Voiture : ID : "+this.VIN+" modele : "+this.modele.getNom()+this.moteur.toString()+" couleur : "+this.couleur;
     }
+
+    /*public JSONObject toJSON(){
+		JSONObject json = new JSONObject();
+		json.put("VIN",this.VIN);
+		json.put("modele",this.modele);
+		json.put("moteur",this.moteur.toJSON());
+		json.put("couleur",this.couleur.toJSON());
+		json.put("options",this.options.toJSON());
+		json.put("dateFabrication",this.dateFabrication);
+
+		return json;
+	}*/
+
+	/*public static Voiture fromJSON(String source){
+		JSONObject voitureJson = new JSONObject(source);
+		
+		String VIN = voitureJson.getInt("VIN");
+		Moteur moteur = voitureJson.?("moteur");
+		Couleur couleur = voitureJson.?("couleur");
+		Options options = voitureJson.?("options");
+		int dateFabrication = voitureJson.getInt("dateFabrication");
+		
+		return new Voiture(...);
+	}*/
 }

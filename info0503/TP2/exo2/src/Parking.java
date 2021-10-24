@@ -3,13 +3,11 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 public class Parking {
-    private static int id;
     private int idparking;
     private Place[][] places;
     private int length, width; //length = ranger, width = numero
 
     /*public Parking(){
-		Parking.id++;
         this.nParking = id;
 		this.length=3;
 		this.width=10;
@@ -18,14 +16,6 @@ public class Parking {
 
     public Parking(int idparking, int length, int width){
         this.idparking = idparking;
-        this.length = length;
-        this.width = width;
-        this.places = new Place[length][width];
-    }
-
-    public Parking(int length, int width){
-        Parking.id++;
-        this.idparking = id;
         this.length = length;
         this.width = width;
         this.places = new Place[length][width];
@@ -42,6 +32,18 @@ public class Parking {
 
     public void libererPlace(int i, int j){
 		this.places[i][j] = null;
+	}
+
+    public String toString(){
+		String s="";
+		for(int i=0;i<this.length;i++){
+			for(int j=0;j<this.width;j++){
+				if(places[i][j] != null){
+					s+="\n"+places[i][j].toString();
+				}
+			}
+		}
+		return ""+idparking+";"+length+";"+width+";"+s;
 	}
 
     public JSONObject toJSON(){

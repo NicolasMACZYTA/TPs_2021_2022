@@ -1,0 +1,18 @@
+repertoires
+cls
+misc
+    json.java
+src
+    Voitures
+        modele.java
+        moteur.java
+        Option.java
+        Voiture.java
+    Parking.java
+    Place.java
+    testVoiture.java
+    usine.java
+
+javac -d cls -cp misc/json-20210307.jar -sourcepath src src/testVoiture.java
+
+java -cp cls:misc/json-20210307.jar testVoiture

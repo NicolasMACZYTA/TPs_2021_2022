@@ -10,11 +10,8 @@ import java.net.UnknownHostException;
 
 
 /**
- * Classe correspondant à un client TCP.
- * Le client envoie la chaine 'Bonjour' et lit une réponse de la part du serveur.
- * Le client envoie ensuite la chaine 'Au revoir' et lit une réponse.
- * Le numéro de port du serveur est spécifié dans la classe ServeurTCPMulti.
  * @author Cyril Rabat
+ * Modifié par Nicolas MACZYTA et Lug Brunet
  */
 public class Usine {
     
@@ -44,12 +41,12 @@ public class Usine {
             System.exit(0);
         }
 
-        // Envoi de 'Bonjour'
+        // Envoi de du premier message
         String message = "Usine en attente de commande :";
         System.out.println("Envoi: " + message);
         output.println(message);
 
-        // Lecture de 'Bonjour'
+        // Lecture de la commande
         try {
             message = input.readLine();
         } catch(IOException e) {
@@ -58,14 +55,14 @@ public class Usine {
         }
         System.out.println("Lu: " + message);
 
-        // Envoi de 'Au revoir'
+        // Envoi des voitures construites
 
-        //ajout voiture
+        //TODO : construction de plusieurs objets voiture
         message = "voiture a (rajouter plus tard)";
         System.out.println("Envoi: " + message);
         output.println(message);
 
-        // Lecture de 'Au revoir'
+        // Lecture de la confirmation
         try {
             message = input.readLine();
         } catch(IOException e) {

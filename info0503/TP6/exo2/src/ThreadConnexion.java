@@ -10,6 +10,7 @@ import java.net.Socket;
 /**
  * Classe correspondant au thread associe à chaque connexion d'un client.
  * @author Cyril Rabat
+ * modifié par Nicolas MACZYTA et Lug Brunet
  */
 public class ThreadConnexion extends Thread {
 
@@ -32,7 +33,7 @@ public class ThreadConnexion extends Thread {
 
     @Override
     public void run() {
-        // Lecture de 'Bonjour'
+        // Lecture de message depuis Usine
         String message = "";
         try {
             message = input.readLine();
@@ -42,12 +43,14 @@ public class ThreadConnexion extends Thread {
         }
         System.out.println("Lu: " + message);
         
-        // Envoi de 'Bonjour'
+        // Envoi de la requete 
+        // TODO : generer une requete avec un type de voiture et une quantité
+
         message = "il me faut une voiture";
         System.out.println("Envoi: " + message);
         output.println(message);
 
-        // Lecture de 'Au revoir'
+        // Lecture reception json objet
         message = "";
         try {
             message = input.readLine();
@@ -57,7 +60,7 @@ public class ThreadConnexion extends Thread {
         }
         System.out.println("Lu: " + message);
         
-        // Envoi de 'Au revoir'
+        // Envoi de la confirmation
         message = "bien recu";
         System.out.println("Envoi: " + message);
         output.println(message);

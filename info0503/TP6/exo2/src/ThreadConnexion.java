@@ -43,7 +43,7 @@ public class ThreadConnexion extends Thread {
         System.out.println("Lu: " + message);
         
         // Envoi de 'Bonjour'
-        message = "Bonjour";
+        message = "il me faut une voiture";
         System.out.println("Envoi: " + message);
         output.println(message);
 
@@ -58,7 +58,7 @@ public class ThreadConnexion extends Thread {
         System.out.println("Lu: " + message);
         
         // Envoi de 'Au revoir'
-        message = "Au revoir";
+        message = "bien recu";
         System.out.println("Envoi: " + message);
         output.println(message);
 

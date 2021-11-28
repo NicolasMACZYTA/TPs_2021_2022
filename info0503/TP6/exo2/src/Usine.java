@@ -4,9 +4,10 @@ import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.PrintWriter;
-
+import Voitures.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
 
 /**
  * Classe correspondant à un client TCP.
@@ -44,7 +45,7 @@ public class Usine {
         }
 
         // Envoi de 'Bonjour'
-        String message = "Bonjour";
+        String message = "Usine en attente de commande :";
         System.out.println("Envoi: " + message);
         output.println(message);
 
@@ -58,7 +59,9 @@ public class Usine {
         System.out.println("Lu: " + message);
 
         // Envoi de 'Au revoir'
-        message = "Au revoir";
+
+        //ajout voiture
+        message = "voiture a (rajouter plus tard)";
         System.out.println("Envoi: " + message);
         output.println(message);
 

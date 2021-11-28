@@ -12,7 +12,17 @@ src
     Place.java
     testVoiture.java
     usine.java
+    Constructeur.java
+    Threadconnexion.java
+    
+compilation
 
-javac -d cls -cp misc/json-20210307.jar -sourcepath src src/testVoiture.java
+javac -d cls -cp misc/json-20210307.jar -sourcepath src src/*.java
 
-java -cp cls:misc/json-20210307.jar testVoiture
+execution
+
+serveur
+java -cp cls:misc/json-20210307.jar Constructeur
+
+client
+java -cp cls:misc/json-20210307.jar Usine

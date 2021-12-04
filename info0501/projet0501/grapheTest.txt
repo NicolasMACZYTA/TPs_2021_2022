@@ -1,0 +1,11 @@
+nSommets 5
+oriente 1
+value 1
+DEBUT_DEF_ARCS
+1 3 5
+1 4 -1
+2 1 2
+3 2 10
+4 5 3
+5 1 1
+FIN_DEF_ARCS

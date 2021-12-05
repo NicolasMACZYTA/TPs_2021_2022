@@ -1,16 +1,13 @@
-#ifndef CELLULE_H
-#define CELLULE_H
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#ifndef CELLULE
+#define CELLULE
 
-typedef struct cellule_t{
-    int idSommet;
-    struct cellule_t *succ;
-    struct cellule_t *pred;
+typedef struct cellule_type{
+    int id_sommet;
+    int poids;
+    struct cellule_type *suiv;
+    struct cellule_type *prec;
 }cellule_t;
 
-void initialiserCellule(cellule_t *c, int idSommet);
-
+int initialiser_cellule(cellule_t *c, int id_sommet);
 
 #endif

@@ -1,69 +1,76 @@
-#include <stddef.h>
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
+
 #include "liste.h"
 
-void initialiserListe(liste_t *l){
-    l->tete=NULL;
+int initialiser_liste(liste_t* liste){
+    liste->tete = NULL;
+
+    return 0;
 }
 
-void detruireListe(liste_t* l){
-    if(l->tete!=NULL){
-        while(l->tete!=NULL){
-            if(l->tete->succ != NULL){
-                l->tete=l->tete->succ;
-                l->tete->pred=NULL;
-            }else{
-                l->tete=NULL;
-            }
-        }
+int detruire_liste(liste_t* liste){
+    while(liste->tete){
+        supprimer(liste, &(liste->tete));
     }
-    
+    return 0;
 }
 
-void insererListe(liste_t *l, cellule_t *c){
-   c->succ=l->tete;
-	if(l->tete!=NULL){
-		l->tete->pred=c;
-	}
-	c->pred = NULL;
-	l->tete = c;
-}
+int afficher_liste(liste_t* liste){
+    cellule_t* c;
+    if(liste){
+        c = liste->tete;
+        while(c){
+            printf("%d [%d]",c->id_sommet,c->poids);
+            c = c->suiv;
+        }   
 
-void afficherListe(liste_t *l){
-    cellule_t *c;
-    if(l->tete==NULL){
-        printf("Liste Vide\n");
-    }else{
-        c=malloc(sizeof(cellule_t));
-        c=l->tete;
-        while(c!=NULL){
-            printf("%d ",c->idSommet);
-            c=c->succ;
-        }
-        printf("\n");
-        free(c);
     }
+    else{
+        printf("Cette liste est vide");
+    }
+    printf("\n");
+    return 0;
 }
 
-cellule_t* rechercher(liste_t *l, int sommet){
-    cellule_t *c=l->tete;
-    while( (c->idSommet != sommet) && (c->succ != NULL) ){
-		c=c->succ;
-	}
-	if(c->idSommet != sommet){
-		c = NULL;
-	}
+int inserer(liste_t* liste, cellule_t* c){
+    c->suiv = liste->tete;
+    if(liste->tete){
+        liste->tete->prec = c;
+    }
+    liste->tete = c;
+    c->prec = NULL;
+    return 0;
+}
+
+cellule_t* rechercher(liste_t* liste, int val){
+    cellule_t *c = liste->tete;
+    while(c && c->id_sommet != val){
+        c = c->suiv;
+    }
     return c;
 }
 
-void supprimerListe(liste_t *l, cellule_t *c){
-    if(c->pred!=NULL){
-		c->pred->succ = c->succ;
-	}else{
-		l->tete=c->succ;
-	}
-	if(c->succ != NULL){
-		c->succ->pred=c->pred;
-	}
+int supprimer(liste_t* liste, cellule_t** c){
+    if((*c)->suiv){
+        (*c)->suiv->prec = (*c)->prec;
+    }
+    
+    if((*c)->prec){
+        (*c)->prec->suiv = (*c)->suiv;
+    }
+    else{
+        liste->tete = (*c)->suiv;
+        if(liste->tete){
+            liste->tete->prec = NULL;
+        }
+    }
+    free(*c);
+    *c = NULL;
+    return 0;
+
 }
+
+
+
+

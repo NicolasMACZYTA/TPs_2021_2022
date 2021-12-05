@@ -1,17 +1,22 @@
-#ifndef LISTE_H
-#define LISTE_H
+#ifndef LISTE
+#define LISTE
 #include "cellule.h"
 
-typedef struct liste_t{
-    cellule_t* tete;
+typedef struct liste_type{
+    cellule_t *tete;
 }liste_t;
 
-void initialiserListe(liste_t *l);
-void detruireListe(liste_t *l);
-void insererListe(liste_t *l, cellule_t *c);
-void afficherListe(liste_t *l);
-cellule_t* rechercher(liste_t *l, int sommet);
-void supprimerListe(liste_t *l, cellule_t *c);
+int initialiser_liste(liste_t*);
+
+int detruire_liste(liste_t*);
+
+int afficher_liste(liste_t*);
+
+int inserer(liste_t*, cellule_t*);
+
+cellule_t* rechercher(liste_t*, int);
+
+int supprimer(liste_t*, cellule_t**);
 
 
 #endif

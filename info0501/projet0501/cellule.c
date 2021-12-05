@@ -1,10 +1,10 @@
-#include <stddef.h>
+#include <stdlib.h>
 #include "cellule.h"
 
-void initialiserCellule(cellule_t *c, int idSommet){
+int initialiser_cellule(cellule_t *c, int id_sommet){
+    c->id_sommet = id_sommet;
+    c->prec = NULL;
+    c->suiv = NULL;
 
-    c->pred=NULL;
-    c->succ=NULL;
-    c->idSommet=idSommet;
-  
+    return 1;
 }

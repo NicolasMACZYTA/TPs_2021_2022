@@ -1,5 +1,5 @@
 CC = gcc -Wall -O3
-OBJETS = test.o cellule.o liste.o graphe.o file.o algo.o
+OBJETS = test.o cellule.o liste.o graphe.o file.o ensemble.o plus_court_ch.o
 
 test : $(OBJETS)
 	$(CC) -o test $(OBJETS) -g
@@ -19,8 +19,12 @@ graphe.o : graphe.c graphe.h
 file.o : file.c file.h
 	$(CC) -c file.c -g
 
-algo.o : algo.c algo.h
-	$(CC) -c algo.c -g
-	
+ensemble.o : ensemble.c ensemble.h
+	$(CC) -c ensemble.c -g
+
+plus_court_ch.o : plus_court_ch.c plus_court_ch.h
+	$(CC) -c plus_court_ch.c -g
+
+
 clean:
 	rm test $(OBJETS)

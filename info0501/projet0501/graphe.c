@@ -1,4 +1,5 @@
-#include"graphe.h"
+#include "graphe.h"
+#include "cellule.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,14 +37,14 @@ void initialiserGraphe(graphe_t *g, char *nomFichier){
 		fscanf(fichier,"%d",&g->nb_sommets);
 		
 		// Allocation et initialisation de la matrice d'adjacence
-		printf("Allocation memoire matrice, nombre de sommet = %d\n",g->nb_sommets);
+		/*printf("Allocation memoire matrice, nombre de sommet = %d\n",g->nb_sommets);
 		g->matriceAdjacence=malloc(sizeof(int*)*g->nb_sommets);
 		for(i=0;i<g->nb_sommets;i++){
 			g->matriceAdjacence[i]=malloc(sizeof(int)*g->nb_sommets);
 			for(j=0;j<g->nb_sommets;j++){
 				g->matriceAdjacence[i][j]=0;
 			}
-		}
+		}*/
 		
 		// Initialisation de la liste d'adjacence
 		printf("allocation mémoire lAdjacence\n");
@@ -79,27 +80,20 @@ void initialiserGraphe(graphe_t *g, char *nomFichier){
 				cellule_t *s1,*s2;
 				s1 = (cellule_t*)malloc(sizeof(cellule_t));
 				s2 = (cellule_t*)malloc(sizeof(cellule_t));
-                fscanf(fichier, "%d %d", &sommet1, &sommet2);
+                fscanf(fichier, "%d %d %d", &sommet1, &sommet2, &valeur);
+				printf("lecture %d %d\n", sommet1,sommet2);
                 if ((sommet1 >= 1 && sommet1 <= g->nb_sommets) &&
                     (sommet2 >= 1 && sommet2 <= g->nb_sommets)) {//verification des valeurs
-					
-					initialiserCellule(s1,sommet1);
-					initialiserCellule(s2,sommet2);
-					
-					
-					if(g->valuer==1){//verif si graphe valuer
-						fscanf(fichier, " %d", &valeur); // valeur est initialiser à 1 dans le cas ou le graph n'est pas valuer
-						s2->poids=valeur;
-					}
-					inserer(&(g->listeAdjacences[s1->id_sommet-1]),s2);
+					sommet1--;
+					sommet2--;
+					initialiser_cellule(s1,sommet1);
+					initialiser_cellule(s2,sommet2);
 
-                    g->matriceAdjacence[sommet1-1][sommet2-1] = valeur;
-                    if (g->orienter == 0) {
-                        g->matriceAdjacence[sommet2-1][sommet1-1] = valeur;
-                    }
-					g->aretes[count].origine=&g->tSommet[sommet1];
-					g->aretes[count].fin=&g->tSommet[sommet2];
+					g->aretes[count].origine=&g->tSommet[s1->id_sommet];
+					g->aretes[count].fin=&g->tSommet[s2->id_sommet];
 					g->aretes[count].poids=valeur;
+					
+					inserer(&(g->listeAdjacences[s1->id_sommet]),s2);
 					count++;
 					
 					
@@ -108,39 +102,17 @@ void initialiserGraphe(graphe_t *g, char *nomFichier){
 			}
 		}
 
-
-		/*
-		//Mise à jour de la liste d'adjacence
-		printf("début du remplissage de la liste d'adjacence\n");
-
-
-		for(i=0;i<g->nb_sommets;i++){
-		    for(j=0;j<g->nb_sommets;j++){
-		        if(g->matriceAdjacence[i][j] != 0){
-					c=malloc(sizeof(cellule_t));
-					initialiserCellule(c,j+1);
-                    insererListe(&g->listeAdjacences[i], c);
-		        }
-		    }
-			c=malloc(sizeof(cellule_t));
-			initialiserCellule(c,i+1);
-			insererListe(&g->listeAdjacences[i],c);
-		}
-		*/
-
-
 		//initialisation du tableau de sommet
 		printf("initialisation du tableau de sommets\n");
 		for(i=0;i<g->nb_sommets;i++){
-			g->tSommet[i].idSommet=g->listeAdjacences[i].tete->id_sommet;
+			g->tSommet[i].idSommet=i;
 			g->tSommet[i].cAsso=g->listeAdjacences[i].tete;
 		}
 
-		/*
-		debug tableau aretes
+		//debug tableau aretes
 		for(i=0;i<l;i++){
-			printf("count : %d origine : %d fin : %d poids %d\n",i,g->aretes[i].origine->idSommet,g->aretes[i].fin->idSommet,g->aretes[i].poids);
-		}*/
+			printf("%d -> %d poids :%d\n",g->aretes[i].origine->idSommet,g->aretes[i].fin->idSommet,g->aretes[i].poids);
+		}
 		
 		rewind(fichier);//replace le curseur au début du fichier
 		fclose(fichier);
@@ -153,7 +125,8 @@ void initialiserGraphe(graphe_t *g, char *nomFichier){
 
 void afficherGraphe(graphe_t *g){
 	liste_t l;
-	int i=0, j=0;
+	int i=0;
+	// int j=o; // utile pour matrice seulement
 	
 	if(g->nb_sommets!=-1){
 
@@ -173,6 +146,7 @@ void afficherGraphe(graphe_t *g){
 		}
 		printf("Listes d'adjacences :\n\n");
 		for(i=0;i<g->nb_sommets;i++){
+			printf("sommet : [%d] -->",i+1);
 			printf(" %d --> ", g->listeAdjacences[i].tete->id_sommet);
 			l=g->listeAdjacences[i];
 			l.tete=l.tete->suiv;

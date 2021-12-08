@@ -1,12 +1,23 @@
 #include <stdlib.h>
 #include <stdio.h>
-
+#include "sommet.h"
 #include "liste.h"
 
 int initialiser_liste(liste_t* liste){
     liste->tete = NULL;
 
     return 0;
+}
+
+int initialiser_sommet(sommet_t* s, int id){
+    s->idSommet = id;
+    s->couleur = BLANC;
+    s->distance = 999999;
+    s->pere = NULL;
+    s->debut = 0;
+    s->fin = 999999;
+
+    return 1;
 }
 
 int detruire_liste(liste_t* liste){

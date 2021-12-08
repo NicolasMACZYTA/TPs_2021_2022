@@ -1,4 +1,5 @@
 #include "plus_court_ch.h"
+#include <stdio.h>
 
 void afficherChemin(graphe_t *g, sommet_t* s, sommet_t* v){
     if(v==s){
@@ -65,35 +66,7 @@ sommet_t* extraireMinTab(sommet_t** t, int taille){
     
     return t[taille-1];
 }
-/*
-void dijskstaTab(graphe_t *g,int** w, sommet_t *s){
-    sommet_t **tab = malloc(sizeof(sommet_t*)*g->nb_sommets);
-    sommet_t *u;
-    sommet_t *v;
-    liste_t l;
-    sourceUniqueInitialisation(g,s);
-    for(int i=0;i<g->nb_sommets;i++){
-        tab[i]=&g->tSommet[i];
-    }
-    
 
-    for(int i=0;i<g->nb_sommets;i++){
-        u=extraireMinTab(tab,g->nb_sommets-i);
-        l=g->listeAdjacences[u->idSommet-1];
-        v=&g->tSommet[u->idSommet-1];
-        do{
-            if(u!=v){
-                relacher(u,v,w);
-            }
-            
-            l.tete=l.tete->succ;
-            if(l.tete!=NULL){
-                v=&g->tSommet[l.tete->idSommet-1];
-            }
-        }while(l.tete!=NULL);
-    }
-}
-*/
 ensemble_t* dijkstra(graphe_t* g, sommet_t* s){
     int i = 0;
     file_t* f;
@@ -103,7 +76,7 @@ ensemble_t* dijkstra(graphe_t* g, sommet_t* s){
     cellule_t* cell;
 
     f = (file_t*)malloc(sizeof(file_t));
-    initialiserFile(f,g->nb_sommets);
+    initialiser_file(&f,g->nb_sommets);
     e = (ensemble_t*)malloc(sizeof(ensemble_t)*g->nb_sommets);
     ensemble_final = (ensemble_t*)malloc(sizeof(ensemble_t));
 
@@ -111,11 +84,12 @@ ensemble_t* dijkstra(graphe_t* g, sommet_t* s){
     {
         e[i] = *creer_ensemble(&g->tSommet[i]);
         enfiler(f,&g->tSommet[i]);
+        printf("enfiler");
     }
     
     sourceUniqueInitialisation(g,s);
 
-    while(!fileVide(f)){
+    while(!file_vide(f)){
         u = defiler(f);
         if(ensemble_final->tete == NULL){
             ensemble_final = creer_ensemble(u);
@@ -127,7 +101,7 @@ ensemble_t* dijkstra(graphe_t* g, sommet_t* s){
             cell = cell->suiv;
         }
     }
-
+    printf("fin dijkstra \n");
     return ensemble_final;
 }
 
@@ -164,12 +138,16 @@ int afficher_pcc(graphe_t* g){
         cell = &g->tSommet[i];
         while (cell)
         {
-            printf("%d ->", cell->idSommet);
+            printf("[%d]", cell->idSommet+1);
             cell = cell->pere;
+            if(cell){
+                printf("->");
+            }
         }
             printf("\n");
     }
     
     return 1;
 }
+
 

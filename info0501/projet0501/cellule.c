@@ -8,3 +8,4 @@ int initialiser_cellule(cellule_t *c, int id_sommet){
 
     return 1;
 }
+

@@ -11,7 +11,7 @@ int main(int argc, char* argv[]){
     int val,val2;
     int i;
     g = malloc(sizeof(graphe_t));
-    ensemble = malloc(sizeof(ensemble_t*));
+    //ensemble = malloc(sizeof(ensemble_t*));
     printf("10 000 = %d\n",10000);
     initialiserGraphe(g,argv[1]);
 
@@ -31,21 +31,10 @@ int main(int argc, char* argv[]){
     //afficherGraphe(g);
 
 
-    /*
-    if(bellmandFord(g,g->matriceAdjacence,&g->tSommet[val-1])){
-        printf("bellmand-ford:\n");
-        for(i=0;i<g->nb_sommets;i++){
-           afficherChemin(g,&g->tSommet[val-1],&g->tSommet[i]);
-           printf("\n\n");
-        }
-    }else{
-        printf("ca marche pas :(\n");
-    }
-    */
-
+    bellman_ford(g,&g->tSommet[0]);
+    afficher_pcc(g);
     //dijskstaTab(&g,g.matriceAdjacence,&g.tSommet[val-1]);
-
-    printf("DIJSKTRA TABLEAU\n");
+    
     /*for(i=0;i<g.nb_sommets;i++){
         afficherChemin(&g,&g.tSommet[val-1],&g.tSommet[i]);
         printf("\n\n");
@@ -54,7 +43,9 @@ int main(int argc, char* argv[]){
 
     ensemble = dijkstra(g,&g->tSommet[0]);
 
-    afficher_ensemble(ensemble);
+    printf("dijkstra :\n");
+    //afficher_ensemble(ensemble);
+
 
 
     return 0;

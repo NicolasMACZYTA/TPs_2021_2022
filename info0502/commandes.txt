@@ -1,0 +1,5 @@
+['fichier']. //ouvre fichier
+trace. //trace
+notrace. //notrace puis nodebug.
+appuer sur ; pour avoir les autres valeurs
+findall(X,divinite_primordiale(X),Liste).

@@ -1,0 +1,143 @@
+1. Ce qui sera à rendre
+
+Comme cela a été évoqué dans le sujet de TP 1, votre projet concerne la mise en oeuvre d'un système de commande de voiture (avec quelques simplifications) qui va être l'occasion de faire dialoguer différentes entités selon un principe client/serveur.
+
+Ce projet demandera deux rendus rassemblés au sein d'une même archive .zip (de moins de 50Mo) :
+
+    un rapport décrivant le projet et incluant tout ce qui a été demandé (voir page "contenu du rapport"). Une version PDF ainsi qu'une version source doivent être présentes (docx, odt, tex, ...).
+
+    le code source avec les moyens pour facilement reproduire un scénario de fonctionnement type (ces scénarios sont évoqués dans le chapitre "contenu du rapport").
+
+
+
+2. Contenu du rapport
+
+Vous allez produire un rapport qui devra déjà avoir la forme d'un "vrai" rapport :
+
+    page de garde
+    sommaire (automatique)
+    en-tête/pied-de-page
+    ...
+
+Dans ce rapport vous devrez inclure :
+
+    un schéma global détaillant toutes les entités en présence et les technologies de communication associées entre elles (on ne demande pas un diagramme de classe). Vous devrez en outre préciser dans quel ordre doit être démarré toutes ces entités pour que le système soit fonctionnel.
+
+    Pour chaque couple d'entités pouvant communiquer entre elles, il faudra indiquer :
+
+        le format des messages échangés et la justification de ce choix de format,
+
+        la liste des requêtes associés,
+
+        au moins un chronogramme détaillant un de ces échanges.
+
+    Pour les scénarios suivants, établir le chronogramme complet des échanges qui ont lieu entre toutes les entités concernées :
+
+        Scénario A : un client commande une voiture déjà en stock. On effectue juste la commande, pas de livraison.
+
+        Scénario B : un client commande une voiture d'après le catalogue, cette voiture est construite dans la foulée et peut-être livrée tout de suite après (ce qui est généralement impossible dans la réalité). Dans ce scénario, il n'y a pas de livraison.
+
+        Scénario C : un client commande une voiture d'après le catalogue mais la construction n'est pas possible dans l'immédiat. Après rechargement du stock de l'usine concernée grâce au fournisseur, la voiture est construite et est mise à disposition du client (voir chapitre "Livraison" correspondante).
+
+En plus de ces éléments, vous pourrez expliquer les choix particuliers d'implémentation  que vous avez pu prendre (ce qui sort de ce que vous avez vu en TP).
+
+
+
+3. Architecture du SCV et livraison
+
+Dans ce chapitre, nous allons détailler les communications que vous allez devoir utiliser entre les différents entités et rappeler comment le livreur est géré (voir aussi le sujet de TP 7).
+Serveurs du système SCV
+
+Ainsi, vous aurez de base :
+
+    un unique serveur PHP qui sera utilisé pour le site du concessionnaire. C'est sur ce site que l'utilisateur pourra consulter le catalogue et initier une commande.
+
+    un serveur HTTP JAVA pour chaque constructeur présent dans le système (un pour commencer, cela ira très bien). Ainsi, tout requête du concessionnaire nécessitant d'interroger un constructeur partira du site PHP vers le serveur HTTP JAVA concerné.
+
+    un serveur TCP par constructeur pour le dialogue avec ses usines (qui seront donc ses clients TCP).
+
+    une liaison UDP entre les usines et leurs fournisseurs.
+
+Cette architecture vous permettra d'initier tous les traitements demandés.
+
+A cette architecture va se rajouter la partie sécurité au travers d'un serveur TCP JAVA  qui sera l'autorité de certification. Tout serveur JAVA doit avoir un certificat valide fourni par cette autorité. De là, toute échanges client/serveur JAVA sera chiffré selon le protocole exposé à la séance de TP 8.
+Gestion du livreur
+
+Le livreur est un objet qui sert à transporter, de manière chiffrée, la voiture produite pour le client. Dans le système SCV, nous estimerons que c'est l'usine qui s'occupe de prévenir un livreur qu'il y a une livraison à faire. Pour simplifier, on partira du principe qu'un objet Livreur est obtenu via un patron de conception Factory auquel on fournit la Voiture à livrer et une clé de chiffrement. De là, un objet Livreur est produit avec la version chiffrée de la Voiture. Cela signifie qu'un objet Livreur ne connaît pas la clé de chiffrement/déchiffrement (c'est un chiffrement symétrique pour rappel). Dès qu'une Usine a produit un objet Livreur, elle le sérialise classiquement (JAVA) et en profite pour fournir la clé de déchiffrement à son constructeur  de référence.
+
+Pour finaliser la récupération de sa voiture, le client, via le concessionnaire, pourra demander où la voiture est stockée (sérialisée) et la clé de chiffrement/déchiffrement associée. En plus, les détails de la voiture seront rappelés (grâce à une version JSON de celle-ci renvoyé par le constructeur). 
+
+Avec toutes ces informations (lieu de stockage du Livreur sérialisé et clé de chiffrement), le client, via un petit objet JAVA, pourra désérialiser le Livreur et déchiffrer sa Voiture pour l'obtenir (comme au TP 7). Normalement, l'information obtenue sera la même que celle affichée dans le serveur.
+
+
+
+4. Mise en oeuvre du SCV
+
+Comme vous l'avez certainement remarqué, démarrer tout votre système va nécessiter :
+
+    plusieurs terminaux (un par serveur au minimum)
+
+    une bonne gestion des ports utilisés (HTTP, TCP, UDP) par toutes les entités
+
+    des protocoles de tests pour s'assurer que tout fonctionne bien
+
+Le principal souci vient du principe même de fonctionnement du SCV. C'est un système uniquement réactif c'est à dire que c'est l'interaction avec le site du concessionnaire qui engendre un ensemble de réaction de tous les acteurs. Il serait très utile, à tout moment, de pouvoir examiner ou faire évoluer les entités du système entre deux demandes du client.
+
+Pour que cela soit possible, il faudrait que vos objets puissent en même temps répondre non seulement aux requêtes qui arrivent mais aussi à vos sollicitations. Par exemple, une fois le système démarré, on pourrait volontairement demander à une usine de créer des voitures aléatoires en dehors de toute demande.
+
+Pour vous aider à faire cela, ce qui vous permettra en plus de debugger facilement l'état de votre système, je vous propose une ressource complémentaire autour d'un objet que j'ai appelé Surveillant. 
+Surveillant
+
+Cet objet est une classe abstraite implémentant l'interface Runnable. Cette classe donne le squelette d'une interaction utilisateur au travers d'un thread dédié. Ainsi, vos serveurs peuvent continuer à tourner pendant que cet objet fonctionne. L'idée est de créer un objet qui hérite de cette classe pour préciser quel objet il doit surveiller et quelle action il peut faire dessus. Pour illustrer cela, j'ai mis dans la ressource Surveillant.zip une exemple d'utilisation dans lequel j'ai fait une classe qui peut surveiller une ArrayList<Long>. Ensuite dans une classe de test, je crée un tableau qui va avoir des valeurs se rajouter toutes les secondes pendant 30s. Pendant ce temps, vous pouvez surveiller ce tableau grâce au thread dédié en tapant des commandes dans le terminal.
+Démarrage du SCV
+
+Afin de rendre l'utilisation de votre application aisée, il faudra faire en sorte que le démarrer se fasse d'une manière codifiée indépendante de tout Environnement de Développement Intégré (EDI). Pour ce faire,  vous allez devoir établir un protocole de lancement de vos différents serveurs JAVA (on estimera que le serveur PHP pourra être démarré en dernier) incluant éventuellement le chargement d'objets déjà prêt (sérialisation JAVA ou JSON). L'utilisation de fichiers de configuration indépendant JSON pourrait être aussi une bonne idée mais ce n'est pas obligatoire si vous avez déjà des objets à charger.
+Test des différentes parties du SCV
+
+Vous ne pourrez pas dès la départ faire fonctionner tout le système de concert, il faudra donc prévoir des "raccourcis" pour tester les différentes parties. Le plus simple est de partir de la connexion la plus interne d'une requête (Constructeur/Usine par exemple) et voir si elle fonctionne. Pour ce faire, dans vos objets, vous mettrez en place des méthodes spécifiques que vous appelerez testRequeteXX avec XX un nombre qui fera référence à une vraie requête (le détail devra être disponible dans la documentation de votre application ainsi que dans votre rapport). Ainsi, grâce à l'utilisation de classe héritant de l'objet Surveillant, vous serez en mesure d'appeler ces méthodes pour tester les requêtes. Dans les méthodes testRequeteXX, il est normal de préparer des requêtes en "dur" pour des finalités de test. Cela doit être simple.
+
+
+
+5. Barème
+
+Dans ce projet, il y a beaucoup de chose à mettre en place. Votre objectif principal est de prouver que vous maîtrisez la mise en place des différents technologies de communication. C'est pour cela que le barème exposé dans ce chapitre valorise votre capacité à prouver que chaque étape de votre projet a été testé localement avant d'être rajouté dans un scénario de fonctionnement plus complet.
+Barème du rapport
+
+Voici le détail du barème actuel (peut être amené à évoluer). Pour le moment, c'est un barème sur 60 points répartis ainsi :
+
+    Mise en forme global (4 points) : nombre de page minimum de 10, page de garde, table des matières automatiques, en-tête/pied-de-page, ... Le tout peut être complément annulé par un malus de 4 points si le rapport est rempli de fautes (orthographe/grammaire) et/ou si la gestion de la composition des éléments est trop souvent en dur et à la main (retour chariot excédentaires, ...). Au passage, le malus peut aussi être sans que dans la mise en forme n'est fait (ce qui fait perdre au final 8 points).
+
+    Présentation globale (8 points) : cela évalue le schéma global du système SCV et le détail du démarrage d'un tel système
+
+    Pour chaque type de communication, il faut détailler le format des échanges, la liste des requêtes associées et au moins un chronogramme d'exemple (voir chapitre "contenu du rapport"). Cela rapporte 12 points par partie et il y en a 3 : concessionnaire/constructeur, constructeur/usine et usine/fournisseur.
+
+    Pour les scénarios d'exécution (voir chapitre "contenu du rapport"), chaque chronogramme rapporte 4 points (et il y en a 3).
+
+Barème du projet (code)
+
+Voici le détail du barème actuel (peut être amené à évoluer). Pour le moment, c'est un barème sur 76 points répartis ainsi :
+
+    Gestion du système (6 points) : il s'agit de la présence d'une aide concrète au démarrage du système SCV via la présence d'objets pré-établie ou au minimum de fichier de configuration ainsi que tout le nécessaire au démarrage des scénario de fonctionnement.
+
+    Serveur PHP concessionnaire (6 points) : est évalué ici le bon fonctionnement du serveur aux demandes du client ainsi que la bonne connexion avec le(s) constructeur(s)
+
+    Serveur HTTP constructeur (8 points) : est évalué ici le bon fonctionnement du serveur aux requêtes du concessionnaire, qu'il soit testable en local (testRequeteXX) et qu'il soit certifié par l'autorité de certification.
+
+    Liaison TCP constructeur/usine (12 points) : est évalué ici le bon fonctionnement du serveur et du(des) clients associés, que tout soit testable en local que les entités soient certifiées et la communication chiffrée.
+
+    Liaison UDP usine/fournisseur (12 points) : même principe d'évaluation que la partie TCP mais pour l'UDP entre usine et fournisseur.
+
+    Le bon fonctionnement des scénarios : le A rapporte 5 points, le B 10 points et le C 15 points. Cette partie inclue notamment la gestion de la livraison de la voiture suivant le scénario.
+    Le rendu des différents TP (2 points extensible à 4 points donc) : si les rendus sont réguliers et correspondent globalement au demandé (format + contenu), les 2 points sont obtenables facilement. Les 2 points supplémentaires (en bonus sur le barème) sont récupérables si chaque rendu a répondu complètement à chaque demande associée.  
+
+Remarque
+
+Voici plusieurs détails supplémentaires :
+
+    Notez que pour tous les ces éléments, il y a toujours 5 états possibles : non fait, à peine fait/fonctionnel, partiellement fait/fonctionnel, presque fait/fonctionnelle et fait/fonctionnel qui rapportent respectivement 0% / 25% / 50% / 75% / 100% des points associés.
+
+    La notion de sécurité est directement présente dans les différentes parties concernés sous la forme d'entité JAVA certifiée (dont il doit y avoir une autorité de certification quelque part) et du chiffrement quand c'est possible (uniquement dans les communications TCP/UDP et la gestion de la livraison.
+
+
+
+

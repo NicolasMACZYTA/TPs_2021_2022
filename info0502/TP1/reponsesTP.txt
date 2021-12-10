@@ -1,0 +1,9 @@
+5. fruit_de(tartare,X),fruit_de(Y,X),male(Y),tartare\=Y.
+
+6. fruit_de(hera,P,_),fruit_de(P,GP). //P = cronos, GP = ouranos, P = rhea, GP = ouranos
+
+8. fruit_de(persephone,M,P1),femelle(M),fruit_de(E,M,P2),P1\=P2,persephone\=E.
+
+9. divinite(D),fruit_de(D,P,_),fruit_de(P,GP,_),fruit_de(T,GP,_),femelle(T),divine(T),D\=T.
+
+findall(X, enfant(X,zeus), Liste).

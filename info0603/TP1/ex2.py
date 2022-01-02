@@ -6,11 +6,11 @@ import doctest as dt
 
 
 class ElmtZnZ(object):
-    """>> >a=ElmtZnZ(7,8)
+    """>>> a=ElmtZnZ(7,8)
     >>> b=ElmtZnZ(2,8)
     >>> a==b
     False
-    >> >a+b
+    >>> a+b
     ElmtZnZ(1,8)
     >>> a+3
     ElmtZnZ(2,8)

@@ -1,0 +1,22 @@
+theoreme chinoi a implémenter
+premiere methode :
+Soit l'equation modulaire :
+a[n]
+b[m]
+
+On fait pgcd(n,m)=d
+application de bezout : au+bv=d
+On trouve un u et v qui confirme d
+On fait un produit en croix de l'équation modulaire on rajoutant u a n, et v a m
+soit :
+c = a*m*u + b*n*v
+
+Une fois qu'on connait c, on fait c[nxm]
+
+
+log discret :
+
+soit a[n] et on recherche b donnée
+tq (a^x)[n]=b[n]
+
+vous allez en gros tester toutes les puissance jusque trouver b dans le modulo n

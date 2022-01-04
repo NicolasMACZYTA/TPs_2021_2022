@@ -79,7 +79,7 @@ class ElmtZnZ(object):
 
     """
     def __init__(self,a,n):
-        """initialisation"""
+        """initialisation d'un ElmtZnZ"""
         self.a=a%n
         self.n=n
 
@@ -142,7 +142,7 @@ class ElmtZnZ(object):
             return ElmtZnZ(self.a-other,self.n)
 
     def __rsub__(self,other):
-        """reverse soustractionb"""
+        """reverse soustraction"""
         return self-other
     
     def __pow__(self,other):
@@ -155,10 +155,10 @@ class ElmtZnZ(object):
         return ElmtZnZ(c,self.n*other.n)        
         
     def estInversible(self):
-        """verifie si nombre est inversible"""
+        """verifie si l'element est inversible"""
 
     def inverse(self):
-        """inverse le nombre"""
+        """inverse l'element"""
     
     def logDiscret(self,b):
         """Renvoie x tel que self.a**x==b(self.n) n doit etre premier"""

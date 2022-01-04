@@ -66,7 +66,7 @@ class ElmtZnZ(object):
     >>> ElmtZnZ(3,8).estInversible()
     True
     >>> b.inverse()
-    '2 n est pas inversible'
+    2 n'est pas inversible
     >>> a.inverse()
     ElmtZnZ(7,8)
     >>> a**2
@@ -164,6 +164,11 @@ class ElmtZnZ(object):
 
     def inverse(self):
         """inverse l'element"""
+        if self.estInversible():
+            print(f'agrougroutodo')
+        else:
+            print(f"{self.a} n'est pas inversible")
+        
     
     def logDiscret(self,b):
         """Renvoie x tel que self.a**x==b(self.n) n doit etre premier"""

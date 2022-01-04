@@ -4,6 +4,31 @@ import matplotlib.pyplot as plt
 import numpy as np
 import doctest as dt
 
+def PGCD(a,b):
+    """Renvoie le PGCD entre deux nombres
+    >>> PGCD(360,304)
+    8
+    >>> PGCD(517,513)==1 and PGCD(513,517)==1
+    True"""
+    if b==0:
+        return a
+    else:
+        n = a%b
+        return PGCD(b,n)
+
+def bezout(a,b):
+    """Renvoie (v,u,d) tel que a.u+b.v=d avec d=PGCD(a,b)
+    >>> bezout(360,304)
+    (11, -13, 8)
+    >>> bezout(1254,493)
+    (-149, 379, 1)
+    >>> bezout(513,517)
+    (129, -128, 1)"""
+    if b==0:
+        return 1,0,PGCD(a,b)
+    else:
+        u,v,d = bezout(b, a%b)
+        return v,u - (a//b)*v, d
 
 class ElmtZnZ(object):
     """>>> a=ElmtZnZ(7,8)
@@ -120,14 +145,20 @@ class ElmtZnZ(object):
         """reverse soustractionb"""
         return self-other
     
+    def __pow__(self,other):
+        """permet de faire des puissance"""
+        
+    def valThChinois(self,other):
+        """Theoreme chinois"""
+        v,u,d=bezout(self.n,other.n)
+        c = self.a*other.n*u + other.a*self.n*v
+        return ElmtZnZ(c,self.n*other.n)        
+        
     def estInversible(self):
         """verifie si nombre est inversible"""
 
     def inverse(self):
         """inverse le nombre"""
-        
-    def valThChinois(self,other):
-        """Theoreme chinois"""
     
     def logDiscret(self,b):
         """Renvoie x tel que self.a**x==b(self.n) n doit etre premier"""

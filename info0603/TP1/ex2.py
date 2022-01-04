@@ -74,10 +74,8 @@ class ElmtZnZ(object):
     >>> ElmtZnZ(2,13).logDiscret(8)
     3
     >>> ElmtZnZ(2,13).logDiscret(3)
-    4
-
-
-    """
+    4"""
+    
     def __init__(self,a,n):
         """initialisation d'un ElmtZnZ"""
         self.a=a%n
@@ -165,11 +163,13 @@ class ElmtZnZ(object):
     def inverse(self):
         """inverse l'element"""
         if self.estInversible():
-            print(f'agrougroutodo')
+            for x in range(1, self.n):
+               if (((self.a%self.n) * (x%self.n)) % self.n == 1):
+                   return ElmtZnZ(x,self.n)
+               return ElmtZnZ(self.a,self.n)
         else:
             print(f"{self.a} n'est pas inversible")
         
-    
     def logDiscret(self,b):
         """Renvoie x tel que self.a**x==b(self.n) n doit etre premier"""
     

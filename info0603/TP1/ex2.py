@@ -87,27 +87,50 @@ class ElmtZnZ(object):
 
     def __mul__(self,other):
         """multiplication"""
+        if isinstance(other, ElmtZnZ):
+            assert self.n == other.n,f"modulos différents"
+            return ElmtZnZ(self.a*other.a,self.n)
+        else:
+            return ElmtZnZ(self.a*other,self.n)
 
     def __rmul__(self,other):
         """reverse multiplication"""
+        return self*other
 
     def __floordiv__(self,other):
         """implements a//b"""
+        if isinstance(other, ElmtZnZ):
+            assert self.n == other.n,f"modulos différents"
+            return ElmtZnZ(self.a//other.a,self.n)
+        else:
+            return ElmtZnZ(self.a//other,self.n)
 
     def __neg__(self):
         """retourne negatif de lui même"""
 
     def __sub__(self,other):
         """soustraction"""
+        if isinstance(other, ElmtZnZ):
+            assert self.n == other.n,f"modulos différents"
+            return ElmtZnZ(self.a-other.a,self.n)
+        else:
+            return ElmtZnZ(self.a-other,self.n)
 
     def __rsub__(self,other):
         """reverse soustractionb"""
+        return self-other
     
     def estInversible(self):
         """verifie si nombre est inversible"""
 
     def inverse(self):
         """inverse le nombre"""
+        
+    def valThChinois(self,other):
+        """Theoreme chinois"""
+    
+    def logDiscret(self,b):
+        """Renvoie x tel que self.a**x==b(self.n) n doit etre premier"""
     
 if __name__ == "__main__":
     dt.testmod()

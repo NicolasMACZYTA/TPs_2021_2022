@@ -176,6 +176,12 @@ class ElmtZnZ(object):
         
     def logDiscret(self,b):
         """Renvoie x tel que self.a**x==b(self.n) n doit etre premier"""
+        i=1
+        while ((self.a**i)%self.n)!=b:
+            i+=1;
+            if(i>1000):
+                return ohno
+        return i
     
 if __name__ == "__main__":
     dt.testmod()

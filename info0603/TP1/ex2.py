@@ -132,6 +132,7 @@ class ElmtZnZ(object):
 
     def __neg__(self):
         """retourne negatif de lui même"""
+        return ElmtZnZ(-self.a,self.n)
 
     def __sub__(self,other):
         """soustraction"""

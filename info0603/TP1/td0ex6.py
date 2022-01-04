@@ -5,8 +5,6 @@ import numpy as np
 import doctest as dt
 
 
-def gne():
-    """jesaispas"""
     
 #Sans aucune justification, proposer un ordre de grandeur de la probabilité que deux personnes de cette
 #salle aient la même date d’anniversaire.
@@ -16,7 +14,17 @@ def gne():
 #A partir de combien de personnes présentent cette probabilité dépasse 0,5 ? 0,9 ?
 
 
-#Wesh c'est quoi ça moi je suis pas magicien
+# 1-p(n) = 365/365+365/364*365/363*...*(365-n+1)/365
+
+
+def proba_anniversaire(n):
+    res = 1
+    for i in range(1,n+2):
+        res = res * ((365-i)/365)
+    return 1-res
+
+
+
 
     
 if __name__ == "__main__":

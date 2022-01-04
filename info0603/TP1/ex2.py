@@ -29,6 +29,18 @@ def bezout(a,b):
     else:
         u,v,d = bezout(b, a%b)
         return v,u - (a//b)*v, d
+    
+def estPremier(num):
+    if num==2:
+        return True
+    if num%2==0 or num<=1:
+        return False
+    c=int(sqrt(num))+1
+    
+    for div in range(3, c, 2):
+        if num % div==0:
+            return False
+    return True
 
 class ElmtZnZ(object):
     """>>> a=ElmtZnZ(7,8)
@@ -76,7 +88,9 @@ class ElmtZnZ(object):
     >>> ElmtZnZ(2,13).logDiscret(8)
     3
     >>> ElmtZnZ(2,13).logDiscret(3)
-    4"""
+    4
+    >>> ElmtZnZ(2,14).logDiscret(2)
+    14 n'est pas un nombre premier"""
     
     def __init__(self,a,n):
         """initialisation d'un ElmtZnZ"""
@@ -176,12 +190,13 @@ class ElmtZnZ(object):
         
     def logDiscret(self,b):
         """Renvoie x tel que self.a**x==b(self.n) n doit etre premier"""
-        i=1
-        while ((self.a**i)%self.n)!=b:
-            i+=1;
-            if(i>1000):
-                return ohno
-        return i
+        if estPremier(self.n):
+            i=1
+            while ((self.a**i)%self.n)!=b:
+                i+=1
+            return i
+        else:
+            print(f"{self.n} n'est pas un nombre premier")
     
 if __name__ == "__main__":
     dt.testmod()

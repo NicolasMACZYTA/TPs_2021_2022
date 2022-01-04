@@ -69,6 +69,8 @@ class ElmtZnZ(object):
     2 n'est pas inversible
     >>> a.inverse()
     ElmtZnZ(7,8)
+    >>> ElmtZnZ(13,8).inverse()
+    ElmtZnZ(5,8)
     >>> a**2
     ElmtZnZ(1,8)
     >>> ElmtZnZ(2,13).logDiscret(8)

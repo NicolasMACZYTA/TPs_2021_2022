@@ -156,6 +156,10 @@ class ElmtZnZ(object):
         
     def estInversible(self):
         """verifie si l'element est inversible"""
+        if PGCD(self.a,self.n)==1:
+            return True
+        else:
+            return False
 
     def inverse(self):
         """inverse l'element"""

@@ -102,9 +102,9 @@ class ElmtZnZ(object):
         """addition peut additionner avec un autre ElmtZnZ ou un entier"""
         if isinstance(other, ElmtZnZ):
             assert self.n == other.n,f"modulos différents"
-            return ElmtZnZ((self.a+other.a)%self.n,self.n)
+            return ElmtZnZ(self.a+other.a,self.n)
         else:
-            return ElmtZnZ((self.a+other)%self.n,self.n)
+            return ElmtZnZ(self.a+other,self.n)
 
     def __radd__(self,other):
         """reverse addition"""
@@ -114,9 +114,9 @@ class ElmtZnZ(object):
         """multiplication"""
         if isinstance(other, ElmtZnZ):
             assert self.n == other.n,f"modulos différents"
-            return ElmtZnZ((self.a*other.a)%self.n,self.n)
+            return ElmtZnZ(self.a*other.a,self.n)
         else:
-            return ElmtZnZ((self.a*other)%self.n,self.n)
+            return ElmtZnZ(self.a*other,self.n)
 
     def __rmul__(self,other):
         """reverse multiplication"""
@@ -148,6 +148,7 @@ class ElmtZnZ(object):
     
     def __pow__(self,other):
         """permet de faire des puissance"""
+        return ElmtZnZ((self.a**other),self.n)
         
         
     def valThChinois(self,other):

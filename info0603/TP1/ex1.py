@@ -53,15 +53,35 @@ def chFacteursPremiers(n):
     """renvoie une chaine de caractère donnant la décomposition en
     facteurs premiers de n
     >>> chFacteursPremiers(120)
-    '2^3 x 3 x 5'
+    '2 x 2 x 2 x 3 x 5'
     >>> chFacteursPremiers(3600)
-    '2 x 3^2 x 5^2'
+    '2 x 2 x 2 x 2 x 3 x 3 x 5 x 5'
     >>> chFacteursPremiers(1)
     '1'
     >>> chFacteursPremiers(2)
     '2'
     >>> chFacteursPremiers(21)
     '3 x 7'"""
+    res = []
+    ch = ""
+    if n==1:
+        ch = str(1)
+        return ch
+    d=2
+    # recherche de tous les facteurs 2 s'il y en a
+    while n%d==0:
+        res.append(d)
+        q=n//d
+        n=q
+    d=3
+    while d<=n:
+        while n%d==0:
+            res.append(d)
+            q=n//d
+            n=q
+        d=d+2
+    ch= ' x '.join(str(e) for e in res)
+    return ch
 
 
 if __name__ == "__main__":

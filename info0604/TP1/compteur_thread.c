@@ -21,7 +21,7 @@ void *thread_compteur(void *args){
 
         statut = pthread_mutex_unlock(&mutex);
         if(statut != 0){
-            printf("Probleme lors de l'ouverture du mutex\n");
+            printf("Probleme lors de le fermeture du mutex\n");
         }
     }
 

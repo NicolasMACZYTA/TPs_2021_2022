@@ -18,7 +18,7 @@ void *thread_affichage(void *args){
             printf("Erreur ouverture du mutex\n");
         }
         
-        if(compteur%2 == 0){
+        if(compteur%2 == 0){//faire la verification du paire dans le compteur et il appelle l'affichage
             printf("Compteur est a : %d\n",compteur);
         }
 

@@ -50,14 +50,14 @@ def lliste_peltparmin_unique(p,n):
 if __name__ == "__main__":
     dt.testmod()
     
-    # print("Iterateur de listes")
-    # for l in lliste_peltparmin(3,4):
-    #     print(l)
+    print("Iterateur de listes")
+    for l in lliste_peltparmin(3,4):
+        print(l)
         
     print("Iterateur d'ensembles")
     for l in lensbl_peltparmin(3,4):
         print(l)
         
-    # print("Iterateur de listes sans redites")
-    # for l in lliste_peltparmin_unique(3,4):
-    #     print(l)
+    print("Iterateur de listes sans redites")
+    for l in lliste_peltparmin_unique(3,4):
+        print(l)

@@ -1,6 +1,6 @@
 from math import log
 from random import random,randint
-from tp1ex2 import *
+from ElmtZnZ import *
 class Binaire603(list):#Voir Object ?
 
     def __init__(self,lbin):

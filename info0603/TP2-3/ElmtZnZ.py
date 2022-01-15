@@ -160,7 +160,7 @@ class ElmtZnZ(object):
         """reverse soustraction"""
         return self-other
     
-    def __pow__(self,other):
+    def __pow__(self,other):    #GV: __pow_ est à optimiser urgemment
         """permet de faire des puissance"""
         return ElmtZnZ((self.a**other),self.n)
         
@@ -192,7 +192,7 @@ class ElmtZnZ(object):
         """Renvoie x tel que self.a**x==b(self.n) n doit etre premier"""
         if estPremier(self.n):
             i=1
-            while ((self.a**i)%self.n)!=b:
+            while ((self.a**i)%self.n)!=b:  #GV: pas du tout d'accord avec (self.a**i) dans logDiscret
                 i+=1
             return i
         else:

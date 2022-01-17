@@ -160,7 +160,7 @@ class ElmtZnZ(object):
         """reverse soustraction"""
         return self-other
     
-    def __pow__(self,other):    #GV: __pow_ est à optimiser urgemment
+    def __pow__(self,other):
         """permet de faire des puissance"""
         return ElmtZnZ(pow(self.a,other,self.n),self.n)
         

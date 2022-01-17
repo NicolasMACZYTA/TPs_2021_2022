@@ -28,10 +28,14 @@ class CompresseurHuffman(CodeurCA):# Ne pas toucher
         >>> CompresseurHuffman.arbreDepuisListePonderee([("A",0.2),("B",0.3),("C",0.4)])
         ((((('B', 0.3), ('A', 0.2)), 0.5), ('C', 0.4)), 0.9)
         """
-        lpc=lp.copy()
+        lpc=[]
+        for i in lp:
+            atmp = Arbre(i[1], i[0], None, None)
+            lpc += atmp
+            
         
         while len(lpc)>1:
-            lpc.sort(key=lambda x:x[1], reverse=True)
+            lpc.sort(key=lambda x:x.frequence, reverse=True)
             lpc=lpc[:-2]+[((lpc[-2],lpc[-1]), lpc[-2][1]+lpc[-1][1])]
         
         return lpc[0]
@@ -50,6 +54,7 @@ class CompresseurHuffman(CodeurCA):# Ne pas toucher
     def binDecode(self,monBin,verbose=False):
        """renvoie une chaine Binaire decodée par Huffman
        >>> monCodeur=CompresseurHuffman()
+       
        >>> monBin=Binaire603([6,6,6,6,6,5,5,5,5,6,6,6,7,8,9,8,8])
        >>> monBinC=monCodeur.binCode(monBin)
        >>> monBin==monCodeur.binDecode(monBinC)

@@ -1,4 +1,4 @@
-from math import *
+from math import sqrt
 from random import *
 import matplotlib.pyplot as plt
 import numpy as np
@@ -162,7 +162,7 @@ class ElmtZnZ(object):
     
     def __pow__(self,other):    #GV: __pow_ est à optimiser urgemment
         """permet de faire des puissance"""
-        return ElmtZnZ((self.a**other),self.n)
+        return ElmtZnZ(pow(self.a,other,self.n),self.n)
         
         
     def valThChinois(self,other):
@@ -191,10 +191,11 @@ class ElmtZnZ(object):
     def logDiscret(self,b):
         """Renvoie x tel que self.a**x==b(self.n) n doit etre premier"""
         if estPremier(self.n):
-            i=1
-            while ((self.a**i)%self.n)!=b:  #GV: pas du tout d'accord avec (self.a**i) dans logDiscret
-                i+=1
-            return i
+            s = 1
+            for i in range(self.n):
+                s = (s * self.a) % self.n
+                if s == b:
+                    return i + 1
         else:
             print(f"{self.n} n'est pas un nombre premier")
     

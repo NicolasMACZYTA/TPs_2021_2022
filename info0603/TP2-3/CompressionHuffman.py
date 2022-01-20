@@ -31,12 +31,12 @@ class CompresseurHuffman(CodeurCA):# Ne pas toucher
         lpc=[]
         for i in lp:
             atmp = Arbre(i[1], i[0], None, None)
-            lpc += atmp
+            lpc.append(atmp)
             
         
         while len(lpc)>1:
-            lpc.sort(key=lambda x:x.frequence, reverse=True)
-            lpc=lpc[:-2]+[((lpc[-2],lpc[-1]), lpc[-2][1]+lpc[-1][1])]
+            lpc.sort(key=lambda x:x.freq, reverse=True)
+            lpc = lpc[:-2]+ [Arbre.concatener(lpc[-2],lpc[-1])]
         
         return lpc[0]
         

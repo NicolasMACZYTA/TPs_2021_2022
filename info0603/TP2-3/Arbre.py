@@ -19,7 +19,7 @@ class Arbre(object):
         self.fd = fd
         
     def __repr__(self):
-        return f'Arbre({self.freq},{self.val},{self.fd},{self.fg})'
+        return f'(({self.fg},{self.fd}),{self.val},{self.freq})'
     
     def isFeuille(self):
         if(self.fg == None & self.fd == None):
@@ -27,8 +27,9 @@ class Arbre(object):
         else:
             return False
     
+    
     def concatener(ag,ad):
-        res = Arbre(ag.freq+ad.freq,val=ag.val+ad.val,fg=ag,fd=ad)
+        res = Arbre(ag.freq+ad.freq,None,fg=ag,fd=ad)
         return res
 
     

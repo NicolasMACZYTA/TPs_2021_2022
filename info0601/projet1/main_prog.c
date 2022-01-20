@@ -11,8 +11,10 @@
 int main(int argc, char** argv){
     int ch, posX, posY, fd, size, tmp=0, typeselection;
     char * buf=malloc(129*sizeof(char));
+
     char * disp;
     char * disp2;
+    
     char tmpch;
     int offset=0;
     WIN *win;

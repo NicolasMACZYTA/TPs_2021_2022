@@ -25,5 +25,6 @@ int char_selectionne(int posX, int posY);
 int hex_selectionne(int posX, int posY);
 int selection(int posX,int posY, int* typeselection);
 void afficher_selection(int selected_octet,WIN * hex_window,WIN * char_window,char * buf,int typeselection);
+void afficher_carte(WIN * fenetre_carte,char* carte);
 #endif
 

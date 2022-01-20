@@ -31,7 +31,7 @@ class Texte603(object):
 
 
     def __init__(self, param):
-        assert isinstance(param,Texte603) or isinstance(param,Binaire603.Binaire603) or isinstance(param,str)
+        assert isinstance(param,Texte603) or isinstance(param,Binaire603) or isinstance(param,str)
         ch=""
         if isinstance(param,Texte603):
             ch=param.texte

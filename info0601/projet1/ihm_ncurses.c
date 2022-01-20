@@ -145,3 +145,8 @@ void afficher_selection(int selected_octet,WIN * hex_window,WIN * char_window,ch
 	free(hex);
 }
 
+
+void afficher_carte(WIN * fenetre_carte,char* carte){
+
+	/* TODO */
+}

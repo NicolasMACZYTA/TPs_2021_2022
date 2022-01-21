@@ -32,7 +32,7 @@ void afficherVecteur(int* vecteur, int taille) {
 }
 
 int main(int argc, char *argv[]) {
-	int i, j;
+	int i, j, statut = 0;
 
 	srand(time(NULL));
 

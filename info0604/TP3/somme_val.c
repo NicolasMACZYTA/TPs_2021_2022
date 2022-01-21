@@ -55,6 +55,7 @@ int main(int argc,char** argv){
         idTableau = (int*)malloc(sizeof(int));
         *idTableau = i*4;
         statut = pthread_create(&threadTab[i],NULL,traiterTableau,(void*)idTableau);
+        //sleep(1);
         if(statut != 0){
             perror("Erreur initialisation thread: ");
             exit(EXIT_FAILURE);

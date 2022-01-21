@@ -11,13 +11,13 @@ int *vecResultat;
 
 void afficherMatrice(int** matrice, int m, int n) {
 	int i, j;
-	printf("Matrice******\n");
+	printf("Matrice_____\n");
 	for (i = 0; i < m; i++){
 		for (j = 0; j < n; j++)
 			printf("%d ", matrice[i][j]);
 		printf("\n");
 	}
-	printf("**************\n");
+	printf("____________\n");
 }
 
 void afficherVecteur(int* vecteur, int taille) {

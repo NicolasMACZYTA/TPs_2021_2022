@@ -16,11 +16,11 @@ void* traiterTableau(void* arg){
     int i, idThread=*idTableau/4,somme_thread=0,statut;
 
     //INITIALISATION DES CASES DU TABLEAUX + ADDITION DE LA SOMME DU THREAD
-    printf("**********\nTHREAD %d\n",idThread);
+    printf("________\nThread %d\n",idThread);
     for(i=*idTableau;i<*idTableau+4;i++){
         tab[i]=(rand_r(&seed)%5)+1;
         somme_thread+=tab[i];
-        printf("indice %d : %d\nsomme = %d\n",i,tab[i],somme_thread);
+        printf("Indice(%d):%d\n\tSomme = %d\n",i,tab[i],somme_thread);
     }
 
     free(arg);
@@ -28,7 +28,7 @@ void* traiterTableau(void* arg){
 
     statut=pthread_mutex_lock(&mutex);
     if(statut != 0){
-        perror("mutex lock\n");
+        perror("Erreur fermeture mutex: ");
         exit(EXIT_FAILURE);
     }
 
@@ -36,12 +36,11 @@ void* traiterTableau(void* arg){
 
     statut=pthread_mutex_unlock(&mutex);
     if(statut != 0){
-        perror("mutex unlock\n");
+        perror("Erreur ouverture mutex: ");
         exit(EXIT_FAILURE);
     }
 
     return NULL;
-
 }
 
 
@@ -56,7 +55,7 @@ int main(int argc,char** argv){
         *idTableau = i*4;
         statut = pthread_create(&threadTab[i],NULL,traiterTableau,(void*)idTableau);
         if(statut != 0){
-            perror("initialisation Thread\n");
+            perror("Erreur initialisation thread: ");
             exit(EXIT_FAILURE);
         }    
     }
@@ -65,13 +64,13 @@ int main(int argc,char** argv){
     for(i=0;i<MAX_THREADS;i++){
         statut = pthread_join(threadTab[i],NULL);
         if(statut != 0){
-            perror("erreur pthread_join\n");
+            perror("Erreur attente thread: ");
             exit(EXIT_FAILURE);
         }
     }
 
     //AFFICHAGE DE LA SOMME
-    printf("**********\nSomme Final = %d\n",somme);
+    printf("________\nSomme Total = %d\n",somme);
 
     return(EXIT_SUCCESS);
 }

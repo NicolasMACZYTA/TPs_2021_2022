@@ -7,11 +7,14 @@ class CompresseurHuffman(CodeurCA):# Ne pas toucher
     renvoyant et recevant un Binaire603
     C'est une forme de classe abstraites"""
     def __init__(self):
-        raise NotImplementedError # Ne pas toucher
+        pass
+        #raise NotImplementedError # Ne pas toucher
+        
     def __str__(self):
-        raise NotImplementedError# Ne pas toucher
+        return 'Compresseur Huffman'
+    
     def __repr__(self):
-        raise NotImplementedError# Ne pas toucher
+        return f'CompresseurHuffman()'
 
     def dicoHuffmanDepuisArbre(arbre):
         """Renvoie les dictionnaires associant les étiquettes à leur codage d'Huffman(format txt)
@@ -22,11 +25,12 @@ class CompresseurHuffman(CodeurCA):# Ne pas toucher
         ’0’: ’A’, ’10’: ’B’, ’11’: ’C’
         """
         
+        
     def arbreDepuisListePonderee(lp):
         """Transforme la liste de couple (Etiquette,Entropie) en un tuple modélisant un arbre.
         Un arbre pondéré est un tuple de la forme (Etiquette,pondération) ou (Arbre,pondération)
         >>> CompresseurHuffman.arbreDepuisListePonderee([("A",0.2),("B",0.3),("C",0.4)])
-        ((((('B', 0.3), ('A', 0.2)), 0.5), ('C', 0.4)), 0.9)
+        (((((B, 0.3), (A, 0.2)), 0.5), (C, 0.4)), 0.9)
         """
         lpc=[]
         for i in lp:
@@ -53,7 +57,6 @@ class CompresseurHuffman(CodeurCA):# Ne pas toucher
     def binDecode(self,monBin,verbose=False):
        """renvoie une chaine Binaire decodée par Huffman
        >>> monCodeur=CompresseurHuffman()
-       
        >>> monBin=Binaire603([6,6,6,6,6,5,5,5,5,6,6,6,7,8,9,8,8])
        >>> monBinC=monCodeur.binCode(monBin)
        >>> monBin==monCodeur.binDecode(monBinC)

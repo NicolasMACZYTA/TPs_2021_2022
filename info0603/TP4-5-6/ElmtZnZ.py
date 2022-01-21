@@ -16,7 +16,7 @@ def PGCD(a,b):
         n = a%b
         return PGCD(b,n)
 
-def bezout(a,b):
+def bezout(a,b):    #etre sur que premier
     """Renvoie (v,u,d) tel que a.u+b.v=d avec d=PGCD(a,b)
     >>> bezout(360,304)
     (11, -13, 8)
@@ -179,12 +179,13 @@ class ElmtZnZ(object):
             return False
 
     def inverse(self):
-        """inverse l'element"""
+        """inverse l'element
+        >>> ElmtZnZ(3,256).inverse()
+        ElmtZnZ(171,256)
+        """
         if self.estInversible():
-            for x in range(1, self.n):
-               if (((self.a%self.n) * (x%self.n)) % self.n == 1):
-                   return ElmtZnZ(x,self.n)
-               return ElmtZnZ(self.a,self.n)
+            m = pow(self.a, -1, self.n)
+            return ElmtZnZ(m, self.n)
         else:
             print(f"{self.a} n'est pas inversible")
         

@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Jan 13 16:39:28 2022
-
-@author: nithrilh
-"""
-
 class Arbre(object):
     
     def __init__(self,freq,val = '',fg = None,fd = None):

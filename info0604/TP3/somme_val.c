@@ -17,14 +17,15 @@ void* traiterTableau(void* arg){
 
     //INITIALISATION DES CASES DU TABLEAUX + ADDITION DE LA SOMME DU THREAD
     printf("________\nThread %d\n",idThread);
+    printf("Valeurs: ");
     for(i=*idTableau;i<*idTableau+4;i++){
         tab[i]=(rand_r(&seed)%5)+1;
         somme_thread+=tab[i];
-        printf("Indice(%d):%d\n\tSomme = %d\n",i,tab[i],somme_thread);
+        printf("%d ",tab[i]);
     }
+    printf("\nSomme: %d\n",somme_thread);
 
     free(arg);
-
 
     statut=pthread_mutex_lock(&mutex);
     if(statut != 0){

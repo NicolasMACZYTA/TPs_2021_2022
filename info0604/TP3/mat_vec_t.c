@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include <pthread.h>
 
 #define M	6
 #define N	6
@@ -8,16 +9,17 @@
 int **matrice;
 int *vecteur;
 int *vecResultat;
+pthread_mutex_t mutex=PTHREAD_MUTEX_INITIALIZER;
 
 void afficherMatrice(int** matrice, int m, int n) {
 	int i, j;
-	printf("Matrice******\n");
+	printf("Matrice_____\n");
 	for (i = 0; i < m; i++){
 		for (j = 0; j < n; j++)
 			printf("%d ", matrice[i][j]);
 		printf("\n");
 	}
-	printf("**************\n");
+	printf("____________\n");
 }
 
 void afficherVecteur(int* vecteur, int taille) {

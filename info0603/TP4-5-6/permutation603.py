@@ -5,7 +5,7 @@ Created on Thu Jan 20 16:21:11 2022
 
 @author: Nicolas MACZYTA
 """
-
+from random import *
 from CodeurCA import *
 from Binaire603 import *
 class Permutation603(CodeurCA):# Ne pas toucher
@@ -14,7 +14,7 @@ class Permutation603(CodeurCA):# Ne pas toucher
 
     def __init__(self, lpermutation=[]):
         """>>> Permutation603([1,2,3,0])
-Permutation603([1, 2, 3, 0])"""
+        Permutation603([1, 2, 3, 0])"""
         
         self.lp=lpermutation
         self.li=lpermutation.copy()
@@ -48,6 +48,15 @@ Permutation603([1, 2, 3, 0])"""
             
     def permutAlea(n=6):
         """Renvoie une permutation aléatoire sans utiliser shuffle, seulement randint"""
+        l=[]
+        for i in range(0,n):
+            l.append(i)
+        res = Permutation603(l)
+        for j in range(0,n):
+            r=random.randint(0,n)
+            res.lp[i],res.lp[r]=res.lp[r],res.lp[i]
+        return res
+        
     
     def permutKieme(k,n=6):
         """Renvoie la kieme permutation de Sn ce qui permet d'associer des clés aux permutations
@@ -58,18 +67,18 @@ Permutation603([1, 2, 3, 0])"""
     def numPermutation(self):
         """Renvoie le numéro de la permutation
         >>> Permutation603.permutKieme(100,n=5).numPermutation()
-100"""
+        100"""
 
 
     def __str__(self):
-        raise NotImplementedError# Ne pas toucher
+        return f'Permutation603({self.lp})'
     def __repr__(self):
         return f'Permutation603({self.lp})'
 
     def binCode(self,monBinD:Binaire603)->Binaire603:
-        raise NotImplementedError# Ne pas toucher
+        pass
     def binDecode(self,monBinC:Binaire603)->Binaire603:
-        raise NotImplementedError# Ne pas toucher
+        pass
 
 
 
@@ -82,6 +91,6 @@ if __name__ == "__main__":
         print("Bin:",monBin)
         monBinCr=monCodeur.binCode(monBin)
         print("Bin Codée:",monBinCr)
-        print("monBinCr décodé est égal à Monbin ?",monCodeur.binDecode(monBinCr)==monBin)
+        #print("monBinCr décodé est égal à Monbin ?",monCodeur.binDecode(monBinCr)==monBin)
 
 

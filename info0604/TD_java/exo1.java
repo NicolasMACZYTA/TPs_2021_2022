@@ -1,0 +1,11 @@
+/* 
+pas de notion de variable globale on definit un objet conpteur
+
+
+
+
+
+
+
+
+*/

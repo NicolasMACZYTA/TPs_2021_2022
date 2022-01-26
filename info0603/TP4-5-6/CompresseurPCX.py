@@ -1,7 +1,7 @@
 from CodeurCA import *
 from Binaire603 import *
 from Image603 import *
-class CompressionPCX(CodeurCA):# Ne pas toucher
+class CompresseurPCX(CodeurCA):# Ne pas toucher
     """Un codeur doit surcharger les méthodes __init__ __repr__ __str__
     binCode, binDecode et codeurTest
     renvoyant et recevant un Binaire603
@@ -23,7 +23,7 @@ class CompressionPCX(CodeurCA):# Ne pas toucher
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-    monCodeur=CompressionPCX() #A modifier si repris dans une classe en héritant
+    monCodeur=CompresseurPCX() #A modifier si repris dans une classe en héritant
     for k in range(5):
         monBin=Binaire603.exBin603(num=k,taille=25)
         print("Bin:",monBin)

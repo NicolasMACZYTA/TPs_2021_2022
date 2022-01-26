@@ -13,7 +13,8 @@ class Permutation603(CodeurCA):# Ne pas toucher
     
 
     def __init__(self, lpermutation=[]):
-        """>>> Permutation603([1,2,3,0])
+        """
+        >>> Permutation603([1,2,3,0])
         Permutation603([1, 2, 3, 0])"""
         
         self.lp=lpermutation

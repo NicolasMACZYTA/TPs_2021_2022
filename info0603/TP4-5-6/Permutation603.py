@@ -5,7 +5,7 @@ Created on Thu Jan 20 16:21:11 2022
 
 @author: Nicolas MACZYTA
 """
-from random import *
+import random as rand
 from CodeurCA import *
 from Binaire603 import *
 class Permutation603(CodeurCA):# Ne pas toucher
@@ -53,8 +53,9 @@ class Permutation603(CodeurCA):# Ne pas toucher
         for i in range(0,n):
             l.append(i)
         res = Permutation603(l)
-        for j in range(0,n):
-            r=random.randint(0,n)
+        
+        for i in range(0,n):
+            r=rand.randint(0,n-1)
             res.lp[i],res.lp[r]=res.lp[r],res.lp[i]
         return res
         

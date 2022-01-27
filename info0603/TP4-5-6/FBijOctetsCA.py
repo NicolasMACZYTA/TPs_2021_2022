@@ -1,5 +1,7 @@
+import doctest as dt
+
 class FBijOctetsCA(object):
-    """Une classe abstraite de bijectioe de [0..255]"""
+    """Une classe abstraite de bijection de [0..255]"""
    
     def __init__(self,dec=1):
         self.dec = dec
@@ -14,3 +16,5 @@ class FBijOctetsCA(object):
         """Renvoie l'antécédent de octet C"""
         raise NotImplementedError
         
+if __name__ == "__main__":
+    dt.testmod()

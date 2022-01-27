@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Jan 20 16:21:11 2022
-
-@author: Nicolas MACZYTA
-"""
 import random as rand
 from CodeurCA import *
 from Binaire603 import *

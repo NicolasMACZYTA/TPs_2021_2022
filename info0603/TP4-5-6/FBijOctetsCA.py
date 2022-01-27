@@ -1,4 +1,5 @@
 import doctest as dt
+import matplotlib.pyplot as plt
 
 class FBijOctetsCA(object):
     """Une classe abstraite de bijection de [0..255]"""
@@ -15,6 +16,12 @@ class FBijOctetsCA(object):
     def valInv(self,octetC):
         """Renvoie l'antécédent de octet C"""
         raise NotImplementedError
+    def affPlot(self):
+        lx=[k for k in range(256)]
+        ly=[self(x) for x in lx]
+        plt.plot(lx,ly,".")
+        plt.title("graphique bijection")
+        plt.show()
         
 if __name__ == "__main__":
     dt.testmod()

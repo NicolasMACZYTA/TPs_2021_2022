@@ -14,7 +14,7 @@ class FBijFeistel(FBijOctetsCA):
         self.nbtours = nbtours
         
     def __repr__(self):
-        return f'FBijDecalage()'
+        return f'FBijFeistel({self.nbtours})'
         
     def __call__(self,octet):
         """
@@ -22,12 +22,13 @@ class FBijFeistel(FBijOctetsCA):
         >>> P(5)
         10"""
         l, r = octet//16, octet%16
+        rand.seed(self.cle)
         for tour in range(self.nbtours):
-            t = r
-            r = (self.f(r,self.cle))^l
-            l = t
             
-        return 0
+            l,r = r,(self.f(r,rand.randint(0,15)))^l
+           
+            
+        return l*16+r
     
     def valInv(self,octetC):
         """Renvoie l'antécédent de octet C
@@ -36,9 +37,10 @@ class FBijFeistel(FBijOctetsCA):
         5"""
         pass
     
-def f4b1(v4b,k=rand.randint(0,15)):
+def f4b1(v4b,k):
     return ((v4b+2)^k)%16
         
 if __name__ == "__main__":
     dt.testmod()
-    
+    for i in range(1,17):
+        FBijFeistel(f4b1,5,i).affPlot()

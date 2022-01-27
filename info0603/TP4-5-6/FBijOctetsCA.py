@@ -20,7 +20,7 @@ class FBijOctetsCA(object):
         lx=[k for k in range(256)]
         ly=[self(x) for x in lx]
         plt.plot(lx,ly,".")
-        plt.title("graphique bijection")
+        plt.title(f'{self}')
         plt.show()
         
 if __name__ == "__main__":

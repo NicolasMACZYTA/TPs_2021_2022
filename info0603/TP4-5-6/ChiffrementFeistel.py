@@ -1,12 +1,14 @@
 from CodeurCA import *
 from Binaire603 import *
-from Image603 import *
-class CompresseurRLE(CodeurCA):# Ne pas toucher
+from random import randint
+
+class ChiffrementFeistel(CodeurCA):# Ne pas toucher
     """Un codeur doit surcharger les méthodes __init__ __repr__ __str__
     binCode, binDecode et codeurTest
     renvoyant et recevant un Binaire603
     C'est une forme de classe abstraites"""
-    def __init__(self):
+    def __init__(self,key,tours):
+        self.key = key
         raise NotImplementedError # Ne pas toucher
     def __str__(self):
         raise NotImplementedError# Ne pas toucher
@@ -23,7 +25,7 @@ class CompresseurRLE(CodeurCA):# Ne pas toucher
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-    monCodeur=CompresseurRLE() #A modifier si repris dans une classe en héritant
+    monCodeur=ChiffrementFeistel() #A modifier si repris dans une classe en héritant
     for k in range(5):
         monBin=Binaire603.exBin603(num=k,taille=25)
         print("Bin:",monBin)

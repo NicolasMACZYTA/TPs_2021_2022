@@ -14,7 +14,7 @@ class FBijFeistel(FBijOctetsCA):
         self.nbtours = nbtours
         
     def __repr__(self):
-        return f'FBijFeistel({self.nbtours})'
+        return f'FBijeistel({self.nbtours})'
         
     def __call__(self,octet):
         """

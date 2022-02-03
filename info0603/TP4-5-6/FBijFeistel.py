@@ -1,4 +1,4 @@
-odfrom FBijOctetsCA import *
+from FBijOctetsCA import *
 import random as rand
 
 class FBijFeistel(FBijOctetsCA):

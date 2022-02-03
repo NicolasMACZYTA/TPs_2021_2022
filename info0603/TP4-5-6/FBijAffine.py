@@ -23,7 +23,7 @@ class FBijAffine(FBijOctetsCA):
         >>> P = FBijAffine(5,2)
         >>> P(5)
         27"""
-        return (octet*self.a+self.b)%256
+        return (self.a*octet+self.b)%256
     
     def valInv(self,octetC):
         """Renvoie l'antécédent de octet C

@@ -8,7 +8,7 @@ class FBijOctetsCA(object):
         self.dec = dec
         
     def __repr__(self):
-        return f'FBijOctets(dec)'
+        return f'FBijOctetsCA(dec)'
         
     def __call__(self,octet):
         return (octet+self.dec)%256
@@ -16,6 +16,7 @@ class FBijOctetsCA(object):
     def valInv(self,octetC):
         """Renvoie l'antécédent de octet C"""
         raise NotImplementedError
+        
     def affPlot(self):
         lx=[k for k in range(256)]
         ly=[self(x) for x in lx]

@@ -34,6 +34,8 @@ WINDOW *fen_msg;							/* Fenetre de messages partagee par les fourmis*/
 case_t grille[NB_LIGNES_SIM][NB_COL_SIM];	/* Grille de simulation */
 int nb_fourmis;								/* Nombre de fourmis de la simulation*/
 pthread_mutex_t mutex_nb_fourmis;
+pthread_mutex_t mut_refresh;
+time_t t;
 
 void ncurses_initialiser() {
 	initscr();								/* Demarre le mode ncurses */
@@ -144,11 +146,56 @@ WINDOW *creer_fenetre_outils() {
 
 void *routine_fourmi(void *arg) {
 	coord_t *coord = (coord_t *) arg;
+	int r,dx=0,dy=0;
+	srand((unsigned)time(&t));
 	
-	while (1) {		
-		/*Que feront les fourmis ?!?!?!*/
+	while (1) {	
+			r=rand()%4;
+				switch (r)
+				{
+				case 0:
+					dx=0;
+					dy=1;
+					break;
+				case 1:
+					dx=1;
+					dy=0;
+					break;
+				case 2:
+					dx=0;
+					dy=-1;
+					break;
+				case 3:
+					dx=-1;
+					dx=0;
+					break;
+				
+				default:
+					dx=0;
+					dx=0;
+					break;
+				}
+				pthread_mutex_lock(&grille[(coord->y)%40][(coord->x)%80].mutex);
+				pthread_mutex_lock(&grille[(coord->y+dy)%40][(coord->x+dx)%80].mutex);
+
+				if(grille[(coord->y+dy)%40][(coord->x+dx)%80].element==VIDE){
+
+					grille[(coord->y)][(coord->x)].element=VIDE;
+					mvwprintw(fen_sim,coord->y,coord->x," ");
+					grille[(coord->y+dy)%40][(coord->x+dx)%80].element=FOURMI;
+					mvwprintw(fen_sim,(coord->y+dy)%40,(coord->x+dx)%80,"@");
+					
+					coord->y=(coord->y+dy)%40;
+					coord->x=(coord->x+dx)%80;
+				}
+				pthread_mutex_unlock(&grille[(coord->y+dy)%40][(coord->x+dx)%80].mutex);
+				pthread_mutex_unlock(&grille[coord->y][coord->x].mutex);
+
 		sleep(1);
-	}
+		pthread_mutex_lock(&mut_refresh);
+		wrefresh(fen_sim);
+		pthread_mutex_unlock(&mut_refresh);
+		}
 	
 	free(coord);
 	return NULL;

@@ -1,0 +1,133 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}    % Ces deux packages sont utilisés pour l'encodage des caractères
+\usepackage[T1]{fontenc}       % 
+\usepackage[french]{babel}     % Ce package permet d'utiliser les environnements en Français
+
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+
+\tikzset{
+  ->, % makes the edges directed
+  >=stealth', % makes the arrow heads bold
+  node distance=3cm, % specifies the minimum distance between two nodes. Change if necessary.
+  every state/.style={thick, fill=gray!10}, % sets the properties for each 'state' node
+  initial text=$ $, % sets the text that appears on the start arrow
+}
+
+%**************************************************************************************************
+% *
+% * Configuration des marges
+% *
+%**************************************************************************************************
+
+\usepackage{calc}
+\newcommand{\marges}[2]{
+  \newlength{\HEADHEIGHT}
+  \setlength{\HEADHEIGHT}{28cm-#1}
+  \setlength{\HEADHEIGHT}{\HEADHEIGHT/2}
+  
+  \newlength{\MARGIN}
+  \setlength{\MARGIN}{16cm-#2}
+  \setlength{\MARGIN}{\MARGIN/2}
+    
+	\topmargin -2.5cm
+	\headheight \HEADHEIGHT
+	\headsep 0.75cm
+	\topskip 0cm 
+	\textheight #1
+	\textwidth #2
+	\oddsidemargin \MARGIN
+	\evensidemargin \MARGIN
+	\parindent 0.5cm
+	\parskip 0.75em plus 0.2em minus 0.1em
+}
+
+\marges{26cm}{18cm}
+
+%**************************************************************************************************
+% *
+% * Début du document
+% *
+%**************************************************************************************************
+
+\begin{document}
+
+Voici un automate que l'on veut déterminiser :
+
+\begin{center}
+  \begin{tikzpicture}
+\node[state, initial] (q0) {0};
+\node[state, right of=q0] (q1) {1};
+\node[state, right of=q1] (q2) {2};
+\node[state, right of=q2] (q3) {3};
+\node[state, right of=q3] (q4) {4};
+\node[state, accepting, below right of=q4] (q5) {5};
+\node[state, accepting, above right of=q4] (q6) {6};
+
+\draw
+(q0) edge[above] node{a} (q1)
+(q1) edge[above, bend left] node{b} (q2)
+(q1) edge[below, bend right] node{$\epsilon$} (q2)
+(q2) edge[above] node{a} (q3)
+(q3) edge[above] node{b} (q4)
+
+(q4) edge[above, bend right] node{$\epsilon$} (q5)
+(q5) edge[above, bend right] node{b} (q4)
+
+(q4) edge[above, bend right] node{a} (q6)
+(q6) edge[above, bend right] node{$\epsilon$} (q4);
+  \end{tikzpicture}
+\end{center}
+
+En appliquant l'algorithme de déterminisation : 
+
+\newcommand{\tr}[3]{#1 \stackrel{#2}{\rightarrow} #3}
+
+\begin{center}
+$\begin{array}{l|l|l|l}
+\textbf{x} & \textbf{transiter}  & \textbf{y} & \textbf{$\delta$} \\ \hline
+A= \{0\}  & \tr{A}{a}{\{1\}}     & \{1, 2\} = B & \tr{A}{a}{B} \\
+          & \tr{A}{b}{\emptyset} & & \tr{A}{b}{\emptyset} \\
+B=\{1,2\} & \tr{B}{a}{\{3\}}     & \{3\} = C & \tr{B}{a}{C} \\
+          & \tr{B}{b}{\{2\}}     & \{2\} = D & \tr{B}{b}{D} \\
+C=\{3\}   & \tr{C}{a}{\emptyset} & & \tr{C}{a}{\emptyset} \\
+          & \tr{C}{b}{\{4\}}     & \{4\} = E & \tr{C}{b}{E} \\
+D=\{2\}   & \tr{D}{a}{\{3\}}     & \{3\} = C & \tr{D}{a}{D} \\
+          & \tr{D}{b}{\emptyset} & & \tr{D}{b}{G} \\
+E=\{4\}   & \tr{E}{a}{\{6\}}     & \{4,6\} = F & \tr{E}{a}{F} \\
+          & \tr{E}{b}{\{5\}}     & \{4,5\} = G & \tr{E}{b}{G} \\
+F=\{4,6\} & \tr{F}{a}{\{6\}}     & \{4,6\} = F & \tr{F}{a}{F} \\
+          & \tr{F}{b}{\{5\}}     & \{4,5\} = G & \tr{F}{b}{G} \\
+G=\{4,5\} & \tr{G}{a}{\{6\}}     & \{4,6\} = F & \tr{G}{a}{F} \\
+          & \tr{G}{b}{\{5\}}     & \{4,5\} = G & \tr{G}{b}{G} \\ \hline
+\end{array}$
+\end{center}
+
+Voici l'automate obtenu :
+
+\begin{center}
+  \begin{tikzpicture}
+\node[state, initial] (A) {A};
+\node[state, right of=A] (B) {B};
+\node[state, right of=B] (C) {C};
+\node[state, below of=C] (D) {D};
+\node[state, right of=C] (E) {E};
+\node[state, accepting, right of=E] (F) {F};
+\node[state, accepting, below of=F] (G) {G};
+
+\draw
+(A) edge[above] node{a} (B)
+(B) edge[above] node{a} (C)
+(B) edge[above] node{b} (D)
+(D) edge[right] node{a} (C)
+(C) edge[above] node{b} (E)
+(E) edge[above] node{a} (F)
+(E) edge[above] node{b} (G)
+(F) edge[loop above] node{a} (F)
+(G) edge[loop below] node{b} (G)
+(F) edge[left, bend right] node{b} (G)
+(G) edge[right, bend right] node{a} (F);
+  \end{tikzpicture}
+\end{center}
+
+\end{document}

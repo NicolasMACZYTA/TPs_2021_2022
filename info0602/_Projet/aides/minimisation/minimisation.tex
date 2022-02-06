@@ -1,0 +1,130 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}    % Ces deux packages sont utilisés pour l'encodage des caractères
+\usepackage[T1]{fontenc}       % 
+\usepackage[french]{babel}     % Ce package permet d'utiliser les environnements en Français
+
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+
+\tikzset{
+  ->, % makes the edges directed
+  >=stealth', % makes the arrow heads bold
+  node distance=3cm, % specifies the minimum distance between two nodes. Change if necessary.
+  every state/.style={thick, fill=gray!10}, % sets the properties for each 'state' node
+  initial text=$ $, % sets the text that appears on the start arrow
+}
+
+%**************************************************************************************************
+% *
+% * Configuration des marges
+% *
+%**************************************************************************************************
+
+\usepackage{calc}
+\newcommand{\marges}[2]{
+  \newlength{\HEADHEIGHT}
+  \setlength{\HEADHEIGHT}{28cm-#1}
+  \setlength{\HEADHEIGHT}{\HEADHEIGHT/2}
+  
+  \newlength{\MARGIN}
+  \setlength{\MARGIN}{16cm-#2}
+  \setlength{\MARGIN}{\MARGIN/2}
+    
+	\topmargin -2.5cm
+	\headheight \HEADHEIGHT
+	\headsep 0.75cm
+	\topskip 0cm 
+	\textheight #1
+	\textwidth #2
+	\oddsidemargin \MARGIN
+	\evensidemargin \MARGIN
+	\parindent 0.5cm
+	\parskip 0.75em plus 0.2em minus 0.1em
+}
+
+\marges{26cm}{18cm}
+
+%**************************************************************************************************
+% *
+% * Début du document
+% *
+%**************************************************************************************************
+
+\begin{document}
+
+Voici un automate que l'on veut déterminiser :
+
+\begin{center}
+  \begin{tikzpicture}
+\node[state, initial] (q0) {0};
+\node[state, right of=q0] (q1) {1};
+\node[state, right of=q1] (q2) {2};
+\node[state, accepting, right of=q2] (q3) {3};
+\node[state, below of=q0] (q4) {4};
+\node[state, right of=q4] (q5) {5};
+\node[state, accepting, below of=q3] (q6) {6};
+
+\draw
+(q0) edge[above] node{a} (q1)
+(q0) edge[left] node{b} (q4)
+(q1) edge[above] node{b} (q2)
+(q1) edge[right] node{a} (q5)
+(q2) edge[above, bend right] node{b} (q0)
+(q2) edge[above] node{a} (q3)
+(q3) edge[right, bend left] node{a} (q6)
+(q3) edge[loop right] node{b} (q3)
+(q4) edge[above] node{a} (q5)
+(q4) edge[loop below] node{b} (q4)
+(q5) edge[above] node{a} (q6)
+(q5) edge[loop below] node{b} (q5)
+(q6) edge[loop right] node{a} (q6)
+(q6) edge[right, bend left] node{b} (q3);
+  \end{tikzpicture}
+\end{center}
+
+En appliquant l'algorithme de minimisation : 
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|} \hline
+                            & 0 & 1 & 2 & 3 & 4 & 5 & 6 \\ \hline
+$\pi'$                      & A & A & A & B & A & A & B \\
+$\stackrel{a}{\rightarrow}$ & A & A & B & B & A & B & B \\
+$\stackrel{b}{\rightarrow}$ & A & A & A & B & A & A & B \\ \hline
+$\pi'$                      & A & A & B & C & A & B & C \\
+$\stackrel{a}{\rightarrow}$ & A & B & C & C & B & C & C \\
+$\stackrel{b}{\rightarrow}$ & A & B & A & C & A & B & C \\ \hline
+$\pi'$                      & A & B & C & D & E & F & D \\
+$\stackrel{a}{\rightarrow}$ & B & F & D & D & F & D & D \\
+$\stackrel{b}{\rightarrow}$ & E & C & A & D & E & F & D \\ \hline
+$\pi'$                      & A & B & C & D & E & F & D \\ \hline
+\end{tabular}
+\end{center}
+
+Voici l'automate obtenu :
+
+\begin{center}
+  \begin{tikzpicture}
+\node[state, initial] (A) {A};
+\node[state, right of=A] (B) {B};
+\node[state, right of=B] (C) {C};
+\node[state, accepting, right of=C] (D) {D};
+\node[state, below of=A] (E) {E};
+\node[state, right of=E] (F) {F};
+
+\draw
+(A) edge[above] node{a} (B)
+(A) edge[left] node{b} (E)
+(B) edge[above] node{b} (C)
+(B) edge[right] node{a} (F)
+(C) edge[above, bend right] node{b} (A)
+(C) edge[above] node{a} (D)
+(D) edge[loop right] node{b} (D)
+(D) edge[loop above] node{a} (D)
+(E) edge[loop below] node{b} (D)
+(E) edge[above] node{a} (F)
+(F) edge[loop below] node{b} (F)
+(F) edge[above] node{a} (D);
+  \end{tikzpicture}
+\end{center}
+
+\end{document}

@@ -107,10 +107,16 @@ class ElmtZnZ(object):
 
     def __eq__(self,other):
         """verifie si les deux elements sont identique"""
-        if(self.a == other.a and self.n == other.n):
-            return True
+        if isinstance(other, ElmtZnZ):
+            if(self.a == other.a and self.n == other.n):
+                return True
+            else:
+                return False
         else:
-            return False
+            if(self.a == other):
+                return True
+            else:
+                return False
 
     def __add__(self,other):
         """addition peut additionner avec un autre ElmtZnZ ou un entier"""

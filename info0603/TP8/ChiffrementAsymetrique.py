@@ -40,7 +40,10 @@ class ChiffrementAsymetrique(object):
         """
     
     def lbasesDeTestsDePrimalite(nbits=32, verbose=True):
-        """"""
+        """Renvoie la liste des bases à testés selon la valeur du nombre premier à tester
+        >>> lbasesDeTestsDePrimalite(10)
+        [(341, [2, 3]), (1105, [2, 3, 5])]
+        """
 
 if __name__ == "__main__":
     dt.testmod()

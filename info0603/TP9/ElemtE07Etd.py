@@ -1,7 +1,6 @@
 import copy
 from random import *
 from math import sqrt,log
-from sympy import isprime
 from ElmtZnZ import *
 import numpy as np
 import matplotlib.pyplot as plt
@@ -26,26 +25,33 @@ class ElemtE07(object):
         ElemtE07(1,"INF",11)
         """
         
-        if isinstance(x,int):
-            rx = Elementznz(x,p)
-        else:
-            rx = x
-        #utiliser RX a partir de maintenant
-        if isinstance(x,int):
-            ry = ElmtZnZ(y,p)
-        else:
-            ry = y
         
-        assert ry**2 == rx**3+7
-        
-        #elmznz
-        #elm neutre = 'inf'
+        if isinstance(x,int):
+            rx = ElmtZnZ(x,p)
+        else:
+            rx = ElmtZnZ(x)
+            
         if isinstance(y,str):
             # si c'est zero
-            return ElemtE07(x,"INF",p)
+            ry="INF"
+        else:
+            
+            #utiliser RX a partir de maintenant
+            if isinstance(y,int):
+                ry = ElmtZnZ(y,p)
+            else:
+                ry = ElmtZnZ(y)
+            
+            assert ry**2 == (rx**3)+7
+            
+            #elm neutre = 'inf'
         
         
-        raise NotImplementedError
+        self.x=rx
+        self.y=ry
+        self.p=p
+        
+        
     def lDesElements(p=47):
         """
         >>> ElemtE07.lDesElements(5)
@@ -100,9 +106,18 @@ class ElemtE07(object):
         if isinstance(other.y,str):
             # si c'est zero
             return self
+        if isinstance(self.y,str):
+            # si c'est zero
+            return other
         
-        raise NotImplementedError
+        
+        
+        l = (other.y-self.x)//(other.x-self.y)
+        rx=l**2-self.x-other.x
+        ry=-(l*(rx-self.x)+self.y)
 
+        return ElemtE07(rx,ry)
+    
     def double(self):
         """
         >>> ElemtE07(2,2,11).double()
@@ -142,7 +157,11 @@ class ElemtE07(object):
         >>> ElemtE07(3,9,47)==ElemtE07(3,"Inf",47) or ElemtE07(3,"Inf",47)==ElemtE07(3,9,47)
         False
         """
-        raise NotImplementedError
+        if (self.x == other.x and self.y==other.y and self.p == other.p):
+            return True
+        else:
+            return False
+        
     def __neg__(self):
         """
         >>> -ElemtE07(7,3,11)
@@ -324,7 +343,7 @@ if __name__ == "__main__":
 
 
 
-    ElemtE07.demo(p)
+    #ElemtE07.demo(p)
 
 
 

@@ -92,10 +92,14 @@ class ElmtZnZ(object):
     >>> ElmtZnZ(2,14).logDiscret(2)
     14 n'est pas un nombre premier"""
     
-    def __init__(self,a,n):
+    def __init__(self,a,n=2):
         """initialisation d'un ElmtZnZ"""
-        self.a=a%n
-        self.n=n
+        if isinstance(a,ElmtZnZ):
+            self.a,self.n=a.a,a.n
+        else:
+            self.a=a%n
+            self.n=n
+        
 
     def __str__(self):
         """representation string"""

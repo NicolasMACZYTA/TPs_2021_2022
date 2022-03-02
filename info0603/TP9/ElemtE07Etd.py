@@ -23,34 +23,25 @@ class ElemtE07(object):
         >>>
         >>> ElemtE07(1,"Inf",11)
         ElemtE07(1,"INF",11)
-        """
-        
-        
+        """ 
         if isinstance(x,int):
             rx = ElmtZnZ(x,p)
         else:
             rx = ElmtZnZ(x)
-            
+
         if isinstance(y,str):
-            # si c'est zero
-            ry="INF"
+            ry = "INF"
         else:
-            
-            #utiliser RX a partir de maintenant
             if isinstance(y,int):
                 ry = ElmtZnZ(y,p)
             else:
                 ry = ElmtZnZ(y)
-            
+                
             assert ry**2 == (rx**3)+7
-            
-            #elm neutre = 'inf'
         
-        
-        self.x=rx
-        self.y=ry
-        self.p=p
-        
+        self.x = rx
+        self.y = ry
+        self.p = p
         
     def lDesElements(p=47):
         """
@@ -117,7 +108,7 @@ class ElemtE07(object):
         ry=-(l*(rx-self.x)+self.y)
 
         return ElemtE07(rx,ry)
-    
+
     def double(self):
         """
         >>> ElemtE07(2,2,11).double()
@@ -137,8 +128,15 @@ class ElemtE07(object):
         >>> ElemtE07(15,13,17)*0
         ElemtE07(0,"INF",17)
         """
-        raise NotImplementedError
-
+        if other==0:
+            return ElemtE07(0,"INF",self.p)
+        else:
+            res = ElemtE07(self.x,self.y,self.p)
+            for i in range(other):
+                res = res + self
+            
+            return res
+            
     def __rmul__(self,other):
         """
         >>> 2*ElmtZnZ(3,10)
@@ -157,11 +155,7 @@ class ElemtE07(object):
         >>> ElemtE07(3,9,47)==ElemtE07(3,"Inf",47) or ElemtE07(3,"Inf",47)==ElemtE07(3,9,47)
         False
         """
-        if (self.x == other.x and self.y==other.y and self.p == other.p):
-            return True
-        else:
-            return False
-        
+        raise NotImplementedError
     def __neg__(self):
         """
         >>> -ElemtE07(7,3,11)

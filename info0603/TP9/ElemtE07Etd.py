@@ -130,12 +130,24 @@ class ElemtE07(object):
         """
         if other==0:
             return ElemtE07(0,"INF",self.p)
-        else:
-            res = ElemtE07(self.x,self.y,self.p)
-            for i in range(other):
-                res = res + self
+        elif other==1:
+            return self
+        elif other==2:
+            l = ((self.x**2)*3)//(self.y*2)
+            rx=l**2-self.x*2
+            ry=-(l*(rx-self.x)+self.y)
             
-            return res
+            return ElemtE07(rx,ry)
+        elif other>2:
+            if other%2==0:
+                return (self*2)*(other//2)
+            else:
+                return ((self*2)*(other//2))+self
+        """else:
+            if other<2:
+                for i in range(3,other+1):
+                    res = res+self
+        return res"""
             
     def __rmul__(self,other):
         """
@@ -144,7 +156,7 @@ class ElemtE07(object):
         >>> 2*(ElemtE07(3,"INF",47)+3*ElemtE07(3,9,47))+ElemtE07(3,"INF",47)
         ElemtE07(43,32,47)
         """
-        raise NotImplementedError
+        return other*self
 
     def __eq__(self,other):
         """
@@ -155,13 +167,21 @@ class ElemtE07(object):
         >>> ElemtE07(3,9,47)==ElemtE07(3,"Inf",47) or ElemtE07(3,"Inf",47)==ElemtE07(3,9,47)
         False
         """
-        raise NotImplementedError
+        if (isinstance(self.y,str) and other==0):
+            return True
+            
+        if(self.x==other.x and self.y==other.y and self.p==other.p):
+            return True
+        else:
+            return False
+        
     def __neg__(self):
         """
         >>> -ElemtE07(7,3,11)
         ElemtE07(7,8,11)
         """
-        raise NotImplementedError
+        return ElemtE07(self.x,-self.y,self.p)
+    
     def __sub__(self,other):
         """
         >>> ElemtE07(3,10,11)-ElemtE07(7,3,11)

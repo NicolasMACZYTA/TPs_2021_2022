@@ -52,9 +52,22 @@ class ElemtE07(object):
         >>> ElemtE07(6,5,11) in (ElemtE07.lDesElements(11))
         True
         """
-        raise NotImplementedError
+        #assert premier avec 7 et estPremier
+        le=[ElemtE07(0,"INF",p)]
+        for x in range(0,p):
+            n = (x**3+7)%p
+            for y in range(0,p):
+                if (y**2)%p == n:
+                    le.append(ElemtE07(x,y,p))
+        return le
+        
     def __hash__(self):
         """On fera une fonction injective afin de l'utiliser également dans binCode"""
+        #Correction du prof
+        #if isinstance(self.y,str)
+            #return 0
+        #else:
+            #return self.x.a*self.x.n+self.y.a
         raise NotImplementedError
     def ElemtE07DepuisHash(h,p):
         """
@@ -120,7 +133,11 @@ class ElemtE07(object):
         >>> ElemtE07(2,2,11).lOrbite()
         [ElemtE07(2,2,11), ElemtE07(5,0,11), ElemtE07(2,9,11), ElemtE07(0,"INF",11)]
         """
-        raise NotImplementedError
+        le=[self]
+        while l[-1]!=0:
+            le.append(le[-1]+self)
+        return le
+
     def __mul__(self,other):
         """
         >>> ElemtE07(6,5,11)*3
@@ -190,12 +207,14 @@ class ElemtE07(object):
         True
         """
         raise NotImplementedError
+        
     def ordreCourbe(p=17):
         """
         >>> ElemtE07.ordreCourbe(11)
         12
         """
         return len(ElemtE07.lDesElements(p))
+    
     def ordrePoint(self):
         """
         >>> ElemtE07(3,10,11).ordrePoint()
@@ -204,6 +223,7 @@ class ElemtE07(object):
         12
         """
         return len(self.lOrbite())
+    
     def estGenerateur(self):
         """
         >>> ElemtE07(7,3,11).estGenerateur()
@@ -212,6 +232,7 @@ class ElemtE07(object):
         False
         """
         return ElemtE07.ordreCourbe(self.x.n)==self.ordrePoint()
+    
     def lDesElementsGenerateurs(p=47):
         """
         >>> ElemtE07.lDesElementsGenerateurs(11)
@@ -225,6 +246,7 @@ class ElemtE07(object):
         [ElemtE07(3,1,11), ElemtE07(3,10,11), ElemtE07(5,0,11)]
         """
         return [e for e in ElemtE07.lDesElements(p) if estPremier(e.ordrePoint())]
+    
     def elemtE07APartirDeX(x:ElmtZnZ):
         """
         Renvoie un point avec x ou une valeur proche de x comme abscisse
@@ -239,9 +261,11 @@ class ElemtE07(object):
             y2=xx**3+7
         #print(xx,y2)
         return ElemtE07(xx,y2.racineCarree())
+    
     def randElemtE07(p):
         """Renvoie un élément non nul au hasard"""
         return ElemtE07.elemtE07APartirDeX(ElmtZnZ(randint(0,p-1),p))
+    
     def randGenerateurE07(p=47):
         """Renvoie un élément non nul au hasard
         >>> ElemtE07.randGenerateurE07(47).estGenerateur()
@@ -265,6 +289,7 @@ class ElemtE07(object):
                 if ord>omax:
                     GMax,omax=ElemtE07(e),ord
             print(f"Avec F{p} l'ordre premier max est atteint avec {GMax} et vaut : {omax}")
+            
     def afficheGraphique1(p,nbgmax=35):
         #matplotlib.rcParams['text.usetex'] = True # Faire import matplotlib
 
@@ -338,6 +363,7 @@ class ElemtE07(object):
         #print(el)
         g=ElemtE07.randGenerateurE07(p)
         print(f"{g=}")
+        
     def demoChiffre(nbBitsCle=32):
             p=nbPremierAleaParNbBits(nbBitsCle*2)
             k=nbPremierAleaParNbBits(nbBitsCle*2)

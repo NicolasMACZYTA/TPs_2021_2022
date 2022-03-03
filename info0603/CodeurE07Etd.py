@@ -11,7 +11,7 @@ class CodeurE0765537(object):
         """Dans les valeurs par défaut B=54321*G
         """
         assert log(p,2)>16
-        self.a=12345
+        self.a=a
         self.A=self.a*G
         self.G=G
         self.B=B

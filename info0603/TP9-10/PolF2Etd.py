@@ -112,14 +112,34 @@ class PolF2(object):
         >>> PolF2([ElmtZnZ(0,2), ElmtZnZ(0,2), ElmtZnZ(1,2)])+PolF2([ElmtZnZ(1,2), ElmtZnZ(1,2)])
         PolF2(0b111)
         """
-        pass
+        pres = PolF2()
+        if(self.degre()>other.degre()):
+            pmax,pmin = self,other
+        else:
+            pmin,pmax = self,other
+        
+        for i in range(pmax.degre()-pmin.degre()):
+            pres.lcoef.append(pmax.lcoef[i])
+        for i in range(pmax.degre()-pmin.degre()+1,pmax.degre()):
+            pres.lcoef.append(pmax[i+pmax.degre()-pmin.degre()]+pmin[i])
+        
+        return pres
+    
+    
     def monome(k):
         """ X**k
         >>> print(PolF2.monome(5)+PolF2.monome(4)+PolF2.monome(1)+PolF2.monome(0))
         X⁵+X⁴+X+1
         """
         return PolF2(2**(k))
-
+    
+    
+    def mulmonome(self,k):
+        for i in range(k):
+            self.lcoef.append(ElmtZnZ(0,2))
+        return self
+    
+    
     def __mul__(self,other):
         """
         >>> print(PolF2.monome(2)*PolF2.monome(1))
@@ -129,7 +149,11 @@ class PolF2(object):
         >>> print(PolF2([ElmtZnZ(0,2), ElmtZnZ(0,2), ElmtZnZ(1,2)])*PolF2([ElmtZnZ(1,2), ElmtZnZ(1,2)]))
         X³+X²
         """
-        pass
+        pres=PolF2()
+        for i in range(self.degre()):
+            if self.lcoef[i].x==1:
+                pres = pres + other.mulmonome(other.degre()-i)
+        return pres
 
     def estNul(self):
         return self.degre()==0 and self.lcoef[0]==0
@@ -152,13 +176,27 @@ class PolF2(object):
         >>> PolF2(0b100011)-PolF2(0b100011)==0
         True
         """
-        pass
+        return self+other
+    
+    
     def __mod__(self,other):
         """
         >>> PolF2(0b11000101)%PolF2(0b11000)
         PolF2(0b101)
         """
-        pass
+        
+        #self = q.other +r 
+        
+        q,r = PolF2(0),PolF2(self)
+        
+        while(r.degre()>=other.degre()):
+            
+            k=r.degre()-other.degre()
+            r=r-other.mulmonome(k)
+            q=q+PolF2.monome(k)
+            
+        return r
+            
     def __floordiv__(self,other):
         """
         >>> PolF2(0b11000101)//PolF2(0b11000)

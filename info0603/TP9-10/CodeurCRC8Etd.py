@@ -18,7 +18,14 @@ class CodeurCRC8(CodeurCA):
         >>> print(f"0x{CodeurCRC8().blocCode(0xab345678):x}")
         0xab34567821
         '''
-        pass
+        
+        pm = PolF2(M)
+        g=self.pg.degre
+        pmxg = pm * monome(g)
+        pc = pmxg + pmxg % self.pg
+        
+        
+        return int(pc)
 
     def estBlocValide(self,valc):
         """
@@ -27,7 +34,8 @@ class CodeurCRC8(CodeurCA):
         >>> CodeurCRC8().estBlocValide(0xab34567820)
         False
         """
-        pass
+        # modulo par pg = 0
+        return (PolF2(valc)%self.Pg)==0
 
     def blocValideLePlusProche(self,valc,verbose=False):
         """
@@ -36,7 +44,14 @@ class CodeurCRC8(CodeurCA):
         >>> print(f"0x{CodeurCRC8().blocValideLePlusProche(0xab35567821):x}")
         0xab34567821
         """
-        pass
+        k=0
+        while (((PolF2(valc)*monome(k))%self.Pg)==0) and k<32:
+            k = k+1
+        
+        if k==32:
+            return False
+        else:
+            return ((PolF2(valc)*monome(k))%self.Pg)==0
 
     def blocDecode(self,valc):
         """
@@ -60,7 +75,7 @@ class CodeurCRC8(CodeurCA):
 
         # Ajouter nbErreurs au à chaque bloc
         # berr=CodeurCRC8.blocAvecErreur(bloc,nbBits=32,nbErreurs=nbErreurs)
-
+        pass
 
     def testDistance(self,nmax=0x21):
         min=1000

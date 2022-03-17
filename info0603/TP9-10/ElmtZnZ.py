@@ -43,63 +43,12 @@ def estPremier(num):
     return True
 
 class ElmtZnZ(object):
-    """>>> a=ElmtZnZ(7,8)
-    >>> b=ElmtZnZ(2,8)
-    >>> a==b
-    False
-    >>> a+b
-    ElmtZnZ(1,8)
-    >>> a+3
-    ElmtZnZ(2,8)
-    >>> 3+a
-    ElmtZnZ(2,8)
-    >>> a*b
-    ElmtZnZ(6,8)
-    >>> 3*a
-    ElmtZnZ(5,8)
-    >>> a*3
-    ElmtZnZ(5,8)
-    >>> a//b
-    ElmtZnZ(3,8)
-    >>> -a
-    ElmtZnZ(1,8)
-    >>> a-b
-    ElmtZnZ(5,8)
-    >>> a-3
-    ElmtZnZ(4,8)
-    >>> 3-a
-    ElmtZnZ(4,8)
-    >>> ElmtZnZ(2,7).valThChinois(ElmtZnZ(3,10))
-    ElmtZnZ(23,70)
-    >>> b.estInversible()
-    False
-    >>> (a+b).estInversible()
-    True
-    >>> ElmtZnZ(3,8).estInversible()
-    True
-    >>> b.inverse()
-    2 n'est pas inversible
-    >>> a.inverse()
-    ElmtZnZ(7,8)
-    >>> ElmtZnZ(13,8).inverse()
-    ElmtZnZ(5,8)
-    >>> a**2
-    ElmtZnZ(1,8)
-    >>> ElmtZnZ(2,13).logDiscret(8)
-    3
-    >>> ElmtZnZ(2,13).logDiscret(3)
-    4
-    >>> ElmtZnZ(2,14).logDiscret(2)
-    14 n'est pas un nombre premier"""
+    """Elements ZnZ"""
     
-    def __init__(self,a,n=2):
+    def __init__(self,a,n):
         """initialisation d'un ElmtZnZ"""
-        if isinstance(a,ElmtZnZ):
-            self.a,self.n=a.a,a.n
-        else:
-            self.a=a%n
-            self.n=n
-        
+        self.a=a%n
+        self.n=n
 
     def __str__(self):
         """representation string"""
@@ -110,7 +59,12 @@ class ElmtZnZ(object):
         return f"ElmtZnZ({self.a},{self.n})"
 
     def __eq__(self,other):
-        """verifie si les deux elements sont identique"""
+        """verifie si les deux elements sont identique
+        >>> ElmtZnZ(7,8) == ElmtZnZ(2,8)
+        False
+        >>> ElmtZnZ(7,8) == 7
+        True
+        """
         if isinstance(other, ElmtZnZ):
             if(self.a == other.a and self.n == other.n):
                 return True
@@ -123,7 +77,12 @@ class ElmtZnZ(object):
                 return False
 
     def __add__(self,other):
-        """addition peut additionner avec un autre ElmtZnZ ou un entier"""
+        """addition peut additionner avec un autre ElmtZnZ ou un entier
+        >>> ElmtZnZ(7,8)+ElmtZnZ(2,8)
+        ElmtZnZ(1,8)
+        >>> ElmtZnZ(7,8)+3
+        ElmtZnZ(2,8)
+        """
         if isinstance(other, ElmtZnZ):
             assert self.n == other.n,f"modulos différents"
             return ElmtZnZ(self.a+other.a,self.n)
@@ -131,11 +90,19 @@ class ElmtZnZ(object):
             return ElmtZnZ(self.a+other,self.n)
 
     def __radd__(self,other):
-        """reverse addition"""
+        """reverse addition
+        >>> 3+ElmtZnZ(7,8)
+        ElmtZnZ(2,8)
+        """
         return self+other
 
     def __mul__(self,other):
-        """multiplication"""
+        """multiplication
+        >>> ElmtZnZ(7,8)*ElmtZnZ(2,8)
+        ElmtZnZ(6,8)
+        >>> ElmtZnZ(7,8)*3
+        ElmtZnZ(5,8)
+        """
         if isinstance(other, ElmtZnZ):
             assert self.n == other.n,f"modulos différents"
             return ElmtZnZ(self.a*other.a,self.n)
@@ -143,11 +110,17 @@ class ElmtZnZ(object):
             return ElmtZnZ(self.a*other,self.n)
 
     def __rmul__(self,other):
-        """reverse multiplication"""
+        """reverse multiplication
+        >>> 3*ElmtZnZ(7,8)
+        ElmtZnZ(5,8)
+        """
         return self*other
 
     def __floordiv__(self,other):
-        """implements a//b"""
+        """implements a//b
+        >>> ElmtZnZ(7,8)//ElmtZnZ(2,8)
+        ElmtZnZ(3,8)
+        """
         if isinstance(other, ElmtZnZ):
             assert self.n == other.n,f"modulos différents"
             return ElmtZnZ(self.a//other.a,self.n)
@@ -155,11 +128,19 @@ class ElmtZnZ(object):
             return ElmtZnZ(self.a//other,self.n)
 
     def __neg__(self):
-        """retourne negatif de lui même"""
+        """retourne negatif de lui même
+        >>> -ElmtZnZ(7,8)
+        ElmtZnZ(1,8)
+        """
         return ElmtZnZ(-self.a,self.n)
 
     def __sub__(self,other):
-        """soustraction"""
+        """soustraction
+        >>> ElmtZnZ(7,8)-ElmtZnZ(2,8)
+        ElmtZnZ(5,8)
+        >>> ElmtZnZ(7,8)-3
+        ElmtZnZ(4,8)
+        """
         if isinstance(other, ElmtZnZ):
             assert self.n == other.n,f"modulos différents"
             return ElmtZnZ(self.a-other.a,self.n)
@@ -167,22 +148,37 @@ class ElmtZnZ(object):
             return ElmtZnZ(self.a-other,self.n)
 
     def __rsub__(self,other):
-        """reverse soustraction"""
+        """reverse soustraction
+        >>> 3-ElmtZnZ(7,8)
+        ElmtZnZ(4,8)
+        """
         return self-other
     
     def __pow__(self,other):
-        """permet de faire des puissance"""
+        """permet de faire des puissance
+        >>> ElmtZnZ(7,8)**2
+        ElmtZnZ(1,8)"""
         return ElmtZnZ(pow(self.a,other,self.n),self.n)
         
         
     def valThChinois(self,other):
-        """Theoreme chinois"""
+        """Theoreme chinois
+        >>> ElmtZnZ(2,7).valThChinois(ElmtZnZ(3,10))
+        ElmtZnZ(23,70)
+        """
         v,u,d=bezout(self.n,other.n)
         c = self.a*other.n*u + other.a*self.n*v
         return ElmtZnZ(c,self.n*other.n)        
         
     def estInversible(self):
-        """verifie si l'element est inversible"""
+        """verifie si l'element est inversible
+        >>> ElmtZnZ(2,8).estInversible()
+        False
+        >>> (ElmtZnZ(7,8)+ElmtZnZ(2,8)).estInversible()
+        True
+        >>> ElmtZnZ(3,8).estInversible()
+        True
+        """
         if PGCD(self.a,self.n)==1:
             return True
         else:
@@ -192,6 +188,12 @@ class ElmtZnZ(object):
         """inverse l'element
         >>> ElmtZnZ(3,256).inverse()
         ElmtZnZ(171,256)
+        >>> ElmtZnZ(2,8).inverse()
+        2 n'est pas inversible
+        >>> ElmtZnZ(7,8).inverse()
+        ElmtZnZ(7,8)
+        >>> ElmtZnZ(13,8).inverse()
+        ElmtZnZ(5,8)
         """
         if self.estInversible():
             m = pow(self.a, -1, self.n)
@@ -200,7 +202,14 @@ class ElmtZnZ(object):
             print(f"{self.a} n'est pas inversible")
         
     def logDiscret(self,b):
-        """Renvoie x tel que self.a**x==b(self.n) n doit etre premier"""
+        """Renvoie x tel que self.a**x==b(self.n) n doit etre premier
+        >>> ElmtZnZ(2,13).logDiscret(8)
+        3
+        >>> ElmtZnZ(2,13).logDiscret(3)
+        4
+        >>> ElmtZnZ(2,14).logDiscret(2)
+        14 n'est pas un nombre premier
+        """
         if estPremier(self.n):
             s = 1
             for i in range(self.n):

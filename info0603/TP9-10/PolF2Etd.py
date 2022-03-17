@@ -12,10 +12,10 @@ import matplotlib
 
 #Les méthodes magiques : https://blog.finxter.com/python-dunder-methods-cheat-sheet/
 
-def affpuis(n):
+def affPuis(n):
     if(n==1):
-        return "".join("") #pas beau mais pour eviter les X¹
-    return "".join(["⁰¹²³⁴⁵⁶⁷⁸⁹"[ord(c)-ord('0')] for c in str(n)])
+        return "".join("")
+    return "".join(["⁰¹²³⁴⁵⁶⁷⁸⁹"[ord(c)-ord('0')] for c in str(n)]) 
 
 class PolF2(object):
     "Polynôme dans F2"
@@ -55,7 +55,6 @@ class PolF2(object):
         """
         return int(self)
 
-
     def __str__(self):
         """
         >>> print(PolF2(0b110010))
@@ -74,8 +73,9 @@ class PolF2(object):
                 res="+1"
         for k,c in enumerate(self.lcoef[1:]):
             if c==1:
-                res="+X"+affpuis(k+1)+res
+                res="+X"+affPuis(k+1)+res
         return res[1:]
+    
     def __repr__(self):
         """
         """
@@ -92,6 +92,7 @@ class PolF2(object):
         5
         """
         return len(self.lcoef)-1
+    
     def sommeCoef(self):
         """
         >>> PolF2(0b100011).sommeCoef()
@@ -101,12 +102,13 @@ class PolF2(object):
         for c in self.lcoef:
             if c==1:s+=1
         return s
+    
     def distanceHamming(self,other):
         """
         >>> PolF2(0b100011).distanceHamming(PolF2(0b1100011))
         1
         """
-        pass
+        return (self.other).sommeCoef()
 
     def __add__(self,other):
         """
@@ -127,7 +129,7 @@ class PolF2(object):
             return [self.lcoef[k]+other.lcoef[k] for k in range(pmin.degre()+1)] + pmax.lcoef[pmin.degre()+1:]
         else:
             return PolF2(other)+self
-        
+    
     def monome(k):
         """ X**k
         >>> print(PolF2.monome(5)+PolF2.monome(4)+PolF2.monome(1)+PolF2.monome(0))
@@ -135,13 +137,11 @@ class PolF2(object):
         """
         return PolF2(2**(k))
     
-    
     def mulmonome(self,k):
         for i in range(k):
             self.lcoef.append(ElmtZnZ(0,2))
         return self
-    
-    
+
     def __mul__(self,other):
         """
         >>> print(PolF2.monome(2)*PolF2.monome(1))
@@ -170,11 +170,11 @@ class PolF2(object):
         
         return (self-other).estNul()
     
-    
     def __neg__(self):
         """
         """
         pass
+    
     def __sub__(self,other):
         """
         >>> PolF2(0b100011)-PolF2(0b100011)==0
@@ -182,15 +182,11 @@ class PolF2(object):
         """
         return self+other
     
-    
     def __mod__(self,other):
         """
         >>> PolF2(0b11000101)%PolF2(0b11000)
         PolF2(0b101)
         """
-        
-        #self = q.other +r 
-        
         q,r = PolF2(0),PolF2(self)
         
         while(r.degre()>=other.degre()):
@@ -200,7 +196,7 @@ class PolF2(object):
             q=q+PolF2.monome(k)
             
         return r
-            
+    
     def __floordiv__(self,other):
         """
         >>> PolF2(0b11000101)//PolF2(0b11000)

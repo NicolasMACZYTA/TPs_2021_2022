@@ -4,13 +4,18 @@ import copy
 from random import *
 from math import sqrt,log
 from sympy import isprime
-from arithmetiqueDansZ import *
+from ElemtE07Etd import *
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 
 
 #Les méthodes magiques : https://blog.finxter.com/python-dunder-methods-cheat-sheet/
+
+def affpuis(n):
+    if(n==1):
+        return "".join("") #pas beau mais pour eviter les X¹
+    return "".join(["⁰¹²³⁴⁵⁶⁷⁸⁹"[ord(c)-ord('0')] for c in str(n)])
 
 class PolF2(object):
     "Polynôme dans F2"
@@ -69,7 +74,7 @@ class PolF2(object):
                 res="+1"
         for k,c in enumerate(self.lcoef[1:]):
             if c==1:
-                res="+X"+strExp(k+1)+res
+                res="+X"+affpuis(k+1)+res
         return res[1:]
     def __repr__(self):
         """
@@ -112,20 +117,17 @@ class PolF2(object):
         >>> PolF2([ElmtZnZ(0,2), ElmtZnZ(0,2), ElmtZnZ(1,2)])+PolF2([ElmtZnZ(1,2), ElmtZnZ(1,2)])
         PolF2(0b111)
         """
-        pres = PolF2()
-        if(self.degre()>other.degre()):
-            pmax,pmin = self,other
+        if(isinstance(other, PolF2)):
+        
+            if(self.degre() > other.degre()):
+                pmax,pmin = self,other
+            else:
+                pmin,pmax = self,other
+            
+            return [self.lcoef[k]+other.lcoef[k] for k in range(pmin.degre()+1)] + pmax.lcoef[pmin.degre()+1:]
         else:
-            pmin,pmax = self,other
+            return PolF2(other)+self
         
-        for i in range(pmax.degre()-pmin.degre()):
-            pres.lcoef.append(pmax.lcoef[i])
-        for i in range(pmax.degre()-pmin.degre()+1,pmax.degre()):
-            pres.lcoef.append(pmax[i+pmax.degre()-pmin.degre()]+pmin[i])
-        
-        return pres
-    
-    
     def monome(k):
         """ X**k
         >>> print(PolF2.monome(5)+PolF2.monome(4)+PolF2.monome(1)+PolF2.monome(0))
@@ -165,8 +167,10 @@ class PolF2(object):
         """
         if isinstance(other,int) or isinstance(other,ElmtZnZ):
             return self.degre()==0 and self.lcoef[0]==other
-
+        
         return (self-other).estNul()
+    
+    
     def __neg__(self):
         """
         """

@@ -1,6 +1,7 @@
 #include "ihm_ncurses.h"
 #include <stdlib.h>
 #include <ncurses.h>
+#include <string.h>
 
 WIN * initialiser_win(int startx_,int starty_,int height_,int width_,char *window_text_){
 	/*initialiser_win(x départ, y départ, hauteur, largeur, texte bordure)
@@ -100,10 +101,10 @@ int hex_selectionne(int posX, int posY){
 int selection(int posX,int posY, int * typeselection){
 	int res;
 	
-	if(posX >= 9 && posX <=32 && posY>=8 && posY<=23){
+	if(posX >= 1 && posX <=40 && posY>=8 && posY<=27){
 		res = hex_selectionne(posX,posY);
 		*typeselection = 0;
-	}else if(posX >= 35 && posX <=42 && posY>=8 && posY<=23){
+	}else if(posX >= 43 && posX <=50 && posY>=8 && posY<=23){
 		res = char_selectionne(posX,posY);
 		*typeselection = 1;
 	}else{
@@ -147,6 +148,5 @@ void afficher_selection(int selected_octet,WIN * hex_window,WIN * char_window,ch
 
 
 void afficher_carte(WIN * fenetre_carte,char* carte){
-
 	/* TODO */
 }

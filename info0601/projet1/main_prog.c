@@ -18,9 +18,9 @@ int main(int argc, char** argv){
     char tmpch;
     int offset=0;
     WIN *win;
-    WIN *win2;
+    WIN *win_carte;
     WIN *win3;
-    
+
     ncurses_initialisation();
     ncurses_couleurs();
     curs_set(FALSE);
@@ -30,11 +30,14 @@ int main(int argc, char** argv){
     afficher_win(win);
     refresh_win(win);
 
-    win2= initialiser_win(0,7,22,42,"Hexadecimal");
-    afficher_win(win2);
-    refresh_win(win2);
+    /*win_carte = carte*/
 
-    win3= initialiser_win(42,7,18,10,"char");
+
+    win_carte= initialiser_win(0,7,22,42,"Carte");
+    afficher_win(win_carte);
+    refresh_win(win_carte);
+
+    win3= initialiser_win(42,7,18,10,"Outils");
     afficher_win(win3);
     refresh_win(win3);
 
@@ -51,13 +54,15 @@ int main(int argc, char** argv){
         lseek(fd, 0, SEEK_SET);
         
         if(0<read(fd, buf, 128)){
+
             buf[128]='\0';
             disp2 = to_disp(buf);
             print_win(win3,disp2);
             refresh_win(win3);
             disp = to_string(buf,offset);
-            print_win(win2,disp);
-            refresh_win(win2);
+            print_win(win_carte,disp);
+            refresh_win(win_carte);
+
         }else{
             ncurses_stopper();
             return(EXIT_FAILURE);
@@ -73,19 +78,19 @@ int main(int argc, char** argv){
         switch(ch) {
             case KEY_MOUSE :
             if(souris_getpos(&posX, &posY) == OK){
-                wclear(win2->content_window);
+                wclear(win_carte->content_window);
                 wclear(win3->content_window);
                 print_win(win3,disp2);
                 refresh_win(win3);
-                print_win(win2,disp);
+                print_win(win_carte,disp);
 
                 tmp = selection(posX,posY,&typeselection);   /*a changer*/
 
                 wclear(win->content_window);
                 wprintw(win->content_window,"%d,%d char selectionné %d \n cliquez sur l'octet que vous voulez modifier.\n appuyez sur entrée pour éditer,\n ou suppr. pour supprimmer un octet",posX,posY,tmp);
-                afficher_selection(tmp,win2,win3,buf,typeselection);
+                afficher_selection(tmp,win_carte,win3,buf,typeselection);
                 refresh_win(win);
-                refresh_win(win2);
+                refresh_win(win_carte);
                 refresh_win(win3);
             }
             break;
@@ -93,14 +98,14 @@ int main(int argc, char** argv){
             supprimer_octet(fd,tmp,offset,size);
             lseek(fd,offset,SEEK_SET);
             lire_buf(fd,buf,offset);
-                wclear(win2->content_window);
+                wclear(win_carte->content_window);
                 wclear(win3->content_window);
                 disp = to_string(buf,offset);
                 disp2 = to_disp(buf);
                 print_win(win3,disp2);
-                print_win(win2,disp);
+                print_win(win_carte,disp);
                 refresh_win(win);
-                refresh_win(win2);
+                refresh_win(win_carte);
                 refresh_win(win3);
 
 
@@ -126,14 +131,14 @@ int main(int argc, char** argv){
             ecrire_buf(fd,buf,offset);
             wprintw(win->content_window,"\n ecriture");
             lire_buf(fd,buf,offset);
-            wclear(win2->content_window);
+            wclear(win_carte->content_window);
             wclear(win3->content_window);
              disp = to_string(buf,offset);
                 disp2 = to_disp(buf);
                 print_win(win3,disp2);
-                print_win(win2,disp);
+                print_win(win_carte,disp);
                 refresh_win(win);
-                refresh_win(win2);
+                refresh_win(win_carte);
                 refresh_win(win3);
 
 
@@ -143,14 +148,14 @@ int main(int argc, char** argv){
             if(offset-128>=0){
                 offset=offset-128;
                 lire_buf(fd,buf,offset);
-                wclear(win2->content_window);
+                wclear(win_carte->content_window);
                 wclear(win3->content_window);
                 disp = to_string(buf,offset);
                 disp2 = to_disp(buf);
                 print_win(win3,disp2);
-                print_win(win2,disp);
+                print_win(win_carte,disp);
                 refresh_win(win);
-                refresh_win(win2);
+                refresh_win(win_carte);
                 refresh_win(win3);
             }
             break;
@@ -159,14 +164,14 @@ int main(int argc, char** argv){
             if((offset+128)<size){
                 offset=offset+128;
                 lire_buf(fd,buf,offset);
-                wclear(win2->content_window);
+                wclear(win_carte->content_window);
                 wclear(win3->content_window);
                 disp = to_string(buf,offset);
                 disp2 = to_disp(buf);
                 print_win(win3,disp2);
-                print_win(win2,disp);
+                print_win(win_carte,disp);
                 refresh_win(win);
-                refresh_win(win2);
+                refresh_win(win_carte);
                 refresh_win(win3);
             }
             break;

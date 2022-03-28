@@ -10,7 +10,7 @@
 
 int main(int argc, char** argv){
     int ch, posX, posY, fd, size, tmp=0, typeselection;
-    char * buf=malloc(129*sizeof(char));
+    char * buf=malloc(801*sizeof(char));
 
     char * disp;
     char * disp2;
@@ -53,13 +53,13 @@ int main(int argc, char** argv){
         refresh_win(win);
         lseek(fd, 0, SEEK_SET);
         
-        if(0<read(fd, buf, 128)){
+        if(0<read(fd, buf, 800)){
 
-            buf[128]='\0';
+            buf[800]='\0';
             disp2 = to_disp(buf);
             print_win(win3,disp2);
             refresh_win(win3);
-            disp = to_string(buf,offset);
+            disp = to_disp(buf);
             print_win(win_carte,disp);
             refresh_win(win_carte);
 
@@ -100,7 +100,7 @@ int main(int argc, char** argv){
             lire_buf(fd,buf,offset);
                 wclear(win_carte->content_window);
                 wclear(win3->content_window);
-                disp = to_string(buf,offset);
+                disp = to_disp(buf);
                 disp2 = to_disp(buf);
                 print_win(win3,disp2);
                 print_win(win_carte,disp);
@@ -133,7 +133,7 @@ int main(int argc, char** argv){
             lire_buf(fd,buf,offset);
             wclear(win_carte->content_window);
             wclear(win3->content_window);
-             disp = to_string(buf,offset);
+             disp = to_disp(buf);
                 disp2 = to_disp(buf);
                 print_win(win3,disp2);
                 print_win(win_carte,disp);
@@ -150,7 +150,7 @@ int main(int argc, char** argv){
                 lire_buf(fd,buf,offset);
                 wclear(win_carte->content_window);
                 wclear(win3->content_window);
-                disp = to_string(buf,offset);
+                disp = to_disp(buf);
                 disp2 = to_disp(buf);
                 print_win(win3,disp2);
                 print_win(win_carte,disp);
@@ -166,7 +166,7 @@ int main(int argc, char** argv){
                 lire_buf(fd,buf,offset);
                 wclear(win_carte->content_window);
                 wclear(win3->content_window);
-                disp = to_string(buf,offset);
+                disp = to_disp(buf);
                 disp2 = to_disp(buf);
                 print_win(win3,disp2);
                 print_win(win_carte,disp);

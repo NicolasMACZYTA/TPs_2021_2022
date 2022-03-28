@@ -93,8 +93,8 @@ int char_selectionne(int posX, int posY){
 }
 
 int hex_selectionne(int posX, int posY){
-	int x = (posX-9)/3, y = posY-8;
-	return (y*8+x);
+	int x = (posX-1), y = posY-8;
+	return (y*40+x);
 }
 
 
@@ -119,16 +119,16 @@ void afficher_selection(int selected_octet,WIN * hex_window,WIN * char_window,ch
 	int x_hex,x_char;
 	int y_hex,y_char;
 	sprintf((char*)(hex), "%02X", buf[selected_octet]);
-	x_hex = (selected_octet%8)*3+8+1;
+	x_hex = (selected_octet%40);
 	x_char = selected_octet%8;
-	y_hex = selected_octet/8;
+	y_hex = selected_octet/40;
 	y_char = selected_octet/8;
 
 	if(typeselection==0){
 	wattron(hex_window->content_window,COLOR_PAIR(2));
 	}
 	wattron(hex_window->content_window,A_STANDOUT);
-	mvwprintw(hex_window->content_window,y_hex,x_hex,"%s",hex);
+	mvwprintw(hex_window->content_window,y_hex,x_hex,"%c",buf[selected_octet]);
 	wattroff(hex_window->content_window,A_STANDOUT);
 	if(typeselection==0){
 	wattroff(hex_window->content_window,COLOR_PAIR(2));

@@ -38,7 +38,7 @@ void string2hexString(char* input, char* output)
 }
 
 char * to_string(char*buf,int offset){
-    char * res= malloc(600*sizeof(char));
+    char * res= malloc(800*sizeof(char));
     char * hex = hex_from_buf(buf);
     char *line = (char*)malloc(8*sizeof(char));
     int i=0,j=0;
@@ -76,13 +76,13 @@ char * to_disp(char*buf){
 void lire_buf(int fd, char*buf, int offset){
     int i;
     free(buf);
-    buf=malloc(129*sizeof(char));
-    for(i=0;i<128;i++){
+    buf=malloc(801*sizeof(char));
+    for(i=0;i<800;i++){
         buf[i]='\0';
     }
     lseek(fd,offset,SEEK_SET);
-    if(0<read(fd, buf, 128)){
-        buf[128]='\0';
+    if(0<read(fd, buf, 800)){
+        buf[800]='\0';
     }else{
         ncurses_stopper();
         printf("erreur lecture ;\n");
@@ -91,7 +91,7 @@ void lire_buf(int fd, char*buf, int offset){
 }
 void ecrire_buf(int fd, char*buf, int offset){
     lseek(fd,offset,SEEK_SET);
-    if(0<write(fd, buf, 128)){
+    if(0<write(fd, buf, 800)){
         
     }else{
         ncurses_stopper();
@@ -101,8 +101,8 @@ void ecrire_buf(int fd, char*buf, int offset){
 }
 void supprimer_octet(int fd, int selection, int offset,int size){
     int i=offset+selection;
-    char * buf2 = malloc(129*sizeof(char));
-    buf2[128]='\0';
+    char * buf2 = malloc(801*sizeof(char));
+    buf2[800]='\0';
     lseek(fd,offset+selection+1,SEEK_SET);
     while (i<size){
         lire_buf(fd,buf2,i+1);

@@ -85,21 +85,19 @@ En appliquant l'algorithme de déterminisation :
 
 \begin{center}
 $\begin{array}{l|l|l|l}
-\textbf{x} & \textbf{transiter}  & \textbf{y} & \textbf{$\delta$} \\ \hline
-A= \{0\}  & \tr{A}{a}{\{1\}}     & \{1, 2\} = B & \tr{A}{a}{B} \\
-          & \tr{A}{b}{\emptyset} & & \tr{A}{b}{\emptyset} \\
-B=\{1,2\} & \tr{B}{a}{\{3\}}     & \{3\} = C & \tr{B}{a}{C} \\
-          & \tr{B}{b}{\{2\}}     & \{2\} = D & \tr{B}{b}{D} \\
-C=\{3\}   & \tr{C}{a}{\emptyset} & & \tr{C}{a}{\emptyset} \\
-          & \tr{C}{b}{\{4\}}     & \{4\} = E & \tr{C}{b}{E} \\
-D=\{2\}   & \tr{D}{a}{\{3\}}     & \{3\} = C & \tr{D}{a}{D} \\
-          & \tr{D}{b}{\emptyset} & & \tr{D}{b}{G} \\
-E=\{4\}   & \tr{E}{a}{\{6\}}     & \{4,6\} = F & \tr{E}{a}{F} \\
-          & \tr{E}{b}{\{5\}}     & \{4,5\} = G & \tr{E}{b}{G} \\
-F=\{4,6\} & \tr{F}{a}{\{6\}}     & \{4,6\} = F & \tr{F}{a}{F} \\
-          & \tr{F}{b}{\{5\}}     & \{4,5\} = G & \tr{F}{b}{G} \\
-G=\{4,5\} & \tr{G}{a}{\{6\}}     & \{4,6\} = F & \tr{G}{a}{F} \\
-          & \tr{G}{b}{\{5\}}     & \{4,5\} = G & \tr{G}{b}{G} \\ \hline
+\textbf{x}  & \textbf{transiter}   & \textbf{y}    & \textbf{$\delta$} \\ \hline
+A= \{0\}    & \tr{A}{a}{\{1\}}     & \{1, 2\} = B  & \tr{A}{a}{B} \\
+            & \tr{A}{b}{\emptyset} &               & \tr{A}{b}{\emptyset} \\
+B=\{1,2\}   & \tr{B}{a}{\{3\}}     & \{3\} = C     & \tr{B}{a}{C} \\
+            & \tr{B}{b}{\{2\}}     & \{2\} = D     & \tr{B}{b}{D} \\
+C=\{3\}     & \tr{C}{a}{\emptyset} &               & \tr{C}{a}{\emptyset} \\
+            & \tr{C}{b}{\{4\}}     & \{4,5\} = E   & \tr{C}{b}{E} \\
+D=\{2\}     & \tr{D}{a}{\{3\}}     & \{3\} = C     & \tr{D}{a}{C} \\
+            & \tr{D}{b}{\emptyset} &               & \tr{D}{b}{\emptyset} \\
+E=\{4,5\}   & \tr{E}{a}{\{6\}}     & \{4,5,6\} = F & \tr{E}{a}{F} \\
+            & \tr{E}{b}{\{4\}}     & \{4,5\} = E   & \tr{E}{b}{E} \\
+F=\{4,5,6\} & \tr{F}{a}{\{6\}}     & \{4,5,6\} = F & \tr{F}{a}{F} \\
+            & \tr{F}{b}{\{4\}}     & \{4,5\} = E   & \tr{F}{b}{E} \\
 \end{array}$
 \end{center}
 
@@ -111,9 +109,8 @@ Voici l'automate obtenu :
 \node[state, right of=A] (B) {B};
 \node[state, right of=B] (C) {C};
 \node[state, below of=C] (D) {D};
-\node[state, right of=C] (E) {E};
+\node[state, accepting, right of=C] (E) {E};
 \node[state, accepting, right of=E] (F) {F};
-\node[state, accepting, below of=F] (G) {G};
 
 \draw
 (A) edge[above] node{a} (B)
@@ -121,12 +118,10 @@ Voici l'automate obtenu :
 (B) edge[above] node{b} (D)
 (D) edge[right] node{a} (C)
 (C) edge[above] node{b} (E)
-(E) edge[above] node{a} (F)
-(E) edge[above] node{b} (G)
+(E) edge[above, bend left] node{a} (F)
+(E) edge[loop above] node{b} (E)
 (F) edge[loop above] node{a} (F)
-(G) edge[loop below] node{b} (G)
-(F) edge[left, bend right] node{b} (G)
-(G) edge[right, bend right] node{a} (F);
+(F) edge[above, bend left] node{b} (E);
   \end{tikzpicture}
 \end{center}
 

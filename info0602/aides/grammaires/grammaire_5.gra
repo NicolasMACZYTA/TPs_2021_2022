@@ -1,0 +1,9 @@
+GRAMMAIRE
+T={=,*,id}
+N={S,G,D}
+R={
+  (S -> G = D | D)
+  (G -> * D | id)
+  (D -> G)
+}
+S=S

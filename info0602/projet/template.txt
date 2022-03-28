@@ -3,6 +3,8 @@
 \usepackage[T1]{fontenc}       % 
 \usepackage[french]{babel}     % Ce package permet d'utiliser les environnements en Français
 
+\usepackage{listings}
+
 \usepackage{tikz}
 \usetikzlibrary{automata, positioning, arrows}
 
@@ -51,9 +53,3 @@
 %**************************************************************************************************
 
 \begin{document}
-
-Voici un automate que l'on peut obtenir facilement avec la bibliothèque \textit{tikz}.
-
-\begin{figure}[ht]
-  \centering
-  \begin{tikzpicture}

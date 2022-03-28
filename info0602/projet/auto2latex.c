@@ -14,6 +14,20 @@ void delStr(char *string, char *sub) {
     }
 }
 
+//fonction pour compter nombre de fois un charactere à été trouver
+int compteChar(char str[], char ch){
+	int nb;
+	nb = 0;
+	
+  	for(int i = 0; i <= strlen(str); i++){
+  		if(str[i] == ch){
+  			nb++;
+ 		}
+	}
+    
+	return nb;
+}
+
 int main(int argc, char *argv[]){
     FILE* fo = NULL;
     FILE* fn = NULL;
@@ -25,7 +39,8 @@ int main(int argc, char *argv[]){
     char lAlphabet[50] = "";
     char *check;
     char ch;
-    int nbNodes;
+    char liens[10][20];
+    int nbNodes, nbLiens=0;
 
     if(argc != 3){
         printf("[ERREUR] Il faut 2 fichiers.\n");
@@ -69,14 +84,26 @@ int main(int argc, char *argv[]){
     }
 
     while (fscanf(fo,"%s", chaine) == 1){
+        //Nodes qui sont accepteur
+        if(strcmp(type,"AFD") == 0 || strcmp(type,"AFN") == 0){
+            if(strstr(chaine, "F=")!=0){
+                strcpy(lEnd,chaine);
+                delStr(lEnd,"F=");
+                delStr(lEnd,"{");
+                delStr(lEnd,"}");
+                printf("Nodes accepteurs : %s\n",lEnd);
+            }
+        //Sauf pour les AFNPiles
+        }else{
+            printf("Nodes accepteurs : Pile vide\n");
+        }
+        //Nodes totals
         if(strstr(chaine, "Q=")!=0){
             check=strchr(chaine,'q');
-            while (check!=NULL) {
-                nbNodes++;
-                check=strchr(check+1,'q');
-            }
+            nbNodes = compteChar(check, 'q');
             printf("Le nombres de nodes : %d\n",nbNodes);
         }
+        //L'alphabet utiliser
         if(strstr(chaine, "A=")!=0){
             strcpy(lAlphabet,chaine);
             delStr(lAlphabet,"A=");
@@ -84,20 +111,20 @@ int main(int argc, char *argv[]){
             delStr(lAlphabet,"}");
             printf("L'alphabet : %s\n",lAlphabet);
         }
+        //Node de départ
         if(strstr(chaine, "s=")!=0){
             strcpy(lStart,chaine);
             delStr(lStart,"s=");
-            printf("Les nodes départ : %s\n",lStart);
+            printf("La node de départ : %s\n",lStart);
         }
-        if(strstr(chaine, "F=")!=0){
-            strcpy(lEnd,chaine);
-            delStr(lEnd,"F=");
-            delStr(lEnd,"{");
-            delStr(lEnd,"}");
-            printf("Nodes accepteurs : %s\n",lEnd);
+        if(strstr(chaine, "(")!=0){
+            strcpy(liens[nbLiens],chaine);
+            delStr(liens[nbLiens]," ");
+            printf("%s\n",liens[nbLiens]);
+            nbLiens++;
         }
     }
-
+    
     ftemp = fopen("template.txt", "r+");
     if(ftemp == NULL){
         printf("[ERREUR] Le fichier template.txt est manquant.\n");
@@ -108,65 +135,41 @@ int main(int argc, char *argv[]){
     }
     fclose(ftemp);
 
-    //fprintf(fptr, "%s", sentence);
+    fprintf(fn,"\n\\noindent Le fichier \\texttt{%s} :\n\\begin{lstlisting}[mathescape,frame=single]\n",argv[1]);
+    fseek(fo, 0, SEEK_SET);
+    while((ch = fgetc(fo) ) != EOF){
+        fputc(ch, fn);
+    }
+    fprintf(fn,"\n\\end{lstlisting}\nCe qui donne l'automate suivant :\n\\begin{figure}[ht]\n  \\centering\n  \\begin{tikzpicture})\n");
+    for(int i = 0; i<nbNodes; i++){
+        char iC[3];
+        sprintf(iC, "%d", i);
+        fprintf(fn,"\\node[state");
+        if(strstr(lStart, iC)!=0){
+            fprintf(fn,", initial] (q%d) {$q_%d$};\n",i,i);
+        }else if(strstr(lEnd, iC)!=0){
+            fprintf(fn,", accepting] (q%d) {$q_%d$};\n",i,i);
+        }else{
+            fprintf(fn,"] (q%d) {$q_%d$};\n",i,i);
+        }
+    }
+    fprintf(fn,"\\draw\n");
+    for(int i = 0; i<nbLiens; i++){
+        if(compteChar(liens[i],liens[i][2]) == 2){
+            printf("DOUBLE\n");
+            fprintf(fn,"(q%c) edge[loop below] node{%c} (q%c)\n",liens[i][2],liens[i][4],liens[i][7]);
+        }else{
+            printf("SOLO\n");
+            if(i%2 == 0){
+                fprintf(fn,"(q%c) edge[below] node{%c} (q%c)\n",liens[i][2],liens[i][4],liens[i][7]);
+            }else{
+                fprintf(fn,"(q%c) edge[above] node{%c} (q%c)\n",liens[i][2],liens[i][4],liens[i][7]);
+            }
+        }
+    }
+    fprintf(fn,"  \\end{tikzpicture}\n  \\caption{Fichier \texttt{%s}}\n\\end{figure}",argv[1]);
 
     fclose(fo);
     fclose(fn);
     return 0;
-
-
-/*
-    //récupération orienté
-    fscanf(fo, "%s", chaine);
-    fscanf(fo, "%d", &oriente);
-
-    //récupération value
-    fscanf(fo, "%s", chaine);
-    fscanf(fo, "%d", &value);
-
-    //récupération "DEBUT_DEF_ARETES"
-    fscanf(fo, "%s", chaine);
-    fscanf(fo, "%s", chaine);
-
-  if(oriente != 0){
-    while(strcmp(chaine, "FIN_DEF_ARETES") != 0){
-      cellule *c = malloc(sizeof(cellule));
-      fscanf(fo, "%s", char_sommet);
-      initCellule(c, atoi(char_sommet));
-      j = atoi(chaine);
-      inserer(&g->l_adj[j], c);
-      fscanf(fo, "%s", chaine);
-    }
-  }
-  else{
-    while(strcmp(chaine, "FIN_DEF_ARETES") != 0){
-      cellule *c = malloc(sizeof(cellule));
-      cellule *c2 = malloc(sizeof(cellule));
-      fscanf(fo, "%s", char_sommet);
-      initCellule(c, atoi(char_sommet));
-      j = atoi(chaine);
-      inserer(&g->l_adj[j], c);
-      initCellule(c2, atoi(chaine));
-      j = atoi(char_sommet);
-      inserer(&g->l_adj[j], c2);
-      fscanf(fo, "%s", chaine);
-    }
-  }
-
-  g->nbSommet = sommet;
-  g->oriente = oriente;
-  g->value = value;
-  fclose(fo);
-
-  //Remplissage de la matrice
-  for(int i=0; i<sommet ; i++){
-    for(int j=0; j<sommet; j++){
-      if(rechercher(&g->l_adj[i], j)){
-        g->m_adj[i][j] = 1;
-      }
-      else{
-        g->m_adj[i][j] = 0;
-      }
-    }
-  }*/
 }

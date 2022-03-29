@@ -15,6 +15,8 @@ typedef struct WIN{
 WIN* initialiser_win(int startx_,int starty_,int height_,int width_,char*text);
 void refresh_win(WIN*window);
 void print_win(WIN*window,char*text);
+void print_map(WIN*window,char*background);
+void print_outils(WIN*window,int selected_tool);
 void afficher_win(WIN*window);
 void ncurses_initialisation();
 void ncurses_stopper();
@@ -23,7 +25,7 @@ void ncurses_initsouris();
 int souris_getpos(int *x, int *y);
 int char_selectionne(int posX, int posY);
 int hex_selectionne(int posX, int posY);
-int selection(int posX,int posY, int* typeselection);
+int selection(int posX,int posY, int* typeselection,int * selected_tool);
 void afficher_selection(int selected_octet,WIN * hex_window,WIN * char_window,char * buf,int typeselection);
 void afficher_carte(WIN * fenetre_carte,char* carte);
 #endif

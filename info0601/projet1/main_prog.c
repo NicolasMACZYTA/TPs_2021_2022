@@ -10,16 +10,16 @@
 
 int main(int argc, char** argv){
     int ch, posX, posY, fd, size, tmp=0, typeselection;
+    int selected_tool=1;
     char * buf=malloc(801*sizeof(char));
 
     char * disp;
-    char * disp2;
     
     char tmpch;
     int offset=0;
     WIN *win;
     WIN *win_carte;
-    WIN *win3;
+    WIN *win_outils;
 
     ncurses_initialisation();
     ncurses_couleurs();
@@ -37,9 +37,9 @@ int main(int argc, char** argv){
     afficher_win(win_carte);
     refresh_win(win_carte);
 
-    win3= initialiser_win(42,7,18,10,"Outils");
-    afficher_win(win3);
-    refresh_win(win3);
+    win_outils= initialiser_win(42,7,22,18,"Outils");
+    afficher_win(win_outils);
+    refresh_win(win_outils);
 
     if(0<open(argv[1],O_RDONLY)){
         attron(A_STANDOUT);
@@ -56,11 +56,11 @@ int main(int argc, char** argv){
         if(0<read(fd, buf, 800)){
 
             buf[800]='\0';
-            disp2 = to_disp(buf);
-            print_win(win3,disp2);
-            refresh_win(win3);
+            print_outils(win_outils,selected_tool);
+            refresh_win(win_outils);
+
             disp = to_disp(buf);
-            print_win(win_carte,disp);
+            print_map(win_carte,disp);
             refresh_win(win_carte);
 
         }else{
@@ -79,19 +79,18 @@ int main(int argc, char** argv){
             case KEY_MOUSE :
             if(souris_getpos(&posX, &posY) == OK){
                 wclear(win_carte->content_window);
-                wclear(win3->content_window);
-                print_win(win3,disp2);
-                refresh_win(win3);
-                print_win(win_carte,disp);
+                wclear(win_outils->content_window);
+                
+                refresh_win(win_outils);
+                print_map(win_carte,disp);
 
-                tmp = selection(posX,posY,&typeselection);   /*a changer*/
-
+                tmp = selection(posX,posY,&typeselection,&selected_tool);   /*a changer*/
+                print_outils(win_outils,selected_tool);
                 wclear(win->content_window);
-                wprintw(win->content_window,"%d,%d char selectionné %d \n cliquez sur l'octet que vous voulez modifier.\n appuyez sur entrée pour éditer,\n ou suppr. pour supprimmer un octet",posX,posY,tmp);
-                afficher_selection(tmp,win_carte,win3,buf,typeselection);
+                wprintw(win->content_window,"%d,%d char selectionné %d \n type selection : %d",posX,posY,tmp,typeselection);
                 refresh_win(win);
                 refresh_win(win_carte);
-                refresh_win(win3);
+                refresh_win(win_outils);
             }
             break;
             case KEY_DC :
@@ -99,81 +98,51 @@ int main(int argc, char** argv){
             lseek(fd,offset,SEEK_SET);
             lire_buf(fd,buf,offset);
                 wclear(win_carte->content_window);
-                wclear(win3->content_window);
+                wclear(win_outils->content_window);
                 disp = to_disp(buf);
-                disp2 = to_disp(buf);
-                print_win(win3,disp2);
-                print_win(win_carte,disp);
+                print_outils(win_outils,selected_tool);
+                print_map(win_carte,disp);
                 refresh_win(win);
                 refresh_win(win_carte);
-                refresh_win(win3);
+                refresh_win(win_outils);
 
 
             break;
             case 10 :
-            wattron(win3->content_window,COLOR_PAIR(2));
-            wattron(win3->content_window,A_STANDOUT);
-            mvwprintw(win3->content_window,tmp/8,tmp%8," ");
-            refresh_win(win3);
+            wattron(win_outils->content_window,COLOR_PAIR(2));
+            wattron(win_outils->content_window,A_STANDOUT);
+            mvwprintw(win_outils->content_window,tmp/8,tmp%8," ");
+            refresh_win(win_outils);
             tmpch = getch();
-            mvwprintw(win3->content_window,tmp/8,tmp%8,"%c",tmpch);
-            refresh_win(win3);
+            mvwprintw(win_outils->content_window,tmp/8,tmp%8,"%c",tmpch);
+            refresh_win(win_outils);
             while ((ch=getch())!=10)
             {
                 tmpch = getch();
-                mvwprintw(win3->content_window,tmp/8,tmp%8,"%c",tmpch);
-                refresh_win(win3);
+                mvwprintw(win_outils->content_window,tmp/8,tmp%8,"%c",tmpch);
+                refresh_win(win_outils);
             }
-            wattroff(win3->content_window,A_STANDOUT);
-            wattroff(win3->content_window,COLOR_PAIR(2));
+            wattroff(win_outils->content_window,A_STANDOUT);
+            wattroff(win_outils->content_window,COLOR_PAIR(2));
 
             buf[tmp]=tmpch;
             ecrire_buf(fd,buf,offset);
             wprintw(win->content_window,"\n ecriture");
             lire_buf(fd,buf,offset);
             wclear(win_carte->content_window);
-            wclear(win3->content_window);
+            wclear(win_outils->content_window);
              disp = to_disp(buf);
-                disp2 = to_disp(buf);
-                print_win(win3,disp2);
-                print_win(win_carte,disp);
+                print_outils(win_outils,selected_tool);
+                print_map(win_carte,disp);
                 refresh_win(win);
                 refresh_win(win_carte);
-                refresh_win(win3);
+                refresh_win(win_outils);
 
 
             break;
             case KEY_UP :
-            wprintw(win->content_window,"UP");
-            if(offset-128>=0){
-                offset=offset-128;
-                lire_buf(fd,buf,offset);
-                wclear(win_carte->content_window);
-                wclear(win3->content_window);
-                disp = to_disp(buf);
-                disp2 = to_disp(buf);
-                print_win(win3,disp2);
-                print_win(win_carte,disp);
-                refresh_win(win);
-                refresh_win(win_carte);
-                refresh_win(win3);
-            }
             break;
             case KEY_DOWN :
-            wprintw(win->content_window,"DOWN");
-            if((offset+128)<size){
-                offset=offset+128;
-                lire_buf(fd,buf,offset);
-                wclear(win_carte->content_window);
-                wclear(win3->content_window);
-                disp = to_disp(buf);
-                disp2 = to_disp(buf);
-                print_win(win3,disp2);
-                print_win(win_carte,disp);
-                refresh_win(win);
-                refresh_win(win_carte);
-                refresh_win(win3);
-            }
             break;
 
         }

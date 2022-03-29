@@ -1,0 +1,8 @@
+Fonctionnalités développées:
+
+- Possibilité de convertir un fichier .aut en fichier .tex
+	./auto2latex AFD_1.aut test.tex
+	
+- Ce fichier .tex peut être ensuite converti en pdf avec la commande
+	pdflatex test.tex
+

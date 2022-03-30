@@ -1,9 +1,0 @@
-GRAMMAIRE
-T={a,b}
-N={S,C}
-R={
-  (S -> C C)
-  (C -> a C)
-  (C -> b)
-}
-S=S

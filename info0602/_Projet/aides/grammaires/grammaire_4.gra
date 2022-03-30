@@ -1,0 +1,9 @@
+GRAMMAIRE
+T={+,*,id,'(',')'}
+N={E,T,F}
+R={
+  (E -> E + T | T)
+  (T -> T * F | F)
+  (F -> id | '(' E ')')
+}
+S=E

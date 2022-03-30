@@ -1,0 +1,7 @@
+GRAMMAIRE
+T={a,b}
+N={P}
+R={
+  (P -> a P b | a b)
+}
+S=P

@@ -1,8 +1,9 @@
-#ifndef AIDECHAR_H
-#define AIDECHAR_H
+#ifndef CHARFUNCS_H
+#define CHARFUNCS_H
 
 void delStr(char *string, char *sub);
 int compteChar(char str[], char ch);
 char *replaceChar(char *str, char *a, char *b);
+void templateCopy(FILE* f);
 
-#endif /* AIDECHAR_H */
+#endif /* CHARFUNCS_H */

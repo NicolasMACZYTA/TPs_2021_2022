@@ -1,8 +1,27 @@
-Fonctionnalités développées:
+Fonctionnalitées:
 
-- Possibilité de convertir un fichier .aut en fichier .tex
-	./auto2latex AFD_1.aut test.tex
+auto2latex
+	Possibilité de convertir un fichier .aut en fichier .tex
+		./auto2latex AFD_1.aut test.tex
 	
-- Ce fichier .tex peut être ensuite converti en pdf avec la commande
-	pdflatex test.tex
+	Ce fichier .tex peut être ensuite converti en pdf avec la commande
+		pdflatex test.tex
 
+autodet
+	Pas fait
+
+automin
+	Pas fait
+	
+auto2exp
+	Pas fait
+
+exp2auto
+	Pas fait
+
+execauto
+	Pas fait
+	
+typegram
+	Pour connaitre le type de l'a grammaire il suffit d'utiliser (bizarement ça sort que des type 2 pour les grammaires proposée...)
+		./typegram grammaire_1.gra

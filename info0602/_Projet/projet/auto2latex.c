@@ -1,26 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "aidechar.h"
-
-#define MAX 100
+#include "charfuncs.h"
 
 int main(int argc, char *argv[]){
     FILE* fo = NULL;
     FILE* fn = NULL;
-    FILE* ftemp = NULL;
-    char chaine[MAX] = "";
+    char chaine[100] = "";
     char type[6] = "";
     char lStart[50] = "";
     char lEnd[50] = "";
     char lAlphabet[50] = "";
     char *check;
-    char ch;
     char liens[10][20];
     int nbNodes=0, nbLiens=0;
 
     if(argc != 3){
-        printf("[ERREUR] Il faut 2 fichiers.\n");
+        printf("[ERREUR] Il faut 2 arguments.\n");
         exit(EXIT_FAILURE);
     }
     if((check = strrchr(argv[1],'.')) != NULL ) {
@@ -40,11 +36,6 @@ int main(int argc, char *argv[]){
     fo = fopen(argv[1], "r+");
     fn = fopen(argv[2], "w+");
 
-    if(fo == NULL){
-        printf("[ERREUR] Impossible d'ouvrir le fichier.\n");
-        exit(EXIT_FAILURE);
-    }
-
     //récupération type
     fscanf(fo, "%s", type);
 
@@ -60,15 +51,7 @@ int main(int argc, char *argv[]){
         exit(EXIT_FAILURE);
     }
 
-    ftemp = fopen("template.txt", "r+");
-    if(ftemp == NULL){
-        printf("[ERREUR] Le fichier template.txt est manquant.\n");
-        exit(EXIT_FAILURE);
-    }
-    while((ch = fgetc(ftemp) ) != EOF){
-        fputc(ch, fn);
-    }
-    fclose(ftemp);
+    templateCopy(fn);
 
     fprintf(fn,"\n\\noindent Le contenu du fichier .aut :\n\\begin{lstlisting}[mathescape,frame=single]");
     fprintf(fn,"\n%s",type);

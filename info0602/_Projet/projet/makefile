@@ -1,6 +1,6 @@
 EXEC = auto2latex autodet typegram
 OBJETS = charfuncs.o automate.o
-NOM_PROJET = tp2
+NOM_PROJET = 602
 
 .SUFFIXES: .c .o
 

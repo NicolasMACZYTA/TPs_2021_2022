@@ -57,5 +57,5 @@ charfuncs.o: charfuncs.c charfuncs.h
 automate.o: automate.c automate.h
 
 auto2latex.o: auto2latex.c charfuncs.c charfuncs.h
-autodet.o: autodet.c charfuncs.h automate.h
+autodet.o: autodet.c charfuncs.h
 typegram.o:	typegram.c

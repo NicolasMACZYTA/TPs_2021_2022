@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "charfuncs.h"
-#include "automate.h"
 
 int main(int argc, char *argv[]){
     FILE* fin = NULL;

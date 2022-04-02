@@ -46,35 +46,35 @@ void print_win(WIN*window,char*text){
 	wprintw(window->content_window,text);
 }
 
-void print_map(WIN*window,char*background){
+void print_map(WIN*window,char*background,char*foreground){
 	int i;
 	for(i=0;i<800;i++){
 		switch (background[i])
 		{
 		case 'h':
 			wattron(window->content_window,COLOR_PAIR(GRASS_PAIR));
-			mvwprintw(window->content_window, i/40, i%40, &background[i]);
+			mvwprintw(window->content_window, i/40, i%40, &foreground[i]);
 			wattroff(window->content_window,COLOR_PAIR(GRASS_PAIR));
 			break;
 		case 's':
 			wattron(window->content_window,COLOR_PAIR(SAND_PAIR));
-			mvwprintw(window->content_window, i/40, i%40, &background[i]);
+			mvwprintw(window->content_window, i/40, i%40, &foreground[i]);
 			wattroff(window->content_window,COLOR_PAIR(SAND_PAIR));
 			break;
 		case 'e':
 			wattron(window->content_window,COLOR_PAIR(WATER_PAIR));
-			mvwprintw(window->content_window, i/40, i%40, &background[i]);
+			mvwprintw(window->content_window, i/40, i%40, &foreground[i]);
 			wattroff(window->content_window,COLOR_PAIR(WATER_PAIR));
 			break;
 		case 'm':
 			wattron(window->content_window,COLOR_PAIR(MOUNTAIN_PAIR));
-			mvwprintw(window->content_window, i/40, i%40, &background[i]);
+			mvwprintw(window->content_window, i/40, i%40, &foreground[i]);
 			wattroff(window->content_window,COLOR_PAIR(MOUNTAIN_PAIR));
 			break;
 		
 		default:
 			wattron(window->content_window,COLOR_PAIR(EMPTY_PAIR));
-			mvwprintw(window->content_window, i/40, i%40, &background[i]);
+			mvwprintw(window->content_window, i/40, i%40, &foreground[i]);
 			wattroff(window->content_window,COLOR_PAIR(EMPTY_PAIR));
 			break;
 		}
@@ -104,6 +104,8 @@ void print_outils(WIN*window,int selected_tool){
 	mvwprintw(window->content_window,5,0,"$ Trésor");
 	mvwprintw(window->content_window,6,0,"M Monstre");
 	mvwprintw(window->content_window,7,0,"A Artefact");
+	mvwprintw(window->content_window,8,0,"_ Gomme");
+	
 	
 	wattron(window->content_window,A_STANDOUT);
 	switch (selected_tool)
@@ -131,6 +133,9 @@ void print_outils(WIN*window,int selected_tool){
 		break;
 	case 8:
 		mvwprintw(window->content_window,7,2,"Artefact");
+		break;
+	case 9:
+		mvwprintw(window->content_window,8,2,"Gomme");
 		break;
 	default:
 		break;

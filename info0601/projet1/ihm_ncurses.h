@@ -15,7 +15,7 @@ typedef struct WIN{
 WIN* initialiser_win(int startx_,int starty_,int height_,int width_,char*text);
 void refresh_win(WIN*window);
 void print_win(WIN*window,char*text);
-void print_map(WIN*window,char*background);
+void print_map(WIN*window,char*background,char*foreground);
 void print_outils(WIN*window,int selected_tool);
 void afficher_win(WIN*window);
 void ncurses_initialisation();

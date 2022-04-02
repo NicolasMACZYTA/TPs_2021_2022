@@ -8,13 +8,18 @@
 #include "ihm_ncurses.h"
 #include "fichier.h"
 
+#define TAILLE_GRILLE 800
+
 int main(int argc, char** argv){
+
     int ch, posX, posY, fd, size, tmp=0, typeselection;
     int selected_tool=1;
-    char * buf=malloc(801*sizeof(char));
 
+    char buf[TAILLE_GRILLE+1];
+    char buf2[TAILLE_GRILLE+1];
     char * disp;
-    
+    char * disp2;
+
     char tmpch;
     int offset=0;
     WIN *win;
@@ -56,17 +61,31 @@ int main(int argc, char** argv){
         if(0<read(fd, buf, 800)){
 
             buf[800]='\0';
-            print_outils(win_outils,selected_tool);
-            refresh_win(win_outils);
 
-            disp = to_disp(buf);
-            print_map(win_carte,disp);
-            refresh_win(win_carte);
 
         }else{
             ncurses_stopper();
             return(EXIT_FAILURE);
         }
+
+        lseek(fd, 800,SEEK_SET);
+        if(0<read(fd, buf2, 800)){
+
+            buf2[800]='\0';
+
+        }else{
+            ncurses_stopper();
+            return(EXIT_FAILURE);
+        }
+
+
+            print_outils(win_outils,selected_tool);
+            refresh_win(win_outils);
+            disp = to_disp(buf);
+            disp2 = to_disp(buf2);
+            print_map(win_carte,disp,disp2);
+            refresh_win(win_carte);
+
 
     }else{
         ncurses_stopper();
@@ -81,10 +100,48 @@ int main(int argc, char** argv){
                 wclear(win_carte->content_window);
                 wclear(win_outils->content_window);
                 
-                refresh_win(win_outils);
-                print_map(win_carte,disp);
+                
 
                 tmp = selection(posX,posY,&typeselection,&selected_tool);   /*a changer*/
+                if(typeselection==0){
+                    switch (selected_tool)
+                    {
+                    case 1:
+                        buf[tmp]='h';
+                        break;
+                    case 2:
+                        buf[tmp]='s';
+                        break;
+                    case 3:
+                        buf[tmp]='e';
+                        break;
+                    case 4:
+                        buf[tmp]='m';
+                        break;
+                    case 5:
+                        buf2[tmp]='X';
+                        break;
+                    case 6:
+                        buf2[tmp]='$';
+                        break;
+                    case 7:
+                        buf2[tmp]='M';
+                        break;
+                    case 8:
+                        buf2[tmp]='A';
+                        break;
+                    case 9:
+                        buf2[tmp]=' ';
+                        break;
+
+                    default:
+                        break;
+                    }
+                }
+                disp = to_disp(buf);
+                disp2 = to_disp(buf2);
+                refresh_win(win_outils);
+                print_map(win_carte,disp,disp2);
                 print_outils(win_outils,selected_tool);
                 wclear(win->content_window);
                 wprintw(win->content_window,"%d,%d char selectionné %d \n type selection : %d",posX,posY,tmp,typeselection);
@@ -101,7 +158,7 @@ int main(int argc, char** argv){
                 wclear(win_outils->content_window);
                 disp = to_disp(buf);
                 print_outils(win_outils,selected_tool);
-                print_map(win_carte,disp);
+                print_map(win_carte,disp,disp2);
                 refresh_win(win);
                 refresh_win(win_carte);
                 refresh_win(win_outils);
@@ -132,8 +189,9 @@ int main(int argc, char** argv){
             wclear(win_carte->content_window);
             wclear(win_outils->content_window);
              disp = to_disp(buf);
+             disp2 = to_disp(buf2);
                 print_outils(win_outils,selected_tool);
-                print_map(win_carte,disp);
+                print_map(win_carte,disp,disp2);
                 refresh_win(win);
                 refresh_win(win_carte);
                 refresh_win(win_outils);

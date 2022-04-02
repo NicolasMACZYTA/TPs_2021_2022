@@ -1,0 +1,8 @@
+GRAMMAIRE
+T={b,u}
+N={A}
+R={
+  (A -> b)
+  (bA -> u)
+}
+S=A

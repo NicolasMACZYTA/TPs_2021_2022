@@ -136,7 +136,24 @@ int main(int argc, char *argv[]){
         }
     }
 
-    printf("\nLa grammaire est de type : %d\n",final);
+    printf("\nLa grammaire est de type %d : ",final);
+    switch(final){
+        case 0:
+            printf("pas de restrictions\n");
+            break;
+        case 1:
+            printf("grammaire contextuelle\n");
+            break;
+        case 2:
+            printf("grammaire hors-contexte\n");
+            break;
+        case 3:
+            printf("grammaire reguliere\n");
+            break;
+        default:
+            printf("c'est pas normal\n");
+            break;
+    }
 
     return 0;
 }

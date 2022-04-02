@@ -43,7 +43,7 @@ char *replaceChar(char *str, char *a, char *b){
 void templateCopy(FILE* f){ 
     FILE* ftemp = NULL;
     char ch;
-    ftemp = fopen("template", "r+");
+    ftemp = fopen("template.tem", "r+");
     if(ftemp == NULL){
         printf("[ERREUR] Le fichier template.txt est manquant.\n");//ohno
         exit(EXIT_FAILURE);

@@ -23,5 +23,5 @@ execauto
 	Pas fait
 	
 typegram
-	Pour connaitre le type de l'a grammaire il suffit d'utiliser (bizarement ça sort que des type 2 pour les grammaires proposée...)
+	Pour connaitre le type de l'a grammaire il suffit d'utiliser
 		./typegram grammaire_1.gra

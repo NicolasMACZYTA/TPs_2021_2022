@@ -39,6 +39,38 @@ char *replaceChar(char *str, char *a, char *b){
     return str;
 }
 
+char *replaceSymbole(char *str){
+    char * res=malloc(126*sizeof(char));
+    int i = 0, j = 0;
+    for(i=0;i<strlen(str);)
+    {
+        if(str[i]=='+'||str[i]=='*'){
+            res[j]='\'';
+            j++;
+            res[j]=str[i];
+            j++;
+            res[j]='\'';
+            j++;
+            i++;
+        
+        }else if(str[i]=='i'&&str[i+1]=='d'){
+            res[j]='I';
+            j++;
+            i++;
+            res[j]='D';
+            i++;
+            j++;
+        }else{
+            res[j]=str[i];
+            i++;
+            j++;
+        }
+    }
+    
+
+    return res;
+}
+
 //car c'est plus simple
 void templateCopy(FILE* f, char *fichier){ 
     FILE* ftemp = NULL;

@@ -87,6 +87,23 @@ void templateCopy(FILE* f, char *fichier){
     fclose(ftemp);
 }
 
+char *suprimerExt(char* chaine){
+    char *retStr;
+    char *lastExt;
+    if(chaine == NULL){
+        return NULL;
+    }
+    if((retStr = malloc (strlen (chaine) + 1)) == NULL){
+        return NULL;
+    }
+    strcpy(retStr, chaine);
+    lastExt = strrchr (retStr, '.');
+    if (lastExt != NULL){
+        *lastExt = '\0';
+    }
+    return retStr;
+}
+
 char** str_split(char* a_str, const char a_delim){
     char** result    = 0;
     size_t count     = 0;

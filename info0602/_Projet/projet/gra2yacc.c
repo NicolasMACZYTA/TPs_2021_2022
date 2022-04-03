@@ -3,8 +3,6 @@
 #include <string.h>
 #include "charfuncs.h"
 
-char* str_replace(char* string, const char* substr, const char* replacement);
-
 int main(int argc, char *argv[]){
     FILE* fo = NULL;
     FILE* fn = NULL;
@@ -40,6 +38,9 @@ int main(int argc, char *argv[]){
             exit(EXIT_FAILURE);
         }
     }
+
+    //nomfichier = suprimerExt(argv[2]);
+
     if((check = strrchr(argv[3],'.')) != NULL ) {
         if(strcmp(check,".l") != 0) {
             printf("[ERREUR] 3eme fichier n'est pas un .l\n");

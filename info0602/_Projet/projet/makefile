@@ -1,4 +1,4 @@
-EXEC = auto2latex autodet typegram
+EXEC = auto2latex autodet typegram gra2yacc
 OBJETS = charfuncs.o automate.o
 NOM_PROJET = 602
 
@@ -59,3 +59,4 @@ automate.o: automate.c automate.h
 auto2latex.o: auto2latex.c charfuncs.c charfuncs.h
 autodet.o: autodet.c charfuncs.h
 typegram.o:	typegram.c
+gra2yacc.o: gra2yacc.c

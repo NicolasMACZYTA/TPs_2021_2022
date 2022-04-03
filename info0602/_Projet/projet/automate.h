@@ -31,6 +31,6 @@ void insere(liste_t* l, cellule_t* c);
 void afficher_liste(liste_t* l);
 void supprimer(liste_t* l, cellule_t* c);
 cellule_t *rechercherlien(liste_t *l, char *mot);
-int ajout_lien(liste_t *l, char *mot);
+int ajout_lien(liste_t *l, char chaine);
 
 #endif /* AUTOMATE_H */

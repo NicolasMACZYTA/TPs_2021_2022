@@ -8,13 +8,14 @@ int init_automate(automate_t* a, char *type) {
     strcpy(a->nodeStart,"");
     strcpy(a->nodeEnd,"");
     strcpy(a->alphabet,"");
-    a->nbLiens=0;
+    a->liens->nbLiens=0;
     a->nbNodes=0;
 
     return 0;
 }
 
 cellule_t *initialiser_cellule(char chaine){
+    cellule_t *c = malloc(sizeof(cellule_t));
     if(c != NULL){
         strcpy(c->lien,chaine);
         c->succ = NULL;
@@ -57,7 +58,7 @@ void afficher_liste(liste_t* l){
 
     cellule_t* current = l->head;
     while(current != NULL){
-        printf("%s \n", current->cle);
+        printf("%s \n", current->lien);
         current=current->succ;
     }
     printf("\n");
@@ -84,7 +85,7 @@ int ajout_lien(liste_t* l, char chaine){
 
     cellule_t* temp = l->head;
     while(temp->succ != NULL){
-        if(strcmp(temp->cle, chaine) == 0){
+        if(strcmp(temp->lien, chaine) == 0){
             return 0;
         }else{
             temp = temp->succ;
@@ -101,7 +102,7 @@ int ajout_lien(liste_t* l, char chaine){
 cellule_t *rechercherlien(liste_t *l, char *mot){
     cellule_t *x;
     x = l->head;
-    while(x != NULL && x->cle != mot){
+    while(x != NULL && x->lien != mot){
         x = x->succ;
     }
 

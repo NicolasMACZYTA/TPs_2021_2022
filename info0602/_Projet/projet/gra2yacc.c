@@ -109,7 +109,7 @@ int main(int argc, char *argv[]){
     }
 
     for(int i = 0; i<nbLiens; i++){
-        strcpy(liensFix[i],liens[i]);/
+        strcpy(liensFix[i],liens[i]);
     }
 
     for(int i = 0; i<nbLiens; i++){

@@ -40,12 +40,12 @@ char *replaceChar(char *str, char *a, char *b){
 }
 
 //car c'est plus simple
-void templateCopy(FILE* f){ 
+void templateCopy(FILE* f, char *fichier){ 
     FILE* ftemp = NULL;
     char ch;
-    ftemp = fopen("template.tem", "r+");
+    ftemp = fopen(fichier, "r+");
     if(ftemp == NULL){
-        printf("[ERREUR] Le fichier template.txt est manquant.\n");//ohno
+        printf("[ERREUR] Le fichier %s est manquant.\n",fichier);//ohno
         exit(EXIT_FAILURE);
     }
     while((ch = fgetc(ftemp) ) != EOF){

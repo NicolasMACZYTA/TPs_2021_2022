@@ -51,7 +51,7 @@ int main(int argc, char *argv[]){
         exit(EXIT_FAILURE);
     }
 
-    templateCopy(fn);
+    templateCopy(fn,"templateAutomate.tem");
 
     fprintf(fn,"\n\\noindent Le contenu du fichier .aut :\n\\begin{lstlisting}[mathescape,frame=single]");
     fprintf(fn,"\n%s",type);

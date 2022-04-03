@@ -9,14 +9,14 @@ int main(int argc, char *argv[]){
     FILE* fo = NULL;
     FILE* fn = NULL;
     char chaine[100] = "";
-    char type[6] = "";
     char lStart[50] = "";
-    char lEnd[50] = "";
     char lAlphabet[50] = "";
     char lTerminaux[50] = "";
     char *check;
     char liens[10][20];
-    int nbNodes=0, nbLiens=0;
+    char liensFix[10][50];
+    char alphabet[10][5];
+    int nbSymb=0, nbLiens=0, nbA=0;
 
     if(argc != 3){
         printf("[ERREUR] Il faut 2 arguments.\n");
@@ -40,46 +40,30 @@ int main(int argc, char *argv[]){
     fn = fopen(argv[2], "w+");
 
     //récupération type
-    fscanf(fo, "%s", type);
+    fscanf(fo, "%s", chaine);
 
     //test pour trouver le type
-    if(strcmp(type,"GRAMMAIRE") == 0){
+    if(strcmp(chaine,"GRAMMAIRE") == 0){
         printf("GRAMMAIRE\n");
     }else{
         printf("[ERREUR] Je connais pas.\n");
         exit(EXIT_FAILURE);
     }
 
-    templateCopy(fn);
+    //templateCopy(fn);
 
-    fprintf(fn,"\n\\noindent Le contenu du fichier .aut :\n\\begin{lstlisting}[mathescape,frame=single]");
-    fprintf(fn,"\n%s",type);
+    //fprintf(fn,"\n\\noindent Le contenu du fichier .aut :\n\\begin{lstlisting}[mathescape,frame=single]");
+    //fprintf(fn,"\n%s",type);
 
-    if(strcmp(type,"AFNP") == 0){
-        printf("Nodes accepteurs : Pile vide\n");
-    }
-    while (fscanf(fo,"%s", chaine) == 1){
-        //Pour ajouter le contenu du fichier dans le .tex
-        replaceChar(chaine,"ε","$\\epsilon$");//agrougrou
-        fprintf(fn,"\n%s",chaine);
-        //Nodes qui sont accepteur
-        if(strcmp(type,"AFD") == 0 || strcmp(type,"AFN") == 0){
-            if(strstr(chaine, "F=")!=0){
-                strcpy(lEnd,chaine);
-                delStr(lEnd,"{");
-                delStr(lEnd,"}");
-                delStr(lEnd,"F=");
-                printf("Nodes accepteurs : %s\n",lEnd);
-            }
-            //Sauf pour les AFNPiles
-        }
-        //Nodes totals
+    while(fgets(chaine, 100, fo) != NULL){
+        //Pour ajouter le contenu du fichier dans le .y
+
+        //Symboles
         if(strstr(chaine, "N=")!=0){
             check=strchr(chaine,',');
-            nbNodes = compteChar(check, ',')+1;
-            printf("Le nombres de nodes : %d\n",nbNodes);
+            nbSymb = compteChar(check, ',')+1;
+            printf("Le nombres de symboles : %d\n",nbSymb);
         }
-
 
         //L'alphabet utiliser
         if(strstr(chaine, "T=")!=0){
@@ -87,17 +71,20 @@ int main(int argc, char *argv[]){
             delStr(lTerminaux,"{");
             delStr(lTerminaux,"}");
             delStr(lTerminaux,"T=");
-            printf("les symboles terminaux : %s\n",lTerminaux);
-        }
-
-
-        //L'alphabet utiliser
-        if(strstr(chaine, "A=")!=0){
-            strcpy(lAlphabet,chaine);
-            delStr(lAlphabet,"{");
-            delStr(lAlphabet,"}");
-            delStr(lAlphabet,"A=");
-            printf("L'alphabet : %s\n",lAlphabet);
+            printf("Les symboles terminaux : %s\n",lTerminaux);
+            const char *delim = ",\n";
+            char *s = lTerminaux;
+            size_t n = 0, len;
+            //ouverture de la porte des etoiles non programmer
+            for(s = strtok (s, delim); s && n < 10; s = strtok (NULL, delim)){
+                if ((len = strlen (s)) < 5){
+                    strcpy(alphabet[n++], s);
+                    nbA++;
+                }else{
+                    printf("[ERREUR] Un charactere de l'alphabet est trop grand.\n");
+                    exit(EXIT_FAILURE);
+                }
+            }
         }
 
         //Node de départ
@@ -106,21 +93,59 @@ int main(int argc, char *argv[]){
             delStr(lStart,"S=");
             printf("La node de départ : %s\n",lStart);
         }
+
         //Les liens
-        if(strstr(chaine, "(")!=0){
+        if(strstr(chaine, "(")!=0 && strstr(chaine, "{")==0){
             strcpy(liens[nbLiens],chaine);
-            //str_replace(liens[nbLiens],"->",": ");
-            printf("%s\n",liens[nbLiens]);
+            printf("%s",liens[nbLiens]);
+            if(liens[nbLiens][0] == ' '){
+                memmove(liens[nbLiens], liens[nbLiens]+3, strlen(liens[nbLiens]));//J'aime pas les (
+            }
+            liens[nbLiens][(strlen(liens[nbLiens]))-3] = '\0';
+            replaceChar(liens[nbLiens],"->",":");
+            //printf("%s\n",liens[nbLiens]);
             nbLiens++;
         }
     }
 
-    if(strcmp(type,"AFNP") == 0){
+    for(int i = 0; i<nbLiens; i++){
+        strcpy(liensFix[i],liens[i]);/
+    }
+
+    for(int i = 0; i<nbLiens; i++){
+        for(int j = 0; j<nbA; j++){
+            for(int k = 0; k < strlen(liens[i]); k++){
+                //liens[i][k] //char liste
+                //alphabet[j] //char alphabet
+                if(liens[i][k]==alphabet[j][0]){
+                    if(liens[i][k]=='+'){
+                        replaceChar(liensFix[i],"+","'+'");
+                    }else if(liens[i][k]=='*'){
+                        replaceChar(liensFix[i],"*","'*'");
+                    }else if(liens[i][k]=='i'){
+                        replaceChar(liensFix[i],"id","ID");
+                    }
+                }
+            }
+        }
+    }
+    printf("\n");
+    
+
+    //replaceChar(liensFix[i],"+","'+'");
+    //replaceChar(liensFix[i],"*","'*'");
+    //replaceChar(liensFix[i],"id","ID");
+
+    for(int i = 0; i<3; i++){
+        printf("%s\n",liensFix[i]);
+    }
+
+    /*if(strcmp(type,"AFNP") == 0){
         //ohbonvoilaquoi
         fprintf(fn,"\n\\end{lstlisting}\n\nDans le cours, nous n'avons pas vu la représentation sous forme de graphe d'un automate à pile.\n\\end{document}");
     }else{
         fprintf(fn,"\n\\end{lstlisting}\nCe qui donne l'automate suivant :\n\\begin{figure}[ht]\n  \\centering\n  \\begin{tikzpicture})\n");
-        for(int i = 0; i<nbNodes; i++){
+        for(int i = 0; i<nbSymb; i++){
             char iC[10];
             sprintf(iC, "%d", i);
             fprintf(fn,"\\node[state");
@@ -158,48 +183,9 @@ int main(int argc, char *argv[]){
             }
         }
         fprintf(fn,";\n  \\end{tikzpicture}\n  \\caption{Automate}\n\\end{figure}\n\\end{document}");
-    }
+    }*/
 
     fclose(fo);
     fclose(fn);
     return 0;
-}
-
-char* str_replace(char* string, const char* substr, const char* replacement) {
-	char* tok = NULL;
-	char* newstr = NULL;
-	char* oldstr = NULL;
-	int   oldstr_len = 0;
-	int   substr_len = 0;
-	int   replacement_len = 0;
-
-	newstr = strdup(string);
-	substr_len = strlen(substr);
-	replacement_len = strlen(replacement);
-
-	if (substr == NULL || replacement == NULL) {
-		return newstr;
-	}
-
-	while ((tok = strstr(newstr, substr))) {
-		oldstr = newstr;
-		oldstr_len = strlen(oldstr);
-		newstr = (char*)malloc(sizeof(char) * (oldstr_len - substr_len + replacement_len + 1));
-
-		if (newstr == NULL) {
-			free(oldstr);
-			return NULL;
-		}
-
-		memcpy(newstr, oldstr, tok - oldstr);
-		memcpy(newstr + (tok - oldstr), replacement, replacement_len);
-		memcpy(newstr + (tok - oldstr) + replacement_len, tok + substr_len, oldstr_len - substr_len - (tok - oldstr));
-		memset(newstr + oldstr_len - substr_len + replacement_len, 0, 1);
-
-		//free(oldstr);
-	}
-
-	//free(string);
-
-	return newstr;
 }

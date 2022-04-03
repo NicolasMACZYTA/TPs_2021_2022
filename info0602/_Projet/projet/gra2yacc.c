@@ -8,6 +8,7 @@ char* str_replace(char* string, const char* substr, const char* replacement);
 int main(int argc, char *argv[]){
     FILE* fo = NULL;
     FILE* fn = NULL;
+    FILE* fl = NULL;
     char chaine[100] = "";
     char lStart[50] = "";
     //char lAlphabet[50] = "";
@@ -15,6 +16,7 @@ int main(int argc, char *argv[]){
     char *check;
     char liens[10][20];
     char **liensFix;
+    char tokens[50]="\0";
     liensFix=malloc(10*sizeof(char*));
     for(int i=0;i<10;i++){
         liensFix[i]=malloc(50*sizeof(char));
@@ -22,8 +24,8 @@ int main(int argc, char *argv[]){
     char alphabet[10][5];
     int nbSymb=0, nbLiens=0, nbA=0;
     char * tmp1=malloc(20*sizeof(char)); char * tmp2=malloc(20*sizeof(char));
-    if(argc != 3){
-        printf("[ERREUR] Il faut 2 arguments.\n");
+    if(argc != 4){
+        printf("[ERREUR] Il faut 3 arguments.\n");
         exit(EXIT_FAILURE);
     }
     if((check = strrchr(argv[1],'.')) != NULL ) {
@@ -38,10 +40,17 @@ int main(int argc, char *argv[]){
             exit(EXIT_FAILURE);
         }
     }
+    if((check = strrchr(argv[3],'.')) != NULL ) {
+        if(strcmp(check,".l") != 0) {
+            printf("[ERREUR] 3eme fichier n'est pas un .l\n");
+            exit(EXIT_FAILURE);
+        }
+    }
     check = "";
 
     fo = fopen(argv[1], "r+");
     fn = fopen(argv[2], "w+");
+    fl = fopen(argv[3], "w+");
 
     //récupération type
     fscanf(fo, "%s", chaine);
@@ -90,7 +99,6 @@ int main(int argc, char *argv[]){
                 }
             }
         }
-        
         //Node de départ
         if(strstr(chaine, "S=")!=0){
             strcpy(lStart,chaine);
@@ -124,7 +132,7 @@ int main(int argc, char *argv[]){
                 
                 if(liens[i][k]==alphabet[j][0]){
                     if(liens[i][k]=='i'){
-                        replaceChar(liensFix[i], "id", "ID");
+                        strcpy(tokens,"ID");
                     }
                 }
             }
@@ -144,7 +152,12 @@ int main(int argc, char *argv[]){
 
     /*if(strcmp(type,"AFNP") == 0){
         //ohbonvoilaquoi
-        fprintf(fn,"\n\\end{lstlisting}\n\nDans le cours, nous n'avons pas vu la représentation sous forme de graphe d'un automate à pile.\n\\end{document}");
+
+        */
+        fprintf(fn,"%c{\n#include <stdio.h>\n#include <stdlib.h>\nint yylex();\nvoid yyerror();\n%c}",37,37);
+    /*
+        
+    
     }else{
         fprintf(fn,"\n\\end{lstlisting}\nCe qui donne l'automate suivant :\n\\begin{figure}[ht]\n  \\centering\n  \\begin{tikzpicture})\n");
         for(int i = 0; i<nbSymb; i++){
@@ -186,8 +199,25 @@ int main(int argc, char *argv[]){
         }
         fprintf(fn,";\n  \\end{tikzpicture}\n  \\caption{Automate}\n\\end{figure}\n\\end{document}");
     }*/
+        
+            fprintf(fn,"%ctoken %s\n",37,tokens);
+        
+        fprintf(fn,"\n%c%c\n",37,37);
+        fprintf(fn,"S : %s\n",lStart);
+
+        for(int i = 0; i<3; i++){
+            fprintf(fn,"%s\n",liensFix[i] );
+            fprintf(fn,"\n");
+        }
+
+        fprintf(fn,"\n%c%c\n",37,37);
+        fprintf(fn,"void main()\n{\n    printf(\"\\nEnter C++ function definition to check: \\n\");\n    yyparse();\n }\n void yyerror()\n {\n  printf(\"\\nIncorrect function definition.\\n\");\n    exit(1);\n }");
+
+
+        fprintf(fl,"%c{\n    #include <stdio.h>\n    #include \"y.tab.h\"\n%c}\n  \nalpha   \n    [A-Za-z_]\ndigit     \n  [0-9]\n%c%c\n[\\t \\n] ;\nvoid|bool|char|int|float|double           return TYPE;\n{alpha}({alpha}|{digit})                 return ID;\n              return yytext[0];\n%c%c\n int yywrap()\n{\n    return 1;\n}",37,37,37,37,37);
 
     fclose(fo);
     fclose(fn);
+    fclose(fl);
     return 0;
 }

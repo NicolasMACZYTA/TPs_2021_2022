@@ -10,14 +10,18 @@ int main(int argc, char *argv[]){
     FILE* fn = NULL;
     char chaine[100] = "";
     char lStart[50] = "";
-    char lAlphabet[50] = "";
+    //char lAlphabet[50] = "";
     char lTerminaux[50] = "";
     char *check;
     char liens[10][20];
-    char liensFix[10][50];
+    char **liensFix;
+    liensFix=malloc(10*sizeof(char*));
+    for(int i=0;i<10;i++){
+        liensFix[i]=malloc(50*sizeof(char));
+    }
     char alphabet[10][5];
     int nbSymb=0, nbLiens=0, nbA=0;
-
+    char * tmp1=malloc(20*sizeof(char)); char * tmp2=malloc(20*sizeof(char));
     if(argc != 3){
         printf("[ERREUR] Il faut 2 arguments.\n");
         exit(EXIT_FAILURE);
@@ -86,7 +90,7 @@ int main(int argc, char *argv[]){
                 }
             }
         }
-
+        
         //Node de départ
         if(strstr(chaine, "S=")!=0){
             strcpy(lStart,chaine);
@@ -101,7 +105,9 @@ int main(int argc, char *argv[]){
             if(liens[nbLiens][0] == ' '){
                 memmove(liens[nbLiens], liens[nbLiens]+3, strlen(liens[nbLiens]));//J'aime pas les (
             }
-            liens[nbLiens][(strlen(liens[nbLiens]))-3] = '\0';
+            liens[nbLiens][(strlen(liens[nbLiens]))-2] = ';';
+            liens[nbLiens][(strlen(liens[nbLiens]))-1] = '\0';
+
             replaceChar(liens[nbLiens],"->",":");
             //printf("%s\n",liens[nbLiens]);
             nbLiens++;
@@ -109,25 +115,21 @@ int main(int argc, char *argv[]){
     }
 
     for(int i = 0; i<nbLiens; i++){
-        strcpy(liensFix[i],liens[i]);/
+        strcpy(liensFix[i],liens[i]);
     }
 
     for(int i = 0; i<nbLiens; i++){
         for(int j = 0; j<nbA; j++){
             for(int k = 0; k < strlen(liens[i]); k++){
-                //liens[i][k] //char liste
-                //alphabet[j] //char alphabet
+                
                 if(liens[i][k]==alphabet[j][0]){
-                    if(liens[i][k]=='+'){
-                        replaceChar(liensFix[i],"+","'+'");
-                    }else if(liens[i][k]=='*'){
-                        replaceChar(liensFix[i],"*","'*'");
-                    }else if(liens[i][k]=='i'){
-                        replaceChar(liensFix[i],"id","ID");
+                    if(liens[i][k]=='i'){
+                        replaceChar(liensFix[i], "id", "ID");
                     }
                 }
             }
         }
+        liensFix[i]=replaceSymbole(liens[i]);
     }
     printf("\n");
     
@@ -137,7 +139,7 @@ int main(int argc, char *argv[]){
     //replaceChar(liensFix[i],"id","ID");
 
     for(int i = 0; i<3; i++){
-        printf("%s\n",liensFix[i]);
+        printf("%s\n",liensFix[i] );
     }
 
     /*if(strcmp(type,"AFNP") == 0){

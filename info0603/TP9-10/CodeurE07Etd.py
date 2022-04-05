@@ -1,4 +1,3 @@
-
 from Binaire603 import Binaire603
 from Texte603 import Texte603
 
@@ -26,7 +25,8 @@ class CodeurE0765537(object):
         return f"CodeurE0765537({self.a},{self.B},{self.G},{self.p})"
 
     def binCode(self,monBinD:Binaire603)->Binaire603:
-        """ """
+        """
+        """
         monBinC=Binaire603()
         for b in monBinD:
             m=b*256
@@ -34,6 +34,7 @@ class CodeurE0765537(object):
             MP=M+a*B
             monBinC.ajouteMot40b(MP.__hash__())
         return monBinC
+    
     def binDecode(self,monBinC:Binaire603)->Binaire603:
         pos=0
         monBinD=Binaire603()

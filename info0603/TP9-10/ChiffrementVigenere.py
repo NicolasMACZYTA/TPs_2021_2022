@@ -19,6 +19,8 @@ class ChiffrementVigenere(Texte603):
         return f'ChiffrementVigenere("{self.texte},{self.cle}")'
     
     def enCode(self):
+        """
+        """
         p=0
         res=[]
         for c in Texte603(self.texte).toBinaire603():

@@ -529,7 +529,7 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,     9,     9,    10,    10,    12,    12,    14,    14
+       0,    10,    10,    11,    11,    13,    13,    15,    15
 };
 #endif
 
@@ -1298,15 +1298,15 @@ yyreturn:
   return yyresult;
 }
 
-#line 17 "gra1.y"
+#line 18 "gra1.y"
 
 void main()
 {
-    printf("\nEnter C++ function definition to check: \n");
+    printf("\nEnter definition to check: \n");
     yyparse();
  }
  void yyerror()
  {
-  printf("\nIncorrect function definition.\n");
+  printf("\nIncorrect definition.\n");
     exit(1);
  }

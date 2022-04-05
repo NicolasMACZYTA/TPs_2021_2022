@@ -25,3 +25,7 @@ execauto
 typegram
 	Pour connaitre le type de l'a grammaire il suffit d'utiliser
 		./typegram grammaire_1.gra
+
+gra2yacc
+	quasi fonctionnel (génère le script)
+	transforme un fichier grammaire en scripts lex et yacc

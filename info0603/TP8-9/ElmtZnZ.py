@@ -42,6 +42,13 @@ def estPremier(num):
             return False
     return True
 
+def nbpremiersuivant(n) :
+    p=n+1
+    while not estPremier(p):
+        p=p+1
+    return p
+
+
 class ElmtZnZ(object):
     """Elements ZnZ"""
     

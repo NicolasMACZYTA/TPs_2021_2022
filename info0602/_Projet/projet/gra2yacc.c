@@ -7,6 +7,8 @@ int main(int argc, char *argv[]){
     FILE* fo = NULL;
     FILE* fn = NULL;
     FILE* fl = NULL;
+
+    char * nomfichier;
     char chaine[100] = "";
     char lStart[50] = "";
     //char lAlphabet[50] = "";
@@ -39,8 +41,7 @@ int main(int argc, char *argv[]){
         }
     }
 
-    //nomfichier = suprimerExt(argv[2]);
-
+    nomfichier= suprimerExt(argv[2]);
     if((check = strrchr(argv[3],'.')) != NULL ) {
         if(strcmp(check,".l") != 0) {
             printf("[ERREUR] 3eme fichier n'est pas un .l\n");
@@ -200,8 +201,8 @@ int main(int argc, char *argv[]){
         }
         fprintf(fn,";\n  \\end{tikzpicture}\n  \\caption{Automate}\n\\end{figure}\n\\end{document}");
     }*/
-        
-            fprintf(fn,"%ctoken %s\n",37,tokens);
+            //temporaire ici ajout liste tokens
+            fprintf(fn,"\n%ctoken ID\n",37);
         
         fprintf(fn,"\n%c%c\n",37,37);
         fprintf(fn,"S : %s\n",lStart);
@@ -212,10 +213,10 @@ int main(int argc, char *argv[]){
         }
 
         fprintf(fn,"\n%c%c\n",37,37);
-        fprintf(fn,"void main()\n{\n    printf(\"\\nEnter C++ function definition to check: \\n\");\n    yyparse();\n }\n void yyerror()\n {\n  printf(\"\\nIncorrect function definition.\\n\");\n    exit(1);\n }");
+        fprintf(fn,"void main()\n{\n    printf(\"\\nEnter definition to check: \\n\");\n    yyparse();\n }\n void yyerror()\n {\n  printf(\"\\nIncorrect definition.\\n\");\n    exit(1);\n }");
 
 
-        fprintf(fl,"%c{\n    #include <stdio.h>\n    #include \"y.tab.h\"\n%c}\n  \nalpha   \n    [A-Za-z_]\ndigit     \n  [0-9]\n%c%c\n[\\t \\n] ;\nvoid|bool|char|int|float|double           return TYPE;\n{alpha}({alpha}|{digit})                 return ID;\n              return yytext[0];\n%c%c\n int yywrap()\n{\n    return 1;\n}",37,37,37,37,37);
+        fprintf(fl,"%c{\n    #include <stdio.h>\n    #include \"%s.tab.h\"\n%c}\n  \nalpha   \n    [A-Za-z_]\ndigit     \n  [0-9]\n%c%c\n[\\t \\n] ;\nvoid|bool|char|int|float|double           return TYPE;\n{alpha}({alpha}|{digit})                 return ID;\n              return yytext[0];\n%c%c\n int yywrap()\n{\n    return 1;\n}",37,nomfichier,37,37,37,37,37);
 
     fclose(fo);
     fclose(fn);

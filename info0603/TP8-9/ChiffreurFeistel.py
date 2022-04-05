@@ -21,6 +21,10 @@ class ChiffreurFeistel(CodeurCA):# Ne pas toucher
     
     def binCode(self,monBinD:Binaire603)->Binaire603:
         """
+        >>> bin=Texte603("colonel").toBinaire603()
+        >>> c=ChiffreurFeistel(f4b1, 0x0101, 2)
+        >>> Texte603(c.binCode(bin))
+        Texte603("ƕÝ%ÝÍµ%")
         """
         assert isinstance(monBinD, Binaire603)
         

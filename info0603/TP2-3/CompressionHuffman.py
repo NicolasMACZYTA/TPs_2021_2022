@@ -32,7 +32,6 @@ class CompresseurHuffman(CodeurCA):# Ne pas toucher
         for i in lp:
             atmp = Arbre(i[1], i[0], None, None)
             lpc.append(atmp)
-            
         
         while len(lpc)>1:
             lpc.sort(key=lambda x:x.freq, reverse=True)

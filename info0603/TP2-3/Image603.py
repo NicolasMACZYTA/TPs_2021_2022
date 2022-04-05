@@ -272,7 +272,7 @@ class Image603(object):
 
     def demo():
         # "images/python8bits":erreur out of range "images/python4b":ok          "images/python": mauvaise palette OK:"images/NB10"
-        nomfic = "images/Coul10a"
+        nomfic = "test/Exemple"
         im2 = Image603.imgDepuisBmp(nom_fichier=nomfic, verbose=True)
         # im2.affiche()
         print(im2.dPalette())

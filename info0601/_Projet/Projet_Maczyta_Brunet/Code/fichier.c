@@ -149,3 +149,26 @@ int creer_fichier(char* nomfichier,int taille_grille, int nb_grilles, int nb_mon
     return fd;
 }
 
+int sauvegarder_carte(char* nomfichier, char* buf1,char*buf2,int *buf3,int taillegrille, int nbmonstres){
+    int fd = open(nomfichier, O_WRONLY|O_TRUNC, S_IWUSR | S_IRUSR);
+    if(fd == -1){
+        perror("Erreur fichier "); return -1;
+    }else{
+
+
+        lseek(fd,0,SEEK_SET);
+
+        if(write(fd, buf1, taillegrille) == -1){
+            perror("Erreur du write "); return -1;
+        }
+        if(write(fd, buf2, taillegrille) == -1){
+            perror("Erreur du write "); return -1;
+        }
+        if(write(fd, buf3, nbmonstres*4*(sizeof(int))) == -1){
+            perror("Erreur du write "); return -1;
+        }
+    }
+    close(fd);
+    return 0;
+}
+

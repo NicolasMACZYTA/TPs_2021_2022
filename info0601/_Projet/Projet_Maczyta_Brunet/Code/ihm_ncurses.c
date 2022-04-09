@@ -53,28 +53,28 @@ void print_map(WIN*window,char*background,char*foreground){
 		{
 		case 'h':
 			wattron(window->content_window,COLOR_PAIR(GRASS_PAIR));
-			mvwprintw(window->content_window, i/40, i%40, &foreground[i]);
+			mvwprintw(window->content_window, i/40, i%40, ((foreground[i]=='h') ? " " : &foreground[i]));
 			wattroff(window->content_window,COLOR_PAIR(GRASS_PAIR));
 			break;
 		case 's':
 			wattron(window->content_window,COLOR_PAIR(SAND_PAIR));
-			mvwprintw(window->content_window, i/40, i%40, &foreground[i]);
+			mvwprintw(window->content_window, i/40, i%40, ((foreground[i]=='h') ? " " : &foreground[i]));
 			wattroff(window->content_window,COLOR_PAIR(SAND_PAIR));
 			break;
 		case 'e':
 			wattron(window->content_window,COLOR_PAIR(WATER_PAIR));
-			mvwprintw(window->content_window, i/40, i%40, &foreground[i]);
+			mvwprintw(window->content_window, i/40, i%40, ((foreground[i]=='h') ? " " : &foreground[i]));
 			wattroff(window->content_window,COLOR_PAIR(WATER_PAIR));
 			break;
 		case 'm':
 			wattron(window->content_window,COLOR_PAIR(MOUNTAIN_PAIR));
-			mvwprintw(window->content_window, i/40, i%40, &foreground[i]);
+			mvwprintw(window->content_window, i/40, i%40, ((foreground[i]=='h') ? " " : &foreground[i]));
 			wattroff(window->content_window,COLOR_PAIR(MOUNTAIN_PAIR));
 			break;
 		
 		default:
 			wattron(window->content_window,COLOR_PAIR(EMPTY_PAIR));
-			mvwprintw(window->content_window, i/40, i%40, &foreground[i]);
+			mvwprintw(window->content_window, i/40, i%40, ((foreground[i]=='h') ? " " : &foreground[i]));
 			wattroff(window->content_window,COLOR_PAIR(EMPTY_PAIR));
 			break;
 		}

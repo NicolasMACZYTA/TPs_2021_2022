@@ -16,7 +16,7 @@
 
 int main(int argc, char *argv[]) {
     char server_name[SERVER_NAME_LEN_MAX + 1] = { 0 };
-    int server_port, socket_fd;
+    int server_port, socket_fd,n;
     struct hostent *server_host;
     struct sockaddr_in server_address;
     char client_message[2000];
@@ -66,6 +66,12 @@ int main(int argc, char *argv[]) {
     
     send(socket_fd,client_message,strlen(client_message),0);
 
+    while((n=recv(socket_fd,client_message,2000,0))>0)
+      {
+          scanf("%s",&client_message);
+          printf("\n%s\n",client_message);
+        send(socket_fd,client_message,n,0);
+      }
 
     close(socket_fd);
     return 0;

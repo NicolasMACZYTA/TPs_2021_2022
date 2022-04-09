@@ -91,6 +91,14 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
+
+
+
+
+
+
+
+
     while (1) {
         /* Create pthread argument for each connection to client. */
         /* TODO: malloc'ing before accepting a connection causes only one small
@@ -150,8 +158,7 @@ void *pthread_routine(void *arg) {
      while((n=recv(new_socket_fd,client_message,2000,0))>0)
       {
           printf("\n%s\n",client_message);
-        send(new_socket_fd,client_message,n,0);
-        free(client_message);
+        send(new_socket_fd,client_message,2000,0);
       }
     close(new_socket_fd);
     return NULL;

@@ -13,7 +13,7 @@ CCFLAGS = $(CCFLAGS_STD)
 all: msg $(OBJETS) $(EXEC_O)
 	@echo "Creation des executables..."
 	@for i in $(EXEC); do \
-	$(CC) -o $$i $$i.o $(OBJETS); \
+	$(CC) -o $$i $$i.o $(OBJETS) -lncurses -pthread; \
 	done
 	@echo "Termine."
 

@@ -1,5 +1,6 @@
 #include "fichier.h"
 #include "ihm_ncurses.h"
+#include "monstre.h"
 #include <ncurses.h>
 #include <string.h>
 #include <stdlib.h>
@@ -113,3 +114,38 @@ void supprimer_octet(int fd, int selection, int offset,int size){
     ftruncate(fd, size-1);
     free(buf2);
 }
+
+int creer_fichier(char* nomfichier,int taille_grille, int nb_grilles, int nb_monstres){
+    char buf[nb_grilles*taille_grille+1];
+    int fd;
+    int tab_monstre[nb_monstres*4];
+     for(int i=0;i<nb_grilles*taille_grille;i++){
+        buf[i]='h';
+    }
+    for(int j=0;j<nb_monstres*4;j++){
+        tab_monstre[j]=0;
+    }
+    buf[nb_grilles*taille_grille]='\0';
+    if(buf == NULL){
+        perror("Erreur d'allocation "); return -1;
+    }
+
+    fd = open(nomfichier, O_WRONLY | O_CREAT | O_APPEND, S_IWUSR | S_IRUSR);
+    if(fd == -1){
+        perror("Erreur fichier "); return -1;
+    }else{
+
+
+        
+
+        if(write(fd, buf, 1600) == -1){
+            perror("Erreur du write "); return -1;
+        }
+        if(write(fd, tab_monstre, nb_monstres*4*(sizeof(int))) == -1){
+            perror("Erreur du write "); return -1;
+        }
+    }
+    close(fd);
+    return fd;
+}
+

@@ -9,4 +9,5 @@ void lire_buf(int fd, char*buf, int offset);
 void ecrire_buf(int fd, char*buf, int offset);
 void supprimer_octet(int fd, int selection, int offset,int size);
 char * num_ligne(int num);
+int creer_fichier(char * nomfichier, int taillegrille, int nb_grilles, int nb_monstres);
 #endif

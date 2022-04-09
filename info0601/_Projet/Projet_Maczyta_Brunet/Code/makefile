@@ -7,7 +7,7 @@ NOM_PROJET = jeuaventure
 EXEC_O = $(EXEC:=.o)
 OBJETS_O = $(OBJETS) $(EXEC_O)
 CC = gcc
-CCFLAGS_STD = -Wall -O3 -ansi -pedantic -Werror
+CCFLAGS_STD = -Wall -O3 -pedantic -Werror
 CCFLAGS = $(CCFLAGS_STD)
 
 all: msg $(OBJETS) $(EXEC_O)

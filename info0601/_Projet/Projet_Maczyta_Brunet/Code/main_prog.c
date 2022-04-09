@@ -7,21 +7,27 @@
 
 #include "ihm_ncurses.h"
 #include "fichier.h"
+#include "monstre.h"
 
 #define TAILLE_GRILLE 800
+#define NB_MONSTRES 250
+#define NB_GRILLES 1
+
+
+
 
 int main(int argc, char** argv){
 
     int ch, posX, posY, fd, size, tmp=0, typeselection;
     int selected_tool=1;
-
+    //monstre_t tab_monstre[NB_MONSTRES];
     char buf[TAILLE_GRILLE+1];
     char buf2[TAILLE_GRILLE+1];
     char * disp;
     char * disp2;
-
-    char tmpch;
-    int offset=0;
+    //monstre_t tab_monstre[NB_MONSTRES];
+    //char tmpch;
+    //int offset=0;
     WIN *win;
     WIN *win_carte;
     WIN *win_outils;
@@ -46,7 +52,15 @@ int main(int argc, char** argv){
     afficher_win(win_outils);
     refresh_win(win_outils);
 
-    if(0<open(argv[1],O_RDONLY)){
+
+    if(!(0<open(argv[1],O_RDONLY))){
+        if(-1==(fd=creer_fichier(argv[1],TAILLE_GRILLE,NB_GRILLES,NB_MONSTRES))){
+            perror("erreur de création du fichier");
+            ncurses_stopper();
+            return(EXIT_FAILURE);
+        }
+    }
+
         attron(A_STANDOUT);
         mvprintw(29, 0, "F2 pour quitter, entree pour editer, haut, bas pour changer de bloc de 128 octets");
         attroff(A_STANDOUT);
@@ -61,36 +75,41 @@ int main(int argc, char** argv){
         if(0<read(fd, buf, 800)){
 
             buf[800]='\0';
+            
 
 
         }else{
             ncurses_stopper();
             return(EXIT_FAILURE);
         }
-
         lseek(fd, 800,SEEK_SET);
         if(0<read(fd, buf2, 800)){
 
             buf2[800]='\0';
+            printf(buf2);
+
+        printf("\ntest\n");
 
         }else{
             ncurses_stopper();
             return(EXIT_FAILURE);
         }
+        /*lseek(fd, 1600,SEEK_SET);
+        if(!(0<read(fd, tab_monstre, NB_MONSTRES*sizeof(monstre_t)))){
 
-
+            
+            ncurses_stopper();
+            return(EXIT_FAILURE);
+        }*/
             print_outils(win_outils,selected_tool);
             refresh_win(win_outils);
-            disp = to_disp(buf);
-            disp2 = to_disp(buf2);
-            print_map(win_carte,disp,disp2);
+            disp = to_disp((char*)buf);
+            disp2 = to_disp((char*)buf2);
+            print_map(win_carte,disp,(char*)disp2);
             refresh_win(win_carte);
 
 
-    }else{
-        ncurses_stopper();
-        return(EXIT_FAILURE);
-    }
+
 
    while((ch = getch()) != KEY_F(2)){
 
@@ -117,6 +136,7 @@ int main(int argc, char** argv){
                         break;
                     case 4:
                         buf[tmp]='m';
+
                         break;
                     case 5:
                         buf2[tmp]='X';
@@ -151,51 +171,9 @@ int main(int argc, char** argv){
             }
             break;
             case KEY_DC :
-            supprimer_octet(fd,tmp,offset,size);
-            lseek(fd,offset,SEEK_SET);
-            lire_buf(fd,buf,offset);
-                wclear(win_carte->content_window);
-                wclear(win_outils->content_window);
-                disp = to_disp(buf);
-                print_outils(win_outils,selected_tool);
-                print_map(win_carte,disp,disp2);
-                refresh_win(win);
-                refresh_win(win_carte);
-                refresh_win(win_outils);
-
 
             break;
             case 10 :
-            wattron(win_outils->content_window,COLOR_PAIR(2));
-            wattron(win_outils->content_window,A_STANDOUT);
-            mvwprintw(win_outils->content_window,tmp/8,tmp%8," ");
-            refresh_win(win_outils);
-            tmpch = getch();
-            mvwprintw(win_outils->content_window,tmp/8,tmp%8,"%c",tmpch);
-            refresh_win(win_outils);
-            while ((ch=getch())!=10)
-            {
-                tmpch = getch();
-                mvwprintw(win_outils->content_window,tmp/8,tmp%8,"%c",tmpch);
-                refresh_win(win_outils);
-            }
-            wattroff(win_outils->content_window,A_STANDOUT);
-            wattroff(win_outils->content_window,COLOR_PAIR(2));
-
-            buf[tmp]=tmpch;
-            ecrire_buf(fd,buf,offset);
-            wprintw(win->content_window,"\n ecriture");
-            lire_buf(fd,buf,offset);
-            wclear(win_carte->content_window);
-            wclear(win_outils->content_window);
-             disp = to_disp(buf);
-             disp2 = to_disp(buf2);
-                print_outils(win_outils,selected_tool);
-                print_map(win_carte,disp,disp2);
-                refresh_win(win);
-                refresh_win(win_carte);
-                refresh_win(win_outils);
-
 
             break;
             case KEY_UP :

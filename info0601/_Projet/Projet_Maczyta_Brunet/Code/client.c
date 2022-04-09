@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <netdb.h>
 #include <sys/socket.h>
+#include <string.h>
 
 #include "ihm_ncurses.h"
 #include "fichier.h"

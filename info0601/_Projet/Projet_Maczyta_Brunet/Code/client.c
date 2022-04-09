@@ -25,12 +25,11 @@ WIN *win_carte;
 WIN *win_outils;
 
 void * routine_tcp(){
-    int n;
     char server_name[SERVER_NAME_LEN_MAX + 1] = { 0 };
     int server_port, socket_fd;
     struct hostent *server_host;
     struct sockaddr_in server_address;
-    char client_message[2000];
+    /*char client_message[2000];*/
 
     /* Get server name from command line arguments or stdin. */
         strncpy(server_name, SERVER_NAME, SERVER_NAME_LEN_MAX);
@@ -45,7 +44,7 @@ void * routine_tcp(){
     memset(&server_address, 0, sizeof server_address);
     server_address.sin_family = AF_INET;
     server_address.sin_port = htons(server_port);
-    memcpy(&server_address.sin_addr.s_addr, server_host->h_addr, server_host->h_length);
+    memcpy(&server_address.sin_addr.s_addr, server_host->h_addr_list, server_host->h_length);
 
     /* Create TCP socket. */
     if ((socket_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
@@ -86,13 +85,8 @@ void * routine_tcp(){
 
 int main(int argc, char** argv){
 
-    int ch, posX, posY, fd, size, tmp=0, typeselection;
+    int ch, posX, posY, tmp=0, typeselection;
     int selected_tool=1;
-
-    
-
-    char tmpch;
-    int offset=0;
     
 
     ncurses_initialisation();
@@ -175,54 +169,6 @@ int main(int argc, char** argv){
                 refresh_win(win_outils);
             }
             break;
-            case KEY_DC :
-            supprimer_octet(fd,tmp,offset,size);
-            lseek(fd,offset,SEEK_SET);
-            lire_buf(fd,buf,offset);
-                wclear(win_carte->content_window);
-                wclear(win_outils->content_window);
-                disp = to_disp(buf);
-                print_outils(win_outils,selected_tool);
-                print_map(win_carte,disp,disp2);
-                refresh_win(win);
-                refresh_win(win_carte);
-                refresh_win(win_outils);
-
-
-            break;
-            case 10 :
-            wattron(win_outils->content_window,COLOR_PAIR(2));
-            wattron(win_outils->content_window,A_STANDOUT);
-            mvwprintw(win_outils->content_window,tmp/8,tmp%8," ");
-            refresh_win(win_outils);
-            tmpch = getch();
-            mvwprintw(win_outils->content_window,tmp/8,tmp%8,"%c",tmpch);
-            refresh_win(win_outils);
-            while ((ch=getch())!=10)
-            {
-                tmpch = getch();
-                mvwprintw(win_outils->content_window,tmp/8,tmp%8,"%c",tmpch);
-                refresh_win(win_outils);
-            }
-            wattroff(win_outils->content_window,A_STANDOUT);
-            wattroff(win_outils->content_window,COLOR_PAIR(2));
-
-            buf[tmp]=tmpch;
-            ecrire_buf(fd,buf,offset);
-            wprintw(win->content_window,"\n ecriture");
-            lire_buf(fd,buf,offset);
-            wclear(win_carte->content_window);
-            wclear(win_outils->content_window);
-             disp = to_disp(buf);
-             disp2 = to_disp(buf2);
-                print_outils(win_outils,selected_tool);
-                print_map(win_carte,disp,disp2);
-                refresh_win(win);
-                refresh_win(win_carte);
-                refresh_win(win_outils);
-
-
-            break;
             case KEY_UP :
             break;
             case KEY_DOWN :
@@ -232,7 +178,6 @@ int main(int argc, char** argv){
 
 
    }
-close(fd);
 ncurses_stopper();
 
 return(EXIT_SUCCESS);

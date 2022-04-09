@@ -39,20 +39,16 @@ void signal_handler(int signal_number);
 
 int main(int argc, char *argv[]) {
     
-    char * disp;
-    char * disp2;
-    int offset=0;
     int port, socket_fd, new_socket_fd;
-    int fd,size;
+    int fd;
     struct sockaddr_in address;
     pthread_attr_t pthread_attr;
     pthread_arg_t *pthread_arg;
     pthread_t pthread;
     socklen_t client_address_len;
-
     if(0<open(argv[1],O_RDONLY)){
         fd = open(argv[1], O_RDWR);
-        size = lseek(fd, 0, SEEK_END);
+        lseek(fd, 0, SEEK_END);
         lseek(fd, 0, SEEK_SET);
         
         if(0<read(fd, buf, 800)){
@@ -61,7 +57,6 @@ int main(int argc, char *argv[]) {
 
 
         }else{
-            ncurses_stopper();
             return(EXIT_FAILURE);
         }
 
@@ -71,11 +66,8 @@ int main(int argc, char *argv[]) {
             buf2[800]='\0';
 
         }else{
-            ncurses_stopper();
             return(EXIT_FAILURE);
         }
-            disp = to_disp(buf);
-            disp2 = to_disp(buf2);
     }
     /* Get port from command line arguments or stdin. */
     port = argc > 1 ? atoi(argv[1]) : 0;
@@ -188,7 +180,7 @@ void *pthread_routine(void *arg){
     char client_message[2000];
     pthread_arg_t *pthread_arg = (pthread_arg_t *)arg;
     int new_socket_fd = pthread_arg->new_socket_fd;
-    struct sockaddr_in client_address = pthread_arg->client_address;
+    /*struct sockaddr_in client_address = pthread_arg->client_address;*/
     /* TODO: Get arguments passed to threads here. See lines 22 and 116. */
 
     free(arg);
@@ -202,7 +194,6 @@ void *pthread_routine(void *arg){
       {
           printf("\n%s\n",client_message);
         send(new_socket_fd,buf,strlen(buf),0);
-        free(client_message);   
       }
     close(new_socket_fd);
     return NULL;

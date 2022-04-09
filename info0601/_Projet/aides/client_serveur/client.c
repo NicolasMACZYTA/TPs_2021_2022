@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
      * write(socket_fd,,) and read(socket_fd,,) to send and receive messages
      * with the client.
      */
-    
+
     scanf("%s",&client_message);
     
     send(socket_fd,client_message,strlen(client_message),0);

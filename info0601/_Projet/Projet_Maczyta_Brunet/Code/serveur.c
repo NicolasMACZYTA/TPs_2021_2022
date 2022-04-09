@@ -12,9 +12,18 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 #include <unistd.h>
+#include "fichier.h"
 
 #define BACKLOG 10
+#define TAILLE_GRILLE 800
+
+char buf[TAILLE_GRILLE+1];
+char buf2[TAILLE_GRILLE+1];
+
+
 
 typedef struct pthread_arg_t {
     int new_socket_fd;
@@ -29,18 +38,52 @@ void *pthread_routine(void *arg);
 void signal_handler(int signal_number);
 
 int main(int argc, char *argv[]) {
+    
+    char * disp;
+    char * disp2;
+    int offset=0;
     int port, socket_fd, new_socket_fd;
+    int fd,size;
     struct sockaddr_in address;
     pthread_attr_t pthread_attr;
     pthread_arg_t *pthread_arg;
     pthread_t pthread;
     socklen_t client_address_len;
 
+    if(0<open(argv[1],O_RDONLY)){
+        fd = open(argv[1], O_RDWR);
+        size = lseek(fd, 0, SEEK_END);
+        lseek(fd, 0, SEEK_SET);
+        
+        if(0<read(fd, buf, 800)){
+
+            buf[800]='\0';
+
+
+        }else{
+            ncurses_stopper();
+            return(EXIT_FAILURE);
+        }
+
+        lseek(fd, 800,SEEK_SET);
+        if(0<read(fd, buf2, 800)){
+
+            buf2[800]='\0';
+
+        }else{
+            ncurses_stopper();
+            return(EXIT_FAILURE);
+        }
+            disp = to_disp(buf);
+            disp2 = to_disp(buf2);
+    }
     /* Get port from command line arguments or stdin. */
     port = argc > 1 ? atoi(argv[1]) : 0;
     if (!port) {
         printf("Enter Port: ");
         scanf("%d", &port);
+    }else{
+        return(EXIT_FAILURE);
     }
 
     /* Initialise IPv4 address. */
@@ -91,6 +134,14 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
+
+
+
+
+
+
+
+
     while (1) {
         /* Create pthread argument for each connection to client. */
         /* TODO: malloc'ing before accepting a connection causes only one small
@@ -132,7 +183,7 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-void *pthread_routine(void *arg) {
+void *pthread_routine(void *arg){
     int n;
     char client_message[2000];
     pthread_arg_t *pthread_arg = (pthread_arg_t *)arg;
@@ -150,8 +201,8 @@ void *pthread_routine(void *arg) {
      while((n=recv(new_socket_fd,client_message,2000,0))>0)
       {
           printf("\n%s\n",client_message);
-        send(new_socket_fd,client_message,n,0);
-        free(client_message);
+        send(new_socket_fd,buf,strlen(buf),0);
+        free(client_message);   
       }
     close(new_socket_fd);
     return NULL;

@@ -19,6 +19,7 @@ int main(int argc, char *argv[]) {
     int server_port, socket_fd;
     struct hostent *server_host;
     struct sockaddr_in server_address;
+    char client_message[2000];
 
     /* Get server name from command line arguments or stdin. */
     if (argc > 1) {
@@ -60,6 +61,11 @@ int main(int argc, char *argv[]) {
      * write(socket_fd,,) and read(socket_fd,,) to send and receive messages
      * with the client.
      */
+    
+    scanf("%s",&client_message);
+    
+    send(socket_fd,client_message,strlen(client_message),0);
+
 
     close(socket_fd);
     return 0;

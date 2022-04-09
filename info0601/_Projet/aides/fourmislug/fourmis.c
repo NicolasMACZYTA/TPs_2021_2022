@@ -145,6 +145,7 @@ WINDOW *creer_fenetre_outils() {
 
 void *routine_fourmi(void *arg) {
 	coord_t *coord = (coord_t *) arg;
+	//pts de vie
 	int r;
 
 	while (1) {		

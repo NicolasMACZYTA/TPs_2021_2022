@@ -23,9 +23,18 @@
 #define TAILLE_GRILLE 800
 #define NB_MONSTRES 250
 
+#define X_PLAYER 0
+#define Y_PLAYER 1
+#define PV 2
+#define PV_MAX 3
+#define NB_ARTEFACTS 4
+#define NB_PIECE 5
 
+int player[6]={10,10,100,100,0,0};
 char * file_buf;
-char buf[TAILLE_GRILLE*2+1];
+char buf[TAILLE_GRILLE+1];
+char buf2[TAILLE_GRILLE+1];
+int buf_monstre[4*NB_MONSTRES];
 //monstre_t tab_monstre[NB_MONSTRES];
 
 typedef struct pthread_arg_t {
@@ -42,15 +51,42 @@ void signal_handler(int signal_number);
 
 int main(int argc, char *argv[]) {
     int fd;
+    if(!(0<(fd=open(argv[2],O_RDONLY)))){
+        perror("erreur de lecture du fichier");
+            return(EXIT_FAILURE);
+    }
+
+    if(0<read(fd, buf, TAILLE_GRILLE)){
+
+            buf[TAILLE_GRILLE]='\0';
+            
+        }else{
+            return(EXIT_FAILURE);
+        }
+    if(0<read(fd, buf2, TAILLE_GRILLE)){
+
+            buf2[TAILLE_GRILLE]='\0';
+            
+        }else{
+            return(EXIT_FAILURE);
+        }
+        lseek(fd, 1600,SEEK_SET);
+        
+        if(!(0<read(fd, buf_monstre, NB_MONSTRES*4*sizeof(int)))){
+            
+            return(EXIT_FAILURE);
+        }
+
+
     if(0<open(argv[2],O_RDONLY)){
         
         fd = open(argv[2], O_RDWR);
         lseek(fd, 0, SEEK_END);
         lseek(fd, 0, SEEK_SET);
         
-        if(0<read(fd, buf, 1600)){
+        if(0<read(fd, buf, TAILLE_GRILLE)){
             
-            buf[1600]='\0';
+            buf[TAILLE_GRILLE]='\0';
 
 
         }else{
@@ -188,10 +224,13 @@ void *pthread_routine(void *arg) {
      * messages with the client.
      */
 
-     while((n=recv(new_socket_fd,client_message,2000,0))>0)
+     while((n=recv(new_socket_fd,player,6*sizeof(int),0))>0)
       {
           printf("\n%s\n",client_message);
         send(new_socket_fd,buf,strlen(buf),0);
+        send(new_socket_fd,buf2,strlen(buf2),0);
+        send(new_socket_fd,buf_monstre,NB_MONSTRES*4*sizeof(int),0);
+        send(new_socket_fd,player,6*sizeof(int),0);
       }
     close(new_socket_fd);
     return NULL;

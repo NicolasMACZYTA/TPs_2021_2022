@@ -286,10 +286,10 @@ int main(int argc, char *argv[]) {
     socklen_t client_address_len;
 
     //Verifie si il y a bien deux arguments
-    if(argc != 2){
+    /*if(argc != 2){
         printf("[ERREUR] Il faut un port.\nExemple: ./serveur 3000\n");
         exit(EXIT_FAILURE);
-    }
+    }*/
     port = argc > 1 ? atoi(argv[1]) : 0;
 
     memset(&address, 0, sizeof address);

@@ -81,6 +81,14 @@ void print_map(WIN*window,char*background,char*foreground){
 	}
 }
 
+void print_monstres(WIN*window,int nbmonstres,int* tabmonstres){
+	for(int i=0;i<nbmonstres;i++){
+		if(tabmonstres[4*i+2]){
+			mvwprintw(window->content_window, tabmonstres[4*i+1], tabmonstres[4*i], "M");
+		}
+	}
+}
+
 void print_outils(WIN*window,int selected_tool){
 	wattron(window->content_window,COLOR_PAIR(GRASS_PAIR));
 	mvwprintw(window->content_window,0,0," ");

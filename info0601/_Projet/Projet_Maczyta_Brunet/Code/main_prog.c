@@ -106,6 +106,7 @@ int main(int argc, char** argv){
             disp = to_disp((char*)buf);
             disp2 = to_disp((char*)buf2);
             print_map(win_carte,disp,disp2);
+            print_monstres(win_carte,NB_MONSTRES,buf_monstre);
             refresh_win(win_carte);
 
 
@@ -146,9 +147,10 @@ int main(int argc, char** argv){
                         break;
                     case 7:
                         buf2[tmp]='h';
-                        buf_monstre[4*nmonstre]=posX;
-                        buf_monstre[4*nmonstre+1]=posY;
+                        buf_monstre[4*nmonstre]=tmp%40;
+                        buf_monstre[4*nmonstre+1]=tmp/40;
                         buf_monstre[4*nmonstre+2]=1;
+                        nmonstre++;
                         break;
                     case 8:
                         buf2[tmp]='A';
@@ -165,6 +167,7 @@ int main(int argc, char** argv){
                 disp2 = to_disp(buf2);
                 refresh_win(win_outils);
                 print_map(win_carte,disp,disp2);
+                print_monstres(win_carte,NB_MONSTRES,buf_monstre);
                 print_outils(win_outils,selected_tool);
                 wclear(win->content_window);
                 wprintw(win->content_window,"%d,%d char selectionné %d \n type selection : %d",posX,posY,tmp,typeselection);

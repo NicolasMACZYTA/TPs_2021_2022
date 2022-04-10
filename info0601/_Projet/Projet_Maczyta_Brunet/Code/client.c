@@ -125,6 +125,7 @@ int main(int argc, char *argv[]) {
                 disp = to_disp(buf);
                 disp2 = to_disp(buf2);
                 print_map(win_carte,disp,disp2);
+                print_monstres(win_carte,NB_MONSTRES,buf_monstre);
                 wclear(win->content_window);
                 refresh_win(win);
                 refresh_win(win_carte);
@@ -163,8 +164,10 @@ int main(int argc, char *argv[]) {
                 wprintw(win->content_window,"PV MAX    : %d\n",player[PV_MAX]);
                 wprintw(win->content_window,"ARTEFACTS : %d\n",player[NB_ARTEFACTS]);
                 wprintw(win->content_window,"PIECES    : %d\n",player[NB_PIECE]);
-                
+                wprintw(win->content_window,"monstre 1 : %d %d %d",buf_monstre[0],buf_monstre[1],buf_monstre[2]);
+
                 print_map(win_carte,disp,disp2);
+                print_monstres(win_carte,NB_MONSTRES,buf_monstre);
                 mvwprintw(win_carte->content_window,player[Y_PLAYER],player[X_PLAYER],"J");
                 refresh_win(win);
                 refresh_win(win_carte);

@@ -25,6 +25,7 @@
 #define BACKLOG 10
 #define TAILLE_GRILLE 800
 #define NB_MONSTRES 250
+#define MB_PLAYERS 50
 
 #define X_PLAYER 0
 #define Y_PLAYER 1

@@ -19,6 +19,9 @@
 #include "fichier.h"
 #include "monstre.h"
 
+#define NB_LIGNES_SIM		20				/* Dimensions des fenetres du programme */
+#define NB_COL_SIM			40
+
 #define BACKLOG 10
 #define TAILLE_GRILLE 800
 #define NB_MONSTRES 250
@@ -30,6 +33,21 @@
 #define NB_ARTEFACTS 4
 #define NB_PIECE 5
 
+#define VIDE				0				/* Identifiants des elements pouvant etre */
+#define OBSTACLE			1				/* places sur la grille de simulation */
+#define FOURMI				2
+
+typedef struct case_tag {					/* Description d'une case sur la grille de simulation */
+	int element;							/* Ce qui est present sur la case */
+	pthread_t *fourmi;						/* Identifiant du thread de la fourmi presente sur la case */
+	pthread_mutex_t mutex;					/* Protection de la case */
+} case_t;
+
+typedef struct coord_tag {					/* Coordonnees d'une case sur la grille de simulation*/
+	int y;
+	int x;
+} coord_t;
+
 int player[6]={10,10,100,100,0,0};
 char * file_buf;
 char buf[TAILLE_GRILLE+1];
@@ -37,11 +55,147 @@ char buf2[TAILLE_GRILLE+1];
 int buf_monstre[4*NB_MONSTRES];
 //monstre_t tab_monstre[NB_MONSTRES];
 
+
+
 typedef struct pthread_arg_t {
     int new_socket_fd;
     struct sockaddr_in client_address;
     /* TODO: Put arguments passed to threads here. See lines 116 and 139. */
 } pthread_arg_t;
+
+case_t grille[NB_LIGNES_SIM][NB_COL_SIM];	/* Grille de simulation */
+int nb_fourmis;								/* Nombre de fourmis de la simulation*/
+pthread_mutex_t mutex_nb_fourmis;
+pthread_mutex_t mutex_refresh;
+
+
+void *routine_fourmi(void *arg) {
+	coord_t *coord = (coord_t *) arg;
+	//pts de vie
+	int r;
+
+	while (1) {		
+		/*Que feront les fourmis ?!?!?!*/
+		r = rand() % 4; // Entre 0 et 3
+		switch(r){
+			case 0:
+				//wprintw(fen_msg, "<-\n");
+				//wrefresh(fen_msg);
+				if(coord->y > 0 && coord->y < NB_LIGNES_SIM + 1 && coord->x - 1 > 0 && coord->x - 1 < NB_COL_SIM + 1){
+					pthread_mutex_lock(&grille[coord->y][coord->x].mutex);
+					pthread_mutex_lock(&grille[coord->y][coord->x - 1].mutex);
+					if(grille[coord->y][coord->x - 1].element == VIDE){									
+						grille[coord->y][coord->x - 1].element = FOURMI;
+						grille[coord->y][coord->x].element = VIDE;
+						//mvwprintw(fen_sim, coord->y, coord->x, " ");
+						//mvwprintw(fen_sim, coord->y, coord->x - 1, "@");
+						coord->y = coord->y;
+						coord->x = coord->x - 1;
+					}
+					pthread_mutex_unlock(&grille[coord->y][coord->x].mutex);
+					pthread_mutex_unlock(&grille[coord->y][coord->x + 1].mutex);
+				}
+				break;
+			case 1:
+				//wprintw(fen_msg, "->\n");
+				//wrefresh(fen_msg);
+				if(coord->y > 0 && coord->y < NB_LIGNES_SIM + 1 && coord->x + 1 > 0 && coord->x + 1 < NB_COL_SIM + 1){
+					pthread_mutex_lock(&grille[coord->y][coord->x].mutex);
+					pthread_mutex_lock(&grille[coord->y][coord->x + 1].mutex);
+					if(grille[coord->y][coord->x + 1].element == VIDE){									
+						grille[coord->y][coord->x + 1].element = FOURMI;
+						grille[coord->y][coord->x].element = VIDE;
+						//mvwprintw(fen_sim, coord->y, coord->x, " ");
+						//mvwprintw(fen_sim, coord->y, coord->x + 1, "@");
+						coord->y = coord->y;
+						coord->x = coord->x + 1;
+					}
+					pthread_mutex_unlock(&grille[coord->y][coord->x].mutex);
+					pthread_mutex_unlock(&grille[coord->y][coord->x - 1].mutex);
+				}
+				break;
+			case 2:
+				//wprintw(fen_msg, "^\n");
+				//wrefresh(fen_msg);
+				if(coord->y - 1 > 0 && coord->y - 1 < NB_LIGNES_SIM + 1 && coord->x > 0 && coord->x < NB_COL_SIM + 1){
+					pthread_mutex_lock(&grille[coord->y][coord->x].mutex);
+					pthread_mutex_lock(&grille[coord->y - 1][coord->x].mutex);
+					if(grille[coord->y - 1][coord->x].element == VIDE){									
+						grille[coord->y - 1][coord->x].element = FOURMI;
+						grille[coord->y][coord->x].element = VIDE;
+						//mvwprintw(fen_sim, coord->y, coord->x, " ");
+						//mvwprintw(fen_sim, coord->y - 1, coord->x, "@");
+						coord->y = coord->y - 1;
+						coord->x = coord->x;
+					}
+					pthread_mutex_unlock(&grille[coord->y][coord->x].mutex);
+					pthread_mutex_unlock(&grille[coord->y + 1 ][coord->x].mutex);
+				}
+				break;
+			case 3:
+				//wprintw(fen_msg, "v\n");
+				//wrefresh(fen_msg);
+				if(coord->y + 1 > 0 && coord->y + 1 < NB_LIGNES_SIM + 1 && coord->x > 0 && coord->x < NB_COL_SIM + 1){
+					pthread_mutex_lock(&grille[coord->y][coord->x].mutex);
+					pthread_mutex_lock(&grille[coord->y + 1][coord->x].mutex);
+					if(grille[coord->y + 1][coord->x].element == VIDE){									
+						grille[coord->y + 1][coord->x].element = FOURMI;
+						grille[coord->y][coord->x].element = VIDE;
+						//mvwprintw(fen_sim, coord->y, coord->x, " ");
+						//mvwprintw(fen_sim, coord->y + 1, coord->x, "@");
+						coord->y = coord->y + 1;
+						coord->x = coord->x;
+					}
+					pthread_mutex_unlock(&grille[coord->y][coord->x].mutex);
+					pthread_mutex_unlock(&grille[coord->y - 1 ][coord->x].mutex);
+				}
+				break;
+		}
+		//pthread_mutex_lock(&mutex_refresh);
+		//wrefresh(fen_sim);
+        //ecrire monstres
+		//pthread_mutex_unlock(&mutex_refresh);
+		sleep(1);
+	}
+	
+	free(coord);
+	return NULL;
+}
+
+void simulation_initialiser() {
+	int i, j;
+	
+	nb_fourmis = 0;							/* Au depart il n'y a aucune fourmi dans la simulation */
+	pthread_mutex_init(&mutex_nb_fourmis, NULL);
+    pthread_mutex_init(&mutex_refresh,NULL);
+	
+	for (i = 0; i < NB_LIGNES_SIM; i++) {	/* Initialisation des cases de la simulation */
+		for (j = 0; j < NB_COL_SIM; j++) {
+			grille[i][j].element = VIDE;
+			grille[i][j].fourmi = NULL;
+			pthread_mutex_init(&grille[i][j].mutex, NULL);
+		}
+	}
+}
+
+void monstre_refresh(){
+    //pthread_mutex_lock(&mutex_refresh);
+    int nmonstre=0;
+    for(int i=0;i<NB_COL_SIM;i++){
+        for(int j=0;j<NB_LIGNES_SIM;j++){
+            if(grille[j][i].element==FOURMI){
+                buf_monstre[4*nmonstre+2]=1;
+                buf_monstre[4*nmonstre]=i;
+                buf_monstre[4*nmonstre+1]=j;
+                nmonstre++;
+            }
+        }
+    }
+    for(int i=nmonstre;i<NB_MONSTRES;i++){
+        buf_monstre[4*i+2]=0;
+    }
+    //pthread_mutex_unlock(&mutex_refresh);
+}
 
 /* Thread routine to serve connection to client. */
 void *pthread_routine(void *arg);
@@ -51,6 +205,9 @@ void signal_handler(int signal_number);
 
 int main(int argc, char *argv[]) {
     int fd;
+    coord_t *coord;
+
+    simulation_initialiser();
     if(!(0<(fd=open(argv[2],O_RDONLY)))){
         perror("erreur de lecture du fichier");
             return(EXIT_FAILURE);
@@ -75,6 +232,26 @@ int main(int argc, char *argv[]) {
         if(!(0<read(fd, buf_monstre, NB_MONSTRES*4*sizeof(int)))){
             
             return(EXIT_FAILURE);
+        }
+
+        for(int i=0;i<NB_MONSTRES;i++){
+            
+            
+            if(buf_monstre[4*i+2]){
+                coord = (coord_t *) malloc(sizeof(coord_t));
+                //pthread_mutex_lock(&grille[buf_monstre[4*i+1]][buf_monstre[4*i]].mutex);
+                coord->x=buf_monstre[4*i];
+                coord->y=buf_monstre[4*i+1];
+                grille[coord->y][coord->x].fourmi = (pthread_t *) malloc(sizeof(pthread_t));
+                
+                grille[coord->y][coord->x].element = FOURMI;
+                pthread_create(grille[coord->y][coord->x].fourmi, NULL, routine_fourmi, (void *) coord);
+                pthread_mutex_lock(&mutex_nb_fourmis);
+				nb_fourmis++;
+                pthread_mutex_unlock(&mutex_nb_fourmis);
+                //pthread_mutex_unlock(&grille[buf_monstre[4*i+1]][buf_monstre[4*i]].mutex);
+            }
+            
         }
 
 
@@ -227,6 +404,7 @@ void *pthread_routine(void *arg) {
      while((n=recv(new_socket_fd,player,6*sizeof(int),0))>0)
       {
           printf("\n%s\n",client_message);
+          monstre_refresh();
         send(new_socket_fd,buf,strlen(buf),0);
         send(new_socket_fd,buf2,strlen(buf2),0);
         send(new_socket_fd,buf_monstre,NB_MONSTRES*4*sizeof(int),0);

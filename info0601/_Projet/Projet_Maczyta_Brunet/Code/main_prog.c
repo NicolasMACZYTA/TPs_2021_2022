@@ -17,7 +17,7 @@
 
 
 int main(int argc, char** argv){
-
+    int nmonstre=0;
     int ch, posX, posY, fd, size, tmp=0, typeselection;
     int selected_tool=1;
     int buf_monstre[4*NB_MONSTRES];
@@ -145,7 +145,10 @@ int main(int argc, char** argv){
                         buf2[tmp]='$';
                         break;
                     case 7:
-                        buf2[tmp]='M';
+                        buf2[tmp]='h';
+                        buf_monstre[4*nmonstre]=posX;
+                        buf_monstre[4*nmonstre+1]=posY;
+                        buf_monstre[4*nmonstre+2]=1;
                         break;
                     case 8:
                         buf2[tmp]='A';

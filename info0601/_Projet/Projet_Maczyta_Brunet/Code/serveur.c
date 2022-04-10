@@ -71,7 +71,34 @@ case_t grille[NB_LIGNES_SIM][NB_COL_SIM];	/* Grille de simulation */
 int nb_fourmis;								/* Nombre de fourmis de la simulation*/
 pthread_mutex_t mutex_nb_fourmis;
 pthread_mutex_t mutex_refresh;
+pthread_mutex_t mutex_player;
 
+void modif_pv(int* player,int x, int y,int pv){
+    pthread_mutex_lock(&mutex_player);
+    for(int i=0;i<NB_PLAYERS;i++){
+                    if(player[6*i+PV]){
+                        if(player[6*i+X_PLAYER]==x && player[6*i+Y_PLAYER==y])
+                         player[6*i+PV]+=pv;
+                    }
+                    
+                }
+    pthread_mutex_unlock(&mutex_player);
+}
+
+void mourrir(coord_t * coord){
+    for(int i=0;i<NB_PLAYERS;i++){
+                    if(player[6*i+PV]){
+                        if(player[6*i+X_PLAYER]==coord->x && player[6*i+Y_PLAYER==coord->y]){
+                         pthread_mutex_lock(&grille[coord->y][coord->x].mutex);
+                         grille[coord->y][coord->x].element = VIDE;
+                         pthread_mutex_unlock(&grille[coord->y][coord->x].mutex);
+                         pthread_exit(0);
+                    }
+                    
+                }
+    }
+
+}
 
 void *routine_fourmi(void *arg) {
 	coord_t *coord = (coord_t *) arg;
@@ -95,6 +122,7 @@ void *routine_fourmi(void *arg) {
 						//mvwprintw(fen_sim, coord->y, coord->x - 1, "@");
 						coord->y = coord->y;
 						coord->x = coord->x - 1;
+                        modif_pv(player,coord->x,coord->y,-5);
 					}
 					pthread_mutex_unlock(&grille[coord->y][coord->x].mutex);
 					pthread_mutex_unlock(&grille[coord->y][coord->x + 1].mutex);
@@ -113,6 +141,7 @@ void *routine_fourmi(void *arg) {
 						//mvwprintw(fen_sim, coord->y, coord->x + 1, "@");
 						coord->y = coord->y;
 						coord->x = coord->x + 1;
+                        modif_pv(player,coord->x,coord->y,-5);
 					}
 					pthread_mutex_unlock(&grille[coord->y][coord->x].mutex);
 					pthread_mutex_unlock(&grille[coord->y][coord->x - 1].mutex);
@@ -131,6 +160,7 @@ void *routine_fourmi(void *arg) {
 						//mvwprintw(fen_sim, coord->y - 1, coord->x, "@");
 						coord->y = coord->y - 1;
 						coord->x = coord->x;
+                        modif_pv(player,coord->x,coord->y,-5);
 					}
 					pthread_mutex_unlock(&grille[coord->y][coord->x].mutex);
 					pthread_mutex_unlock(&grille[coord->y + 1 ][coord->x].mutex);
@@ -149,6 +179,7 @@ void *routine_fourmi(void *arg) {
 						//mvwprintw(fen_sim, coord->y + 1, coord->x, "@");
 						coord->y = coord->y + 1;
 						coord->x = coord->x;
+                        modif_pv(player,coord->x,coord->y,-5);
 					}
 					pthread_mutex_unlock(&grille[coord->y][coord->x].mutex);
 					pthread_mutex_unlock(&grille[coord->y - 1 ][coord->x].mutex);
@@ -159,6 +190,7 @@ void *routine_fourmi(void *arg) {
 		//wrefresh(fen_sim);
         //ecrire monstres
 		//pthread_mutex_unlock(&mutex_refresh);
+        mourrir(coord);
 		sleep(1);
 	}
 	
@@ -215,6 +247,7 @@ int main(int argc, char *argv[]) {
     
 
     simulation_initialiser();
+    pthread_mutex_init(&mutex_player,NULL);
     if(!(0<(fd=open(argv[2],O_RDONLY)))){
         perror("erreur de lecture du fichier");
             return(EXIT_FAILURE);
@@ -246,7 +279,7 @@ int main(int argc, char *argv[]) {
             
             if(buf_monstre[4*i+2]){
                 coord = (coord_t *) malloc(sizeof(coord_t));
-                //pthread_mutex_lock(&grille[buf_monstre[4*i+1]][buf_monstre[4*i]].mutex);
+                pthread_mutex_lock(&grille[buf_monstre[4*i+1]][buf_monstre[4*i]].mutex);
                 coord->x=buf_monstre[4*i];
                 coord->y=buf_monstre[4*i+1];
                 grille[coord->y][coord->x].fourmi = (pthread_t *) malloc(sizeof(pthread_t));
@@ -256,7 +289,7 @@ int main(int argc, char *argv[]) {
                 pthread_mutex_lock(&mutex_nb_fourmis);
 				nb_fourmis++;
                 pthread_mutex_unlock(&mutex_nb_fourmis);
-                //pthread_mutex_unlock(&grille[buf_monstre[4*i+1]][buf_monstre[4*i]].mutex);
+                pthread_mutex_unlock(&grille[buf_monstre[4*i+1]][buf_monstre[4*i]].mutex);
             }
             
         }
@@ -296,37 +329,22 @@ int main(int argc, char *argv[]) {
         scanf("%d", &port);
     }
 
-    /* Initialise IPv4 address. */
     memset(&address, 0, sizeof address);
     address.sin_family = AF_INET;
     address.sin_port = htons(port);
     address.sin_addr.s_addr = INADDR_ANY;
 
-    /* Create TCP socket. */
     if ((socket_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
         perror("socket");
         exit(1);
     }
 
-    /* Bind address to socket. */
     if (bind(socket_fd, (struct sockaddr *)&address, sizeof address) == -1) {
         perror("bind");
         exit(1);
     }
-
-    /* Listen on socket. */
     if (listen(socket_fd, BACKLOG) == -1) {
         perror("listen");
-        exit(1);
-    }
-
-    /* Assign signal handlers to signals. */
-    if (signal(SIGPIPE, SIG_IGN) == SIG_ERR) {
-        perror("signal");
-        exit(1);
-    }
-    if (signal(SIGTERM, signal_handler) == SIG_ERR) {
-        perror("signal");
         exit(1);
     }
     if (signal(SIGINT, signal_handler) == SIG_ERR) {
@@ -334,7 +352,6 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    /* Initialise pthread attribute to create detached threads. */
     if (pthread_attr_init(&pthread_attr) != 0) {
         perror("pthread_attr_init");
         exit(1);
@@ -353,17 +370,12 @@ int main(int argc, char *argv[]) {
 
 
     while (1) {
-        /* Create pthread argument for each connection to client. */
-        /* TODO: malloc'ing before accepting a connection causes only one small
-         * memory when the program exits. It can be safely ignored.
-         */
         pthread_arg = (pthread_arg_t *)malloc(sizeof *pthread_arg);
         if (!pthread_arg) {
             perror("malloc");
             continue;
         }
 
-        /* Accept connection to client. */
         client_address_len = sizeof pthread_arg->client_address;
         
         new_socket_fd = accept(socket_fd, (struct sockaddr *)&pthread_arg->client_address, &client_address_len);
@@ -372,16 +384,9 @@ int main(int argc, char *argv[]) {
             free(pthread_arg);
             continue;
         }
-
-        /* Initialise pthread argument. */
         pthread_arg->new_socket_fd = new_socket_fd;
-        /* TODO: Initialise arguments passed to threads here. See lines 22 and
-         * 139.
-         */
         pthread_arg->njoueur=njoueur;
         
-
-        /* Create thread to serve connection to client. */
         if (pthread_create(&pthread, &pthread_attr, pthread_routine, (void *)pthread_arg) != 0) {
             perror("pthread_create");
             free(pthread_arg);
@@ -390,11 +395,6 @@ int main(int argc, char *argv[]) {
         njoueur++;
 
     }
-
-    /* close(socket_fd);
-     * TODO: If you really want to close the socket, you would do it in
-     * signal_handler(), meaning socket_fd would need to be a global variable.
-     */
     return 0;
 }
 
@@ -406,14 +406,8 @@ void *pthread_routine(void *arg) {
     int new_socket_fd = pthread_arg->new_socket_fd;
     njoueur = pthread_arg->njoueur;
     //struct sockaddr_in client_address = pthread_arg->client_address;
-    /* TODO: Get arguments passed to threads here. See lines 22 and 116. */
 
     free(arg);
-
-    /* TODO: Put client interaction code here. For example, use
-     * write(new_socket_fd,,) and read(new_socket_fd,,) to send and receive
-     * messages with the client.
-     */
 
         recv(new_socket_fd,player,6*NB_PLAYERS*sizeof(int),0);
         send(new_socket_fd,&njoueur,1*sizeof(int),0);

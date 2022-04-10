@@ -17,7 +17,9 @@
 
 #define SERVER_NAME_LEN_MAX 255
 #define TAILLE_GRILLE 800
+
 #define NB_MONSTRES 250
+#define NB_PLAYERS 50
 
 #define X_PLAYER 0
 #define Y_PLAYER 1
@@ -28,12 +30,14 @@
 
 int main(int argc, char *argv[]) {
     //char buf[TAILLE_GRILLE*2+1];
+    int njoueur;
     int buf_monstre[4*NB_MONSTRES];
     char server_name[SERVER_NAME_LEN_MAX + 1] = { 0 };
     int server_port, socket_fd;
     struct hostent *server_host;
     struct sockaddr_in server_address;
-    int player[6]={10,10,100,100,0,0};
+    int player[6*NB_PLAYERS];
+    int joueur_client[6];
     WIN *win;
     WIN *win_carte;
     char buf[TAILLE_GRILLE+1];
@@ -51,6 +55,9 @@ int main(int argc, char *argv[]) {
     afficher_win(win);
     refresh_win(win);
 
+    for(int i=0;i<NB_PLAYERS*6;i++){
+        player[i]=0;
+    }
 
     win_carte= initialiser_win(0,7,22,42,"Carte");
     afficher_win(win_carte);
@@ -100,11 +107,19 @@ int main(int argc, char *argv[]) {
 
     
         
-        send(socket_fd,player,6*sizeof(int),0);
-        recv(socket_fd,buf,800,0);
-          recv(socket_fd,buf2,800,0);
-          recv(socket_fd,buf_monstre,NB_MONSTRES*4*sizeof(int),0);
-          recv(socket_fd,player,6*sizeof(int),0);
+            send(socket_fd,joueur_client,6*sizeof(int),0);
+
+            recv(socket_fd,&njoueur,1*sizeof(int),0);
+            recv(socket_fd,buf,800,0);
+            recv(socket_fd,buf2,800,0);
+            recv(socket_fd,buf_monstre,NB_MONSTRES*4*sizeof(int),0);
+            recv(socket_fd,player,6*NB_PLAYERS*sizeof(int),0);
+            joueur_client[X_PLAYER]=player[6*njoueur+X_PLAYER];
+            joueur_client[Y_PLAYER]=player[6*njoueur+Y_PLAYER];
+            joueur_client[PV]=player[6*njoueur+PV];
+            joueur_client[PV_MAX]=player[6*njoueur+PV_MAX];
+            joueur_client[NB_ARTEFACTS]=player[6*njoueur+NB_ARTEFACTS];
+            joueur_client[NB_PIECE]=player[6*njoueur+NB_PIECE];
 
 
             printf("\nmonsttres : %d, %d\n",buf_monstre[0],buf_monstre[999]);
@@ -137,38 +152,53 @@ int main(int argc, char *argv[]) {
 
             break;
             case KEY_UP :
-            player[Y_PLAYER]=(player[Y_PLAYER]-1)%20;
+            joueur_client[Y_PLAYER]=(joueur_client[Y_PLAYER]-1)%20;
             
             break;
             case KEY_DOWN :
-            player[Y_PLAYER]=(player[Y_PLAYER]+1)%20;
+            joueur_client[Y_PLAYER]=(joueur_client[Y_PLAYER]+1)%20;
             break;
             case KEY_LEFT :
-            player[X_PLAYER]=(player[X_PLAYER]-1)%40;
+            joueur_client[X_PLAYER]=(joueur_client[X_PLAYER]-1)%40;
             break;
             case KEY_RIGHT :
-            player[X_PLAYER]=(player[X_PLAYER]+1)%40;
+            joueur_client[X_PLAYER]=(joueur_client[X_PLAYER]+1)%40;
             break;
 
         }
 
-            send(socket_fd,player,6*sizeof(int),0);
-        recv(socket_fd,buf,800,0);
-          recv(socket_fd,buf2,800,0);
-          recv(socket_fd,buf_monstre,NB_MONSTRES*4*sizeof(int),0);
-          recv(socket_fd,player,6*sizeof(int),0);
+            send(socket_fd,joueur_client,6*sizeof(int),0);
+
+            recv(socket_fd,&njoueur,1*sizeof(int),0);
+            recv(socket_fd,buf,800,0);
+            recv(socket_fd,buf2,800,0);
+            recv(socket_fd,buf_monstre,NB_MONSTRES*4*sizeof(int),0);
+            recv(socket_fd,player,6*NB_PLAYERS*sizeof(int),0);
+            joueur_client[X_PLAYER]=player[6*njoueur+X_PLAYER];
+            joueur_client[Y_PLAYER]=player[6*njoueur+Y_PLAYER];
+            joueur_client[PV]=player[6*njoueur+PV];
+            joueur_client[PV_MAX]=player[6*njoueur+PV_MAX];
+            joueur_client[NB_ARTEFACTS]=player[6*njoueur+NB_ARTEFACTS];
+            joueur_client[NB_PIECE]=player[6*njoueur+NB_PIECE];
+            
+
           disp = to_disp(buf);
                 disp2 = to_disp(buf2);
                 wclear(win->content_window);
-                wprintw(win->content_window,"PV        : %d\n",player[PV]);
-                wprintw(win->content_window,"PV MAX    : %d\n",player[PV_MAX]);
-                wprintw(win->content_window,"ARTEFACTS : %d\n",player[NB_ARTEFACTS]);
-                wprintw(win->content_window,"PIECES    : %d\n",player[NB_PIECE]);
+                wprintw(win->content_window,"PV        : %d\n",player[6*njoueur+PV]);
+                wprintw(win->content_window,"PV MAX    : %d\n",player[6*njoueur+PV_MAX]);
+                wprintw(win->content_window,"ARTEFACTS : %d\n",player[6*njoueur+NB_ARTEFACTS]);
+                wprintw(win->content_window,"PIECES    : %d\n",player[6*njoueur+NB_PIECE]);
                 wprintw(win->content_window,"monstre 1 : %d %d %d",buf_monstre[0],buf_monstre[1],buf_monstre[2]);
 
                 print_map(win_carte,disp,disp2);
                 print_monstres(win_carte,NB_MONSTRES,buf_monstre);
-                mvwprintw(win_carte->content_window,player[Y_PLAYER],player[X_PLAYER],"J");
+                for(int i=0;i<NB_PLAYERS;i++){
+                    if(player[6*i+PV]){
+                        mvwprintw(win_carte->content_window,player[6*i+Y_PLAYER],player[6*i+X_PLAYER],"J");
+                    }
+                    
+                }
                 refresh_win(win);
                 refresh_win(win_carte);
 

@@ -25,7 +25,7 @@
 #define BACKLOG 10
 #define TAILLE_GRILLE 800
 #define NB_MONSTRES 250
-#define MB_PLAYERS 50
+#define NB_PLAYERS 50
 
 #define X_PLAYER 0
 #define Y_PLAYER 1
@@ -49,11 +49,13 @@ typedef struct coord_tag {					/* Coordonnees d'une case sur la grille de simula
 	int x;
 } coord_t;
 
-int player[6]={10,10,100,100,0,0};
+int player[6*NB_PLAYERS];
+
 char * file_buf;
 char buf[TAILLE_GRILLE+1];
 char buf2[TAILLE_GRILLE+1];
 int buf_monstre[4*NB_MONSTRES];
+
 //monstre_t tab_monstre[NB_MONSTRES];
 
 
@@ -61,6 +63,7 @@ int buf_monstre[4*NB_MONSTRES];
 typedef struct pthread_arg_t {
     int new_socket_fd;
     struct sockaddr_in client_address;
+    int njoueur;
     /* TODO: Put arguments passed to threads here. See lines 116 and 139. */
 } pthread_arg_t;
 
@@ -206,7 +209,10 @@ void signal_handler(int signal_number);
 
 int main(int argc, char *argv[]) {
     int fd;
+    int njoueur=0;
     coord_t *coord;
+
+    
 
     simulation_initialiser();
     if(!(0<(fd=open(argv[2],O_RDONLY)))){
@@ -359,6 +365,7 @@ int main(int argc, char *argv[]) {
 
         /* Accept connection to client. */
         client_address_len = sizeof pthread_arg->client_address;
+        
         new_socket_fd = accept(socket_fd, (struct sockaddr *)&pthread_arg->client_address, &client_address_len);
         if (new_socket_fd == -1) {
             perror("accept");
@@ -371,6 +378,8 @@ int main(int argc, char *argv[]) {
         /* TODO: Initialise arguments passed to threads here. See lines 22 and
          * 139.
          */
+        pthread_arg->njoueur=njoueur;
+        
 
         /* Create thread to serve connection to client. */
         if (pthread_create(&pthread, &pthread_attr, pthread_routine, (void *)pthread_arg) != 0) {
@@ -378,6 +387,8 @@ int main(int argc, char *argv[]) {
             free(pthread_arg);
             continue;
         }
+        njoueur++;
+
     }
 
     /* close(socket_fd);
@@ -388,10 +399,12 @@ int main(int argc, char *argv[]) {
 }
 
 void *pthread_routine(void *arg) {
-    int n;
-    char client_message[2000];
+    int n,njoueur;
+    int joueur_client[6];
+    //char client_message[2000];
     pthread_arg_t *pthread_arg = (pthread_arg_t *)arg;
     int new_socket_fd = pthread_arg->new_socket_fd;
+    njoueur = pthread_arg->njoueur;
     //struct sockaddr_in client_address = pthread_arg->client_address;
     /* TODO: Get arguments passed to threads here. See lines 22 and 116. */
 
@@ -402,16 +415,42 @@ void *pthread_routine(void *arg) {
      * messages with the client.
      */
 
-     while((n=recv(new_socket_fd,player,6*sizeof(int),0))>0)
-      {
-          printf("\n%s\n",client_message);
-          monstre_refresh();
+        recv(new_socket_fd,player,6*NB_PLAYERS*sizeof(int),0);
+        send(new_socket_fd,&njoueur,1*sizeof(int),0);
         send(new_socket_fd,buf,strlen(buf),0);
         send(new_socket_fd,buf2,strlen(buf2),0);
         send(new_socket_fd,buf_monstre,NB_MONSTRES*4*sizeof(int),0);
-        send(new_socket_fd,player,6*sizeof(int),0);
+        player[6*njoueur+X_PLAYER]=10;
+        player[6*njoueur+Y_PLAYER]=10;
+        player[6*njoueur+PV]=100;
+        player[6*njoueur+PV_MAX]=100;
+        player[6*njoueur+NB_ARTEFACTS]=0;
+        player[6*njoueur+NB_PIECE]=0;
+        send(new_socket_fd,player,6*NB_PLAYERS*sizeof(int),0);
+
+
+     while((n=recv(new_socket_fd,joueur_client,6*sizeof(int),0))>0)
+      {
+        player[6*njoueur+X_PLAYER]=joueur_client[X_PLAYER];
+        player[6*njoueur+Y_PLAYER]=joueur_client[Y_PLAYER];
+        player[6*njoueur+PV]=joueur_client[PV];
+        player[6*njoueur+PV_MAX]=joueur_client[PV_MAX];
+        player[6*njoueur+NB_ARTEFACTS]=joueur_client[NB_ARTEFACTS];
+        player[6*njoueur+NB_PIECE]=joueur_client[NB_PIECE];
+        for(int i=0;i<NB_PLAYERS*6;i++){
+
+        printf("%d",player[i]);
+        }
+        printf("\n");
+        monstre_refresh();
+        send(new_socket_fd,&njoueur,1*sizeof(int),0);
+        send(new_socket_fd,buf,strlen(buf),0);
+        send(new_socket_fd,buf2,strlen(buf2),0);
+        send(new_socket_fd,buf_monstre,NB_MONSTRES*4*sizeof(int),0);
+        send(new_socket_fd,player,6*NB_PLAYERS*sizeof(int),0);
       }
     close(new_socket_fd);
+    player[6*njoueur+PV]=0;
     return NULL;
 }
 

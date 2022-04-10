@@ -9,11 +9,12 @@ OBJETS_O = $(OBJETS) $(EXEC_O)
 CC = gcc
 CCFLAGS_STD = -Wall -O3 -pedantic -Werror
 CCFLAGS = $(CCFLAGS_STD)
+CCLIBS = -lncurses -pthread
 
 all: msg $(OBJETS) $(EXEC_O)
 	@echo "Creation des executables..."
 	@for i in $(EXEC); do \
-	$(CC) -o $$i $$i.o $(OBJETS) -lncurses -pthread; \
+	$(CC) -o $$i $$i.o $(OBJETS) $(CCLIBS); \
 	done
 	@echo "Termine."
 

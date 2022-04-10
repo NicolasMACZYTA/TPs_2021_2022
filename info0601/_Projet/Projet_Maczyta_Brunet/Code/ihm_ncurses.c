@@ -36,7 +36,6 @@ void afficher_win(WIN*window){
 	refresh_win(window);
 }
 
-
 void refresh_win(WIN*window){
 	wrefresh(window->border_window);
 	wrefresh(window->content_window);
@@ -151,7 +150,6 @@ void print_outils(WIN*window,int selected_tool){
 	wattroff(window->content_window,A_STANDOUT);
 }
 
-
 void ncurses_initsouris() {
     if(!mousemask(BUTTON1_PRESSED, NULL)) {
         ncurses_stopper();
@@ -161,14 +159,13 @@ void ncurses_initsouris() {
 }
 
 int souris_getpos(int *x, int *y) {
-MEVENT event;
-int resultat = getmouse(&event);
-if(resultat == OK) {
-*x = event.x; *y = event.y;
+	MEVENT event;
+	int resultat = getmouse(&event);
+	if(resultat == OK) {
+		*x = event.x; *y = event.y;
+	}
+	return resultat;
 }
-return resultat;
-}
-
 
 void ncurses_initialisation() {
     initscr();
@@ -184,20 +181,20 @@ void ncurses_stopper() {
 }
 
 void ncurses_couleurs() {
-/* Vérification du support de la couleur */
-if(has_colors() == FALSE) {
-ncurses_stopper();
-fprintf(stderr, "Pas de gestion de la couleurpour ce terminal.\n");
-exit(EXIT_FAILURE);
-}else{
-    start_color();
-    init_pair(1, COLOR_BLACK, COLOR_GREEN);
-    init_pair(2, COLOR_BLACK, COLOR_CYAN);
-    init_pair(3, COLOR_BLACK, COLOR_YELLOW);
-    init_pair(4, COLOR_BLACK, COLOR_RED);
+	/* Vérification du support de la couleur */
+	if(has_colors() == FALSE){
+		ncurses_stopper();
+		fprintf(stderr, "Pas de gestion de la couleurpour ce terminal.\n");
+		exit(EXIT_FAILURE);
+	}else{
+		start_color();
+		init_pair(1, COLOR_BLACK, COLOR_GREEN);
+		init_pair(2, COLOR_BLACK, COLOR_CYAN);
+		init_pair(3, COLOR_BLACK, COLOR_YELLOW);
+		init_pair(4, COLOR_BLACK, COLOR_RED);
+	}
+}
 
-}
-}
 int outil_selectionne(int posY){
 	return posY-7;
 }
@@ -211,7 +208,6 @@ int hex_selectionne(int posX, int posY){
 	int x = (posX-1), y = posY-8;
 	return (y*40+x);
 }
-
 
 int selection(int posX,int posY, int * typeselection, int* selected_tool){
 	int res;
@@ -227,6 +223,7 @@ int selection(int posX,int posY, int * typeselection, int* selected_tool){
 		res=0;
 		*typeselection= 0;
 	}
+	
 	return res;
 }
 
@@ -241,28 +238,33 @@ void afficher_selection(int selected_octet,WIN * hex_window,WIN * char_window,ch
 	y_char = selected_octet/8;
 
 	if(typeselection==0){
-	wattron(hex_window->content_window,COLOR_PAIR(2));
+		wattron(hex_window->content_window,COLOR_PAIR(2));
 	}
+
 	wattron(hex_window->content_window,A_STANDOUT);
 	mvwprintw(hex_window->content_window,y_hex,x_hex,"%c",buf[selected_octet]);
 	wattroff(hex_window->content_window,A_STANDOUT);
+
 	if(typeselection==0){
-	wattroff(hex_window->content_window,COLOR_PAIR(2));
+		wattroff(hex_window->content_window,COLOR_PAIR(2));
 	}
 
 	if(typeselection==1){
-	wattron(char_window->content_window,COLOR_PAIR(2));
+		wattron(char_window->content_window,COLOR_PAIR(2));
 	}
+
 	wattron(char_window->content_window,A_STANDOUT);
 	mvwprintw(char_window->content_window,y_char,x_char,"%c",buf[selected_octet]);
 	wattroff(char_window->content_window,A_STANDOUT);
+
 	if(typeselection==1){
-	wattroff(char_window->content_window,COLOR_PAIR(2));
+		wattroff(char_window->content_window,COLOR_PAIR(2));
 	}
+
 	free(hex);
 }
 
 
 void afficher_carte(WIN * fenetre_carte,char* carte){
-	/* TODO */
+	// TODO
 }

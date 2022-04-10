@@ -1,6 +1,5 @@
 #include "fichier.h"
 #include "ihm_ncurses.h"
-#include "monstre.h"
 #include <ncurses.h>
 #include <string.h>
 #include <stdlib.h>
@@ -11,20 +10,14 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-
-int ftruncate(int fd, off_t length);
-
 char * hex_from_buf(char*buf){
     char * hex=malloc(1024*sizeof(char)); 
     string2hexString(buf,hex);
 
-    /*printf("%s",hex);*/
-
     return hex;
 }
 
-void string2hexString(char* input, char* output)
-{
+void string2hexString(char* input, char* output){
     int loop=0;
     int i=0; 
 
@@ -34,7 +27,6 @@ void string2hexString(char* input, char* output)
         loop+=1;
         i+=3;
     }
-    /*insert NULL at the end of the output string*/
     output[i++] = '\0';
 }
 
@@ -56,9 +48,6 @@ char * to_string(char*buf,int offset){
     return res;
 }
 
-
-
-
 char * to_disp(char*buf){
     char * res = malloc(strlen(buf)*sizeof(char));
     int i;
@@ -71,8 +60,6 @@ char * to_disp(char*buf){
     }
     return res;
 }
-
-
 
 void lire_buf(int fd, char*buf, int offset){
     int i;
@@ -99,20 +86,6 @@ void ecrire_buf(int fd, char*buf, int offset){
         printf("erreur ecriture ;\n");
         exit(EXIT_FAILURE);
     }
-}
-void supprimer_octet(int fd, int selection, int offset,int size){
-    int i=offset+selection;
-    char * buf2 = malloc(801*sizeof(char));
-    buf2[800]='\0';
-    lseek(fd,offset+selection+1,SEEK_SET);
-    while (i<size){
-        lire_buf(fd,buf2,i+1);
-        ecrire_buf(fd,buf2,i);
-        i=i+128;
-    }
-    
-    ftruncate(fd, size-1);
-    free(buf2);
 }
 
 int creer_fichier(char* nomfichier,int taille_grille, int nb_grilles, int nb_monstres){
@@ -154,8 +127,6 @@ int sauvegarder_carte(char* nomfichier, char* buf1,char*buf2,int *buf3,int taill
     if(fd == -1){
         perror("Erreur fichier "); return -1;
     }else{
-
-
         lseek(fd,0,SEEK_SET);
 
         if(write(fd, buf1, taillegrille) == -1){
